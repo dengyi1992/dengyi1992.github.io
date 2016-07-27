@@ -1,0 +1,1204 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="&amp;#x4F1A;&amp;#x8BDD;&amp;#xFF08;Session&amp;#xFF09;&amp;#x8DDF;&amp;#x8E2A;&amp;#x662F;Web&amp;#x7A0B;&amp;#x5E8F;&amp;#x4E2D;&amp;#x5E38;&amp;#x7528;&amp;#x7684;&amp;#x6280;&amp;#x672F;&amp;#xFF0C;&amp;#x7528;&amp;#x6765; &amp;#x8DDF;&amp;#x8E2A;&amp;#x7528;&amp;#x6237;&amp;#x7684;&amp;#x65">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cookie/Session机制详解">
+<meta property="og:url" content="http://yoursite.com/2016/06/26/Cookie-Session机制详解/index.html">
+<meta property="og:site_name" content="似火的Blog">
+<meta property="og:description" content="&amp;#x4F1A;&amp;#x8BDD;&amp;#xFF08;Session&amp;#xFF09;&amp;#x8DDF;&amp;#x8E2A;&amp;#x662F;Web&amp;#x7A0B;&amp;#x5E8F;&amp;#x4E2D;&amp;#x5E38;&amp;#x7528;&amp;#x7684;&amp;#x6280;&amp;#x672F;&amp;#xFF0C;&amp;#x7528;&amp;#x6765; &amp;#x8DDF;&amp;#x8E2A;&amp;#x7528;&amp;#x6237;&amp;#x7684;&amp;#x65">
+<meta property="og:image" content="http://yoursite.com/2016/06/26/Cookie-Session机制详解/0_13208318702UfF.gif">
+<meta property="og:image" content="http://yoursite.com/2016/06/26/Cookie-Session机制详解/2016-05-16 16:28:16 的屏幕截图.png">
+<meta property="og:updated_time" content="2016-06-25T16:17:21.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cookie/Session机制详解">
+<meta name="twitter:description" content="&amp;#x4F1A;&amp;#x8BDD;&amp;#xFF08;Session&amp;#xFF09;&amp;#x8DDF;&amp;#x8E2A;&amp;#x662F;Web&amp;#x7A0B;&amp;#x5E8F;&amp;#x4E2D;&amp;#x5E38;&amp;#x7528;&amp;#x7684;&amp;#x6280;&amp;#x672F;&amp;#xFF0C;&amp;#x7528;&amp;#x6765; &amp;#x8DDF;&amp;#x8E2A;&amp;#x7528;&amp;#x6237;&amp;#x7684;&amp;#x65">
+<meta name="twitter:image" content="http://yoursite.com/2016/06/26/Cookie-Session机制详解/0_13208318702UfF.gif">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> Cookie/Session机制详解 | 似火的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title"></span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        $(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        $("#assist_btn").hide();
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Cookie/Session机制详解
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-06-26T00:01:57+08:00" content="2016-06-26">
+            2016-06-26
+          </time>
+        </span>
+
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>&#x4F1A;&#x8BDD;&#xFF08;Session&#xFF09;&#x8DDF;&#x8E2A;&#x662F;Web&#x7A0B;&#x5E8F;&#x4E2D;&#x5E38;&#x7528;&#x7684;&#x6280;&#x672F;&#xFF0C;&#x7528;&#x6765; <em>&#x8DDF;&#x8E2A;&#x7528;&#x6237;&#x7684;&#x6574;&#x4E2A;&#x4F1A;&#x8BDD;</em> &#x3002;&#x5E38;&#x7528;&#x7684;&#x4F1A;&#x8BDD;&#x8DDF;&#x8E2A;&#x6280;&#x672F;&#x662F;Cookie&#x4E0E;Session&#x3002;<em>Cookie&#x901A;&#x8FC7;&#x5728;&#x5BA2;&#x6237;&#x7AEF;&#x8BB0;&#x5F55;&#x4FE1;&#x606F;&#x786E;&#x5B9A;&#x7528;&#x6237;&#x8EAB;&#x4EFD;&#xFF0C;Session&#x901A;&#x8FC7;&#x5728;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x8BB0;&#x5F55;&#x4FE1;&#x606F;&#x786E;&#x5B9A;&#x7528;&#x6237;&#x8EAB;&#x4EFD;</em>&#x3002;</p>
+<p>&#x672C;&#x7AE0;&#x5C06;&#x7CFB;&#x7EDF;&#x5730;&#x8BB2;&#x8FF0;Cookie&#x4E0E;Session&#x673A;&#x5236;&#xFF0C;&#x5E76;&#x6BD4;&#x8F83;&#x8BF4;&#x660E;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x4E0D;&#x80FD;&#x7528;Cookie&#xFF0C;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x4E0D;&#x80FD;&#x7528;Session&#x3002;</p>
+<h3 id="1-1-Cookie&#x673A;&#x5236;"><a href="#1-1-Cookie&#x673A;&#x5236;" class="headerlink" title="1.1 Cookie&#x673A;&#x5236;"></a>1.1 Cookie&#x673A;&#x5236;</h3><p>&#x5728;&#x7A0B;&#x5E8F;&#x4E2D;&#xFF0C;&#x4F1A;&#x8BDD;&#x8DDF;&#x8E2A;&#x662F;&#x5F88;&#x91CD;&#x8981;&#x7684;&#x4E8B;&#x60C5;&#x3002;&#x7406;&#x8BBA;&#x4E0A;&#xFF0C;<em>&#x4E00;&#x4E2A;&#x7528;&#x6237;&#x7684;&#x6240;&#x6709;&#x8BF7;&#x6C42;&#x64CD;&#x4F5C;&#x90FD;&#x5E94;&#x8BE5;&#x5C5E;&#x4E8E;&#x540C;&#x4E00;&#x4E2A;&#x4F1A;&#x8BDD;</em>&#xFF0C;&#x800C;&#x53E6;&#x4E00;&#x4E2A;&#x7528;&#x6237;&#x7684;&#x6240;&#x6709;&#x8BF7;&#x6C42;&#x64CD;&#x4F5C;&#x5219;&#x5E94;&#x8BE5;&#x5C5E;&#x4E8E;&#x53E6;&#x4E00;&#x4E2A;&#x4F1A;&#x8BDD;&#xFF0C;&#x4E8C;&#x8005;&#x4E0D;&#x80FD;&#x6DF7;&#x6DC6;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x7528;&#x6237;A&#x5728;&#x8D85;&#x5E02;&#x8D2D;&#x4E70;&#x7684;&#x4EFB;&#x4F55;&#x5546;&#x54C1;&#x90FD;&#x5E94;&#x8BE5;&#x653E;&#x5728;A&#x7684;&#x8D2D;&#x7269;&#x8F66;&#x5185;&#xFF0C;&#x4E0D;&#x8BBA;&#x662F;&#x7528;&#x6237;A&#x4EC0;&#x4E48;&#x65F6;&#x95F4;&#x8D2D;&#x4E70;&#x7684;&#xFF0C;&#x8FD9;&#x90FD;&#x662F;&#x5C5E;&#x4E8E;&#x540C;&#x4E00;&#x4E2A;&#x4F1A;&#x8BDD;&#x7684;&#xFF0C;&#x4E0D;&#x80FD;&#x653E;&#x5165;&#x7528;&#x6237;B&#x6216;&#x7528;&#x6237;C&#x7684;&#x8D2D;&#x7269;&#x8F66;&#x5185;&#xFF0C;&#x8FD9;&#x4E0D;&#x5C5E;&#x4E8E;&#x540C;&#x4E00;&#x4E2A;&#x4F1A;&#x8BDD;&#x3002;</p>
+<p>&#x800C;Web&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x662F;&#x4F7F;&#x7528;HTTP&#x534F;&#x8BAE;&#x4F20;&#x8F93;&#x6570;&#x636E;&#x7684;&#x3002;<em>HTTP&#x534F;&#x8BAE;&#x662F;&#x65E0;&#x72B6;&#x6001;&#x7684;&#x534F;&#x8BAE;&#x3002;&#x4E00;&#x65E6;&#x6570;&#x636E;&#x4EA4;&#x6362;&#x5B8C;&#x6BD5;&#xFF0C;&#x5BA2;&#x6237;&#x7AEF;&#x4E0E;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x7684;&#x8FDE;&#x63A5;&#x5C31;&#x4F1A;&#x5173;&#x95ED;&#xFF0C;&#x518D;&#x6B21;&#x4EA4;&#x6362;&#x6570;&#x636E;&#x9700;&#x8981;&#x5EFA;&#x7ACB;&#x65B0;&#x7684;&#x8FDE;&#x63A5;&#x3002;&#x8FD9;&#x5C31;&#x610F;&#x5473;&#x7740;&#x670D;&#x52A1;&#x5668;&#x65E0;&#x6CD5;&#x4ECE;&#x8FDE;&#x63A5;&#x4E0A;&#x8DDF;&#x8E2A;&#x4F1A;&#x8BDD;</em>&#x3002; &#x5373;&#x7528;&#x6237;A&#x8D2D;&#x4E70;&#x4E86;&#x4E00;&#x4EF6;&#x5546;&#x54C1;&#x653E;&#x5165;&#x8D2D;&#x7269;&#x8F66;&#x5185;&#xFF0C;&#x5F53;&#x518D;&#x6B21;&#x8D2D;&#x4E70;&#x5546;&#x54C1;&#x65F6;&#x670D;&#x52A1;&#x5668;&#x5DF2;&#x7ECF;&#x65E0;&#x6CD5;&#x5224;&#x65AD;&#x8BE5;&#x8D2D;&#x4E70;&#x884C;&#x4E3A;&#x662F;&#x5C5E;&#x4E8E;&#x7528;&#x6237;A&#x7684;&#x4F1A;&#x8BDD;&#x8FD8;&#x662F;&#x7528;&#x6237;B&#x7684;&#x4F1A;&#x8BDD;&#x4E86;&#x3002;&#x8981;&#x8DDF;&#x8E2A;&#x8BE5;&#x4F1A;&#x8BDD;&#xFF0C;&#x5FC5;&#x987B;&#x5F15;&#x5165;&#x4E00;&#x79CD;&#x673A;&#x5236;&#x3002;</p>
+<p>Cookie&#x5C31;&#x662F;&#x8FD9;&#x6837;&#x7684;&#x4E00;&#x79CD;&#x673A;&#x5236;&#x3002;&#x5B83;&#x53EF;&#x4EE5;&#x5F25;&#x8865;HTTP&#x534F;&#x8BAE;&#x65E0;&#x72B6;&#x6001;&#x7684;&#x4E0D;&#x8DB3;&#x3002;&#x5728;Session&#x51FA;&#x73B0;&#x4E4B;&#x524D;&#xFF0C;&#x57FA;&#x672C;&#x4E0A;&#x6240;&#x6709;&#x7684;&#x7F51;&#x7AD9;&#x90FD;&#x91C7;&#x7528;Cookie&#x6765;&#x8DDF;&#x8E2A;&#x4F1A;&#x8BDD;&#x3002;</p>
+<h4 id="1-1-1-&#x4EC0;&#x4E48;&#x662F;Cookie"><a href="#1-1-1-&#x4EC0;&#x4E48;&#x662F;Cookie" class="headerlink" title="1.1.1 &#x4EC0;&#x4E48;&#x662F;Cookie"></a>1.1.1 &#x4EC0;&#x4E48;&#x662F;Cookie</h4><p>Cookie&#x610F;&#x4E3A;&#x201C;&#x751C;&#x997C;&#x201D;&#xFF0C;&#x662F;&#x7531; W3C&#x7EC4;&#x7EC7; &#x63D0;&#x51FA;&#xFF0C;&#x6700;&#x65E9;&#x7531;Netscape&#x793E;&#x533A;&#x53D1;&#x5C55;&#x7684;&#x4E00;&#x79CD;&#x673A;&#x5236;&#x3002;&#x76EE;&#x524D;Cookie&#x5DF2;&#x7ECF;&#x6210;&#x4E3A;&#x6807;&#x51C6;&#xFF0C;&#x6240;&#x6709;&#x7684;&#x4E3B;&#x6D41;&#x6D4F;&#x89C8;&#x5668;&#x5982;IE&#x3001;Netscape&#x3001;Firefox&#x3001;Opera&#x7B49;&#x90FD;&#x652F;&#x6301;Cookie&#x3002;<br>&#x7531;&#x4E8E;HTTP&#x662F;&#x4E00;&#x79CD;&#x65E0;&#x72B6;&#x6001;&#x7684;&#x534F;&#x8BAE;&#xFF0C;&#x670D;&#x52A1;&#x5668;&#x5355;&#x4ECE;&#x7F51;&#x7EDC;&#x8FDE;&#x63A5;&#x4E0A;&#x65E0;&#x4ECE;&#x77E5;&#x9053;&#x5BA2;&#x6237;&#x8EAB;&#x4EFD;&#x3002;&#x600E;&#x4E48;&#x529E;&#x5462;&#xFF1F;&#x5C31; <em>&#x7ED9;&#x5BA2;&#x6237;&#x7AEF;&#x4EEC;&#x9881;&#x53D1;&#x4E00;&#x4E2A;&#x901A;&#x884C;&#x8BC1;&#x5427;&#xFF0C;&#x6BCF;&#x4EBA;&#x4E00;&#x4E2A;&#xFF0C;&#x65E0;&#x8BBA;&#x8C01;&#x8BBF;&#x95EE;&#x90FD;&#x5FC5;&#x987B;&#x643A;&#x5E26;&#x81EA;&#x5DF1;&#x901A;&#x884C;&#x8BC1;&#x3002;&#x8FD9;&#x6837;&#x670D;&#x52A1;&#x5668;&#x5C31;&#x80FD;&#x4ECE;&#x901A;&#x884C;&#x8BC1;&#x4E0A;&#x786E;&#x8BA4;&#x5BA2;&#x6237;&#x8EAB;&#x4EFD;&#x4E86;&#x3002;&#x8FD9;&#x5C31;&#x662F;Cookie&#x7684;&#x5DE5;&#x4F5C;&#x539F;&#x7406;&#x3002;</em></p>
+<p>Cookie&#x5B9E;&#x9645;&#x4E0A;&#x662F;&#x4E00;&#x5C0F;&#x6BB5;&#x7684;&#x6587;&#x672C;&#x4FE1;&#x606F;&#x3002;&#x5BA2;&#x6237;&#x7AEF;&#x8BF7;&#x6C42;&#x670D;&#x52A1;&#x5668;&#xFF0C;&#x5982;&#x679C;&#x670D;&#x52A1;&#x5668;&#x9700;&#x8981;&#x8BB0;&#x5F55;&#x8BE5;&#x7528;&#x6237;&#x72B6;&#x6001;&#xFF0C;&#x5C31;&#x4F7F;&#x7528;response&#x5411;&#x5BA2;&#x6237;&#x7AEF;&#x6D4F;&#x89C8;&#x5668;&#x9881;&#x53D1;&#x4E00;&#x4E2A;Cookie&#x3002;&#x5BA2;&#x6237;&#x7AEF;&#x6D4F;&#x89C8;&#x5668;&#x4F1A;&#x628A;Cookie&#x4FDD;&#x5B58;&#x8D77;&#x6765;&#x3002;&#x5F53;&#x6D4F;&#x89C8;&#x5668;&#x518D;&#x8BF7;&#x6C42;&#x8BE5;&#x7F51;&#x7AD9;&#x65F6;&#xFF0C;&#x6D4F;&#x89C8;&#x5668;&#x628A;&#x8BF7;&#x6C42;&#x7684;&#x7F51;&#x5740;&#x8FDE;&#x540C;&#x8BE5;Cookie&#x4E00;&#x540C;&#x63D0;&#x4EA4;&#x7ED9;&#x670D;&#x52A1;&#x5668;&#x3002;&#x670D;&#x52A1;&#x5668;&#x68C0;&#x67E5;&#x8BE5;Cookie&#xFF0C;&#x4EE5;&#x6B64;&#x6765;&#x8FA8;&#x8BA4;&#x7528;&#x6237;&#x72B6;&#x6001;&#x3002;&#x670D;&#x52A1;&#x5668;&#x8FD8;&#x53EF;&#x4EE5;&#x6839;&#x636E;&#x9700;&#x8981;&#x4FEE;&#x6539;Cookie&#x7684;&#x5185;&#x5BB9;&#x3002;<br><img src="/2016/06/26/Cookie-Session&#x673A;&#x5236;&#x8BE6;&#x89E3;/0_13208318702UfF.gif"></p>
+<p>&#x67E5;&#x770B;&#x67D0;&#x4E2A;&#x7F51;&#x7AD9;&#x9881;&#x53D1;&#x7684;Cookie&#x5F88;&#x7B80;&#x5355;&#x3002;&#x6309;F12&#x5728;&#x6D4F;&#x89C8;&#x5668;console&#x4E2D;&#x8F93;&#x5165;JavaScript:alert (document. cookie)&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#xFF08;&#x9700;&#x8981;&#x6709;&#x7F51;&#x624D;&#x80FD;&#x67E5;&#x770B;&#xFF09;&#x3002;JavaScript&#x811A;&#x672C;&#x4F1A;&#x5F39;&#x51FA;&#x4E00;&#x4E2A;&#x5BF9;&#x8BDD;&#x6846;&#x663E;&#x793A;&#x672C;&#x7F51;&#x7AD9;&#x9881;&#x53D1;&#x7684;&#x6240;&#x6709;Cookie&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x5982;&#x56FE;1.1&#x6240;&#x793A;&#x3002;<br><img src="/2016/06/26/Cookie-Session&#x673A;&#x5236;&#x8BE6;&#x89E3;/2016-05-16 16:28:16 &#x7684;&#x5C4F;&#x5E55;&#x622A;&#x56FE;.png"></p>
+<p>&#x56FE;1.1 Baidu&#x7F51;&#x7AD9;&#x9881;&#x53D1;&#x7684;Cookie</p>
+<p>&#x56FE;1.1&#x4E2D;&#x5F39;&#x51FA;&#x7684;&#x5BF9;&#x8BDD;&#x6846;&#x4E2D;&#x663E;&#x793A;&#x7684;&#x4E3A;Baidu&#x7F51;&#x7AD9;&#x7684;Cookie&#x3002;&#x5176;&#x4E2D;&#x7B2C;&#x4E00;&#x884C;BAIDUID&#x8BB0;&#x5F55;&#x7684;&#x5C31;&#x662F;&#x7B14;&#x8005;&#x7684;&#x8EAB;&#x4EFD;</p>
+<p>/<em>&#x6CE8;&#x610F;&#xFF1A;</em>/ Cookie&#x529F;&#x80FD;&#x9700;&#x8981;&#x6D4F;&#x89C8;&#x5668;&#x7684;&#x652F;&#x6301;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x6D4F;&#x89C8;&#x5668;&#x4E0D;&#x652F;&#x6301;Cookie&#xFF08;&#x5982;&#x5927;&#x90E8;&#x5206;&#x624B;&#x673A;&#x4E2D;&#x7684;&#x6D4F;&#x89C8;&#x5668;&#xFF09;&#x6216;&#x8005;&#x628A;Cookie&#x7981;&#x7528;&#x4E86;&#xFF0C;Cookie&#x529F;&#x80FD;&#x5C31;&#x4F1A;&#x5931;&#x6548;&#x3002;</p>
+<p>&#x4E0D;&#x540C;&#x7684;&#x6D4F;&#x89C8;&#x5668;&#x91C7;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x65B9;&#x5F0F;&#x4FDD;&#x5B58;Cookie&#x3002;</p>
+<p>IE&#x6D4F;&#x89C8;&#x5668;&#x4F1A;&#x5728;&#x201C;C:\Documents and Settings\&#x4F60;&#x7684;&#x7528;&#x6237;&#x540D;\Cookies&#x201D;&#x6587;&#x4EF6;&#x5939;&#x4E0B;&#x4EE5;&#x6587;&#x672C;&#x6587;&#x4EF6;&#x5F62;&#x5F0F;&#x4FDD;&#x5B58;&#xFF0C;&#x4E00;&#x4E2A;&#x6587;&#x672C;&#x6587;&#x4EF6;&#x4FDD;&#x5B58;&#x4E00;&#x4E2A;Cookie&#x3002;</p>
+<h4 id="1-1-2-&#x8BB0;&#x5F55;&#x7528;&#x6237;&#x8BBF;&#x95EE;&#x6B21;&#x6570;"><a href="#1-1-2-&#x8BB0;&#x5F55;&#x7528;&#x6237;&#x8BBF;&#x95EE;&#x6B21;&#x6570;" class="headerlink" title="1.1.2 &#x8BB0;&#x5F55;&#x7528;&#x6237;&#x8BBF;&#x95EE;&#x6B21;&#x6570;"></a>1.1.2 &#x8BB0;&#x5F55;&#x7528;&#x6237;&#x8BBF;&#x95EE;&#x6B21;&#x6570;</h4><hr>
+<p>Java&#x4E2D;&#x628A;Cookie&#x5C01;&#x88C5;&#x6210;&#x4E86;javax.servlet.http.Cookie&#x7C7B;&#x3002;&#x6BCF;&#x4E2A;Cookie&#x90FD;&#x662F;&#x8BE5;Cookie&#x7C7B;&#x7684;&#x5BF9;&#x8C61;&#x3002;&#x670D;&#x52A1;&#x5668;&#x901A;&#x8FC7;&#x64CD;&#x4F5C;Cookie&#x7C7B;&#x5BF9;&#x8C61;&#x5BF9;&#x5BA2;&#x6237;&#x7AEF;Cookie&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x3002;&#x901A;&#x8FC7;request.getCookie()&#x83B7;&#x53D6;&#x5BA2;&#x6237;&#x7AEF;&#x63D0;&#x4EA4;&#x7684;&#x6240;&#x6709;Cookie&#xFF08;&#x4EE5;Cookie[]&#x6570;&#x7EC4;&#x5F62;&#x5F0F;&#x8FD4;&#x56DE;&#xFF09;&#xFF0C;&#x901A;&#x8FC7;response.addCookie(Cookiecookie)&#x5411;&#x5BA2;&#x6237;&#x7AEF;&#x8BBE;&#x7F6E;Cookie&#x3002;</p>
+<p>Cookie&#x5BF9;&#x8C61;&#x4F7F;&#x7528;key-value&#x5C5E;&#x6027;&#x5BF9;&#x7684;&#x5F62;&#x5F0F;&#x4FDD;&#x5B58;&#x7528;&#x6237;&#x72B6;&#x6001;&#xFF0C;&#x4E00;&#x4E2A;Cookie&#x5BF9;&#x8C61;&#x4FDD;&#x5B58;&#x4E00;&#x4E2A;&#x5C5E;&#x6027;&#x5BF9;&#xFF0C;&#x4E00;&#x4E2A;request&#x6216;&#x8005;response&#x540C;&#x65F6;&#x4F7F;&#x7528;&#x591A;&#x4E2A;Cookie&#x3002;&#x56E0;&#x4E3A;Cookie&#x7C7B;&#x4F4D;&#x4E8E;&#x5305;javax.servlet.http.* &#x4E0B;&#x9762;&#xFF0C;&#x6240;&#x4EE5;JSP&#x4E2D;&#x4E0D;&#x9700;&#x8981;import&#x8BE5;&#x7C7B;&#x3002;</p>
+<h4 id="1-1-3-Cookie&#x7684;&#x4E0D;&#x53EF;&#x8DE8;&#x57DF;&#x540D;&#x6027;"><a href="#1-1-3-Cookie&#x7684;&#x4E0D;&#x53EF;&#x8DE8;&#x57DF;&#x540D;&#x6027;" class="headerlink" title="1.1.3 Cookie&#x7684;&#x4E0D;&#x53EF;&#x8DE8;&#x57DF;&#x540D;&#x6027;"></a>1.1.3 Cookie&#x7684;&#x4E0D;&#x53EF;&#x8DE8;&#x57DF;&#x540D;&#x6027;</h4><p>&#x5F88;&#x591A;&#x7F51;&#x7AD9;&#x90FD;&#x4F1A;&#x4F7F;&#x7528;Cookie&#x3002;&#x4F8B;&#x5982;&#xFF0C;Google&#x4F1A;&#x5411;&#x5BA2;&#x6237;&#x7AEF;&#x9881;&#x53D1;Cookie&#xFF0C;Baidu&#x4E5F;&#x4F1A;&#x5411;&#x5BA2;&#x6237;&#x7AEF;&#x9881;&#x53D1;Cookie&#x3002;&#x90A3;&#x6D4F;&#x89C8;&#x5668;&#x8BBF;&#x95EE;Google&#x4F1A;&#x4E0D;&#x4F1A;&#x4E5F;&#x643A;&#x5E26;&#x4E0A;Baidu&#x9881;&#x53D1;&#x7684;Cookie&#x5462;&#xFF1F;&#x6216;&#x8005;Google&#x80FD;&#x4E0D;&#x80FD;&#x4FEE;&#x6539;Baidu&#x9881;&#x53D1;&#x7684;Cookie&#x5462;&#xFF1F;</p>
+<p>&#x7B54;&#x6848;&#x662F;&#x5426;&#x5B9A;&#x7684;&#x3002;<em>Cookie&#x5177;&#x6709;&#x4E0D;&#x53EF;&#x8DE8;&#x57DF;&#x540D;&#x6027;&#x3002;</em> &#x6839;&#x636E;Cookie&#x89C4;&#x8303;&#xFF0C;&#x6D4F;&#x89C8;&#x5668;&#x8BBF;&#x95EE;Google&#x53EA;&#x4F1A;&#x643A;&#x5E26;Google&#x7684;Cookie&#xFF0C;&#x800C;&#x4E0D;&#x4F1A;&#x643A;&#x5E26;Baidu&#x7684;Cookie&#x3002;Google&#x4E5F;&#x53EA;&#x80FD;&#x64CD;&#x4F5C;Google&#x7684;Cookie&#xFF0C;&#x800C;&#x4E0D;&#x80FD;&#x64CD;&#x4F5C;Baidu&#x7684;Cookie&#x3002;<br>Cookie&#x5728;&#x5BA2;&#x6237;&#x7AEF;&#x662F;&#x7531;&#x6D4F;&#x89C8;&#x5668;&#x6765;&#x7BA1;&#x7406;&#x7684;&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x80FD;&#x591F;&#x4FDD;&#x8BC1;Google&#x53EA;&#x4F1A;&#x64CD;&#x4F5C;Google&#x7684;Cookie&#x800C;&#x4E0D;&#x4F1A;&#x64CD;&#x4F5C;Baidu&#x7684;Cookie&#xFF0C;&#x4ECE;&#x800C;&#x4FDD;&#x8BC1;&#x7528;&#x6237;&#x7684;&#x9690;&#x79C1;&#x5B89;&#x5168;&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x5224;&#x65AD;&#x4E00;&#x4E2A;&#x7F51;&#x7AD9;&#x662F;&#x5426;&#x80FD;&#x64CD;&#x4F5C;&#x53E6;&#x4E00;&#x4E2A;&#x7F51;&#x7AD9;Cookie&#x7684;&#x4F9D;&#x636E;&#x662F;&#x57DF;&#x540D;&#x3002;Google&#x4E0E;Baidu&#x7684;&#x57DF;&#x540D;&#x4E0D;&#x4E00;&#x6837;&#xFF0C;&#x56E0;&#x6B64;Google&#x4E0D;&#x80FD;&#x64CD;&#x4F5C;Baidu&#x7684;Cookie&#x3002;</p>
+<p>&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;&#x867D;&#x7136;&#x7F51;&#x7AD9;images.google.com&#x4E0E;&#x7F51;&#x7AD9;www.google.com&#x540C;&#x5C5E;&#x4E8E;Google&#xFF0C;&#x4F46;&#x662F;&#x57DF;&#x540D;&#x4E0D;&#x4E00;&#x6837;&#xFF0C;&#x4E8C;&#x8005;&#x540C;&#x6837;&#x4E0D;&#x80FD;&#x4E92;&#x76F8;&#x64CD;&#x4F5C;&#x5F7C;&#x6B64;&#x7684;Cookie&#x3002;</p>
+<p><em>&#x6CE8;&#x610F;&#xFF1A;</em> &#x7528;&#x6237;&#x767B;&#x5F55;&#x7F51;&#x7AD9;www.google.com&#x4E4B;&#x540E;&#x4F1A;&#x53D1;&#x73B0;&#x8BBF;&#x95EE;images.google.com&#x65F6;&#x767B;&#x5F55;&#x4FE1;&#x606F;&#x4ECD;&#x7136;&#x6709;&#x6548;&#xFF0C;&#x800C;&#x666E;&#x901A;&#x7684;Cookie&#x662F;&#x505A;&#x4E0D;&#x5230;&#x7684;&#x3002;&#x8FD9;&#x662F;&#x56E0;&#x4E3A;Google&#x505A;&#x4E86;&#x7279;&#x6B8A;&#x5904;&#x7406;&#x3002;&#x672C;&#x7AE0;&#x540E;&#x9762;&#x4E5F;&#x4F1A;&#x5BF9;Cookie&#x505A;&#x7C7B;&#x4F3C;&#x7684;&#x5904;&#x7406;&#x3002;</p>
+<h4 id="1-1-4-Unicode&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E2D;&#x6587;"><a href="#1-1-4-Unicode&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E2D;&#x6587;" class="headerlink" title="1.1.4 Unicode&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E2D;&#x6587;"></a>1.1.4 Unicode&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E2D;&#x6587;</h4><p>&#x4E2D;&#x6587;&#x4E0E;&#x82F1;&#x6587;&#x5B57;&#x7B26;&#x4E0D;&#x540C;&#xFF0C;<em>&#x4E2D;&#x6587;&#x5C5E;&#x4E8E;Unicode&#x5B57;&#x7B26;&#xFF0C;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x5360;4&#x4E2A;&#x5B57;&#x7B26;&#xFF0C;&#x800C;&#x82F1;&#x6587;&#x5C5E;&#x4E8E;ASCII&#x5B57;&#x7B26;&#xFF0C;&#x5185;&#x5B58;&#x4E2D;&#x53EA;&#x5360;2&#x4E2A;&#x5B57;&#x8282;&#x3002;</em> Cookie&#x4E2D;&#x4F7F;&#x7528;Unicode&#x5B57;&#x7B26;&#x65F6;&#x9700;&#x8981;&#x5BF9;Unicode&#x5B57;&#x7B26;&#x8FDB;&#x884C;&#x7F16;&#x7801;&#xFF0C;&#x5426;&#x5219;&#x4F1A;&#x4E71;&#x7801;&#x3002;</p>
+<p>&#x63D0;&#x793A;&#xFF1A;Cookie&#x4E2D;&#x4FDD;&#x5B58;&#x4E2D;&#x6587;&#x53EA;&#x80FD;&#x7F16;&#x7801;&#x3002;&#x4E00;&#x822C;&#x4F7F;&#x7528;UTF-8&#x7F16;&#x7801;&#x5373;&#x53EF;&#x3002;&#x4E0D;&#x63A8;&#x8350;&#x4F7F;&#x7528;GBK&#x7B49;&#x4E2D;&#x6587;&#x7F16;&#x7801;&#xFF0C;&#x56E0;&#x4E3A;&#x6D4F;&#x89C8;&#x5668;&#x4E0D;&#x4E00;&#x5B9A;&#x652F;&#x6301;&#xFF0C;&#x800C;&#x4E14;JavaScript&#x4E5F;&#x4E0D;&#x652F;&#x6301;GBK&#x7F16;&#x7801;&#x3002;</p>
+<h4 id="1-1-5-BASE64&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E8C;&#x8FDB;&#x5236;&#x56FE;&#x7247;"><a href="#1-1-5-BASE64&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E8C;&#x8FDB;&#x5236;&#x56FE;&#x7247;" class="headerlink" title="1.1.5 BASE64&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E8C;&#x8FDB;&#x5236;&#x56FE;&#x7247;"></a>1.1.5 BASE64&#x7F16;&#x7801;&#xFF1A;&#x4FDD;&#x5B58;&#x4E8C;&#x8FDB;&#x5236;&#x56FE;&#x7247;</h4><p>Cookie&#x4E0D;&#x4EC5;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;ASCII&#x5B57;&#x7B26;&#x4E0E;Unicode&#x5B57;&#x7B26;&#xFF0C;&#x8FD8;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4E8C;&#x8FDB;&#x5236;&#x6570;&#x636E;&#x3002;&#x4F8B;&#x5982;&#x5728;Cookie&#x4E2D;&#x4F7F;&#x7528;&#x6570;&#x5B57;&#x8BC1;&#x4E66;&#xFF0C;&#x63D0;&#x4F9B;&#x5B89;&#x5168;&#x5EA6;&#x3002;&#x4F7F;&#x7528;&#x4E8C;&#x8FDB;&#x5236;&#x6570;&#x636E;&#x65F6;&#x4E5F;&#x9700;&#x8981;&#x8FDB;&#x884C;&#x7F16;&#x7801;&#x3002;</p>
+<p><em>&#x6CE8;&#x610F;&#xFF1A;</em> &#x672C;&#x7A0B;&#x5E8F;&#x4EC5;&#x7528;&#x4E8E;&#x5C55;&#x793A;Cookie&#x4E2D;&#x53EF;&#x4EE5;&#x5B58;&#x50A8;&#x4E8C;&#x8FDB;&#x5236;&#x5185;&#x5BB9;&#xFF0C;&#x5E76;&#x4E0D;&#x5B9E;&#x7528;&#x3002;&#x7531;&#x4E8E;&#x6D4F;&#x89C8;&#x5668;&#x6BCF;&#x6B21;&#x8BF7;&#x6C42;&#x670D;&#x52A1;&#x5668;&#x90FD;&#x4F1A;&#x643A;&#x5E26;Cookie&#xFF0C;&#x56E0;&#x6B64;Cookie&#x5185;&#x5BB9;&#x4E0D;&#x5B9C;&#x8FC7;&#x591A;&#xFF0C;&#x5426;&#x5219;&#x5F71;&#x54CD;&#x901F;&#x5EA6;&#x3002;Cookie&#x7684;&#x5185;&#x5BB9;&#x5E94;&#x8BE5;&#x5C11;&#x800C;&#x7CBE;&#x3002;</p>
+<h4 id="1-1-6-&#x8BBE;&#x7F6E;Cookie&#x7684;&#x6240;&#x6709;&#x5C5E;&#x6027;"><a href="#1-1-6-&#x8BBE;&#x7F6E;Cookie&#x7684;&#x6240;&#x6709;&#x5C5E;&#x6027;" class="headerlink" title="1.1.6 &#x8BBE;&#x7F6E;Cookie&#x7684;&#x6240;&#x6709;&#x5C5E;&#x6027;"></a>1.1.6 &#x8BBE;&#x7F6E;Cookie&#x7684;&#x6240;&#x6709;&#x5C5E;&#x6027;</h4><p>&#x9664;&#x4E86;name&#x4E0E;value&#x4E4B;&#x5916;&#xFF0C;Cookie&#x8FD8;&#x5177;&#x6709;&#x5176;&#x4ED6;&#x51E0;&#x4E2A;&#x5E38;&#x7528;&#x7684;&#x5C5E;&#x6027;&#x3002;&#x6BCF;&#x4E2A;&#x5C5E;&#x6027;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A;getter&#x65B9;&#x6CD5;&#x4E0E;&#x4E00;&#x4E2A;setter&#x65B9;&#x6CD5;&#x3002;Cookie&#x7C7B;&#x7684;&#x6240;&#x6709;&#x5C5E;&#x6027;&#x5982;&#x8868;1.1&#x6240;&#x793A;&#x3002;</p>
+<p>&#x8868;1.1 Cookie&#x5E38;&#x7528;&#x5C5E;&#x6027;</p>
+<p>&#x5C5E; &#x6027; &#x540D;</p>
+<p>&#x63CF; &#x8FF0;</p>
+<p>String name</p>
+<p>&#x8BE5;Cookie&#x7684;&#x540D;&#x79F0;&#x3002;Cookie&#x4E00;&#x65E6;&#x521B;&#x5EFA;&#xFF0C;&#x540D;&#x79F0;&#x4FBF;&#x4E0D;&#x53EF;&#x66F4;&#x6539;</p>
+<p>Object value</p>
+<p>&#x8BE5;Cookie&#x7684;&#x503C;&#x3002;&#x5982;&#x679C;&#x503C;&#x4E3A;Unicode&#x5B57;&#x7B26;&#xFF0C;&#x9700;&#x8981;&#x4E3A;&#x5B57;&#x7B26;&#x7F16;&#x7801;&#x3002;&#x5982;&#x679C;&#x503C;&#x4E3A;&#x4E8C;&#x8FDB;&#x5236;&#x6570;&#x636E;&#xFF0C;&#x5219;&#x9700;&#x8981;&#x4F7F;&#x7528;BASE64&#x7F16;&#x7801;<br>int maxAge</p>
+<p>&#x8BE5;Cookie&#x5931;&#x6548;&#x7684;&#x65F6;&#x95F4;&#xFF0C;&#x5355;&#x4F4D;&#x79D2;&#x3002;&#x5982;&#x679C;&#x4E3A;&#x6B63;&#x6570;&#xFF0C;&#x5219;&#x8BE5;Cookie&#x5728;maxAge&#x79D2;&#x4E4B;&#x540E;&#x5931;&#x6548;&#x3002;&#x5982;&#x679C;&#x4E3A;&#x8D1F;&#x6570;&#xFF0C;&#x8BE5;Cookie&#x4E3A;&#x4E34;&#x65F6;Cookie&#xFF0C;&#x5173;&#x95ED;&#x6D4F;&#x89C8;&#x5668;&#x5373;&#x5931;&#x6548;&#xFF0C;&#x6D4F;&#x89C8;&#x5668;&#x4E5F;&#x4E0D;&#x4F1A;&#x4EE5;&#x4EFB;&#x4F55;&#x5F62;&#x5F0F;&#x4FDD;&#x5B58;&#x8BE5;Cookie&#x3002;&#x5982;&#x679C;&#x4E3A;0&#xFF0C;&#x8868;&#x793A;&#x5220;&#x9664;&#x8BE5;Cookie&#x3002;&#x9ED8;&#x8BA4;&#x4E3A;&#x2013;1</p>
+<p>boolean secure</p>
+<p>&#x8BE5;Cookie&#x662F;&#x5426;&#x4EC5;&#x88AB;&#x4F7F;&#x7528;&#x5B89;&#x5168;&#x534F;&#x8BAE;&#x4F20;&#x8F93;&#x3002;&#x5B89;&#x5168;&#x534F;&#x8BAE;&#x3002;&#x5B89;&#x5168;&#x534F;&#x8BAE;&#x6709;HTTPS&#xFF0C;SSL&#x7B49;&#xFF0C;&#x5728;&#x7F51;&#x7EDC;&#x4E0A;&#x4F20;&#x8F93;&#x6570;&#x636E;&#x4E4B;&#x524D;&#x5148;&#x5C06;&#x6570;&#x636E;&#x52A0;&#x5BC6;&#x3002;&#x9ED8;&#x8BA4;&#x4E3A;false</p>
+<p>String path</p>
+<p>&#x8BE5;Cookie&#x7684;&#x4F7F;&#x7528;&#x8DEF;&#x5F84;&#x3002;&#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E3A;&#x201C;/sessionWeb/&#x201D;&#xFF0C;&#x5219;&#x53EA;&#x6709;contextPath&#x4E3A;&#x201C;/sessionWeb&#x201D;&#x7684;&#x7A0B;&#x5E8F;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x8BE5;Cookie&#x3002;&#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E3A;&#x201C;/&#x201D;&#xFF0C;&#x5219;&#x672C;&#x57DF;&#x540D;&#x4E0B;contextPath&#x90FD;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x8BE5;Cookie&#x3002;&#x6CE8;&#x610F;&#x6700;&#x540E;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x5FC5;&#x987B;&#x4E3A;&#x201C;/&#x201D;</p>
+<p>String domain</p>
+<p>&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x8BE5;Cookie&#x7684;&#x57DF;&#x540D;&#x3002;&#x5982;&#x679C;&#x8BBE;&#x7F6E;&#x4E3A;&#x201C;.google.com&#x201D;&#xFF0C;&#x5219;&#x6240;&#x6709;&#x4EE5;&#x201C;google.com&#x201D;&#x7ED3;&#x5C3E;&#x7684;&#x57DF;&#x540D;&#x90FD;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x8BE5;Cookie&#x3002;&#x6CE8;&#x610F;&#x7B2C;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x5FC5;&#x987B;&#x4E3A;&#x201C;.&#x201D;</p>
+<p>String comment</p>
+<p>&#x8BE5;Cookie&#x7684;&#x7528;&#x5904;&#x8BF4;&#x660E;&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x663E;&#x793A;Cookie&#x4FE1;&#x606F;&#x7684;&#x65F6;&#x5019;&#x663E;&#x793A;&#x8BE5;&#x8BF4;&#x660E;</p>
+<p>int version</p>
+<p>&#x8BE5;Cookie&#x4F7F;&#x7528;&#x7684;&#x7248;&#x672C;&#x53F7;&#x3002;0&#x8868;&#x793A;&#x9075;&#x5FAA;Netscape&#x7684;Cookie&#x89C4;&#x8303;&#xFF0C;1&#x8868;&#x793A;&#x9075;&#x5FAA;W3C&#x7684;RFC 2109&#x89C4;&#x8303;</p>
+<h4 id="1-1-7-Cookie&#x7684;&#x6709;&#x6548;&#x671F;"><a href="#1-1-7-Cookie&#x7684;&#x6709;&#x6548;&#x671F;" class="headerlink" title="1.1.7 Cookie&#x7684;&#x6709;&#x6548;&#x671F;"></a>1.1.7 Cookie&#x7684;&#x6709;&#x6548;&#x671F;</h4><p>Cookie&#x7684;maxAge&#x51B3;&#x5B9A;&#x7740;Cookie&#x7684;&#x6709;&#x6548;&#x671F;&#xFF0C;&#x5355;&#x4F4D;&#x4E3A;&#x79D2;&#xFF08;Second&#xFF09;&#x3002;Cookie&#x4E2D;&#x901A;&#x8FC7;getMaxAge()&#x65B9;&#x6CD5;&#x4E0E;setMaxAge(int maxAge)&#x65B9;&#x6CD5;&#x6765;&#x8BFB;&#x5199;maxAge&#x5C5E;&#x6027;&#x3002;</p>
+<p>&#x5982;&#x679C;maxAge&#x5C5E;&#x6027;&#x4E3A;&#x6B63;&#x6570;&#xFF0C;&#x5219;&#x8868;&#x793A;&#x8BE5;Cookie&#x4F1A;&#x5728;maxAge&#x79D2;&#x4E4B;&#x540E;&#x81EA;&#x52A8;&#x5931;&#x6548;&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x4F1A;&#x5C06;maxAge&#x4E3A;&#x6B63;&#x6570;&#x7684;Cookie&#x6301;&#x4E45;&#x5316;&#xFF0C;&#x5373;&#x5199;&#x5230;&#x5BF9;&#x5E94;&#x7684;Cookie&#x6587;&#x4EF6;&#x4E2D;&#x3002;&#x65E0;&#x8BBA;&#x5BA2;&#x6237;&#x5173;&#x95ED;&#x4E86;&#x6D4F;&#x89C8;&#x5668;&#x8FD8;&#x662F;&#x7535;&#x8111;&#xFF0C;&#x53EA;&#x8981;&#x8FD8;&#x5728;maxAge&#x79D2;&#x4E4B;&#x524D;&#xFF0C;&#x767B;&#x5F55;&#x7F51;&#x7AD9;&#x65F6;&#x8BE5;Cookie&#x4ECD;&#x7136;&#x6709;&#x6548;&#x3002;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x4E2D;&#x7684;Cookie&#x4FE1;&#x606F;&#x5C06;&#x6C38;&#x8FDC;&#x6709;&#x6548;&#x3002;</p>
+<p>Cookie cookie = new Cookie(&#x201C;username&#x201D;,&#x201D;helloweenvsfei&#x201D;); // &#x65B0;&#x5EFA;Cookie</p>
+<p>cookie.setMaxAge(Integer.MAX_VALUE); // &#x8BBE;&#x7F6E;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E3A;MAX_VALUE</p>
+<p>response.addCookie(cookie); // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;</p>
+<p>&#x5982;&#x679C;maxAge&#x4E3A;&#x8D1F;&#x6570;&#xFF0C;&#x5219;&#x8868;&#x793A;&#x8BE5;Cookie&#x4EC5;&#x5728;&#x672C;&#x6D4F;&#x89C8;&#x5668;&#x7A97;&#x53E3;&#x4EE5;&#x53CA;&#x672C;&#x7A97;&#x53E3;&#x6253;&#x5F00;&#x7684;&#x5B50;&#x7A97;&#x53E3;&#x5185;&#x6709;&#x6548;&#xFF0C;&#x5173;&#x95ED;&#x7A97;&#x53E3;&#x540E;&#x8BE5;Cookie&#x5373;&#x5931;&#x6548;&#x3002;maxAge&#x4E3A;&#x8D1F;&#x6570;&#x7684;Cookie&#xFF0C;&#x4E3A;&#x4E34;&#x65F6;&#x6027;Cookie&#xFF0C;&#x4E0D;&#x4F1A;&#x88AB;&#x6301;&#x4E45;&#x5316;&#xFF0C;&#x4E0D;&#x4F1A;&#x88AB;&#x5199;&#x5230;Cookie&#x6587;&#x4EF6;&#x4E2D;&#x3002;Cookie&#x4FE1;&#x606F;&#x4FDD;&#x5B58;&#x5728;&#x6D4F;&#x89C8;&#x5668;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x56E0;&#x6B64;&#x5173;&#x95ED;&#x6D4F;&#x89C8;&#x5668;&#x8BE5;Cookie&#x5C31;&#x6D88;&#x5931;&#x4E86;&#x3002;Cookie&#x9ED8;&#x8BA4;&#x7684;maxAge&#x503C;&#x4E3A;&#x2013;1&#x3002;<br>&#x5982;&#x679C;maxAge&#x4E3A;0&#xFF0C;&#x5219;&#x8868;&#x793A;&#x5220;&#x9664;&#x8BE5;Cookie&#x3002;Cookie&#x673A;&#x5236;&#x6CA1;&#x6709;&#x63D0;&#x4F9B;&#x5220;&#x9664;Cookie&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x56E0;&#x6B64;&#x901A;&#x8FC7;&#x8BBE;&#x7F6E;&#x8BE5;Cookie&#x5373;&#x65F6;&#x5931;&#x6548;&#x5B9E;&#x73B0;&#x5220;&#x9664;Cookie&#x7684;&#x6548;&#x679C;&#x3002;&#x5931;&#x6548;&#x7684;Cookie&#x4F1A;&#x88AB;&#x6D4F;&#x89C8;&#x5668;&#x4ECE;Cookie&#x6587;&#x4EF6;&#x6216;&#x8005;&#x5185;&#x5B58;&#x4E2D;&#x5220;&#x9664;&#xFF0C;</p>
+<p>&#x4F8B;&#x5982;&#xFF1A;</p>
+<p>Cookie cookie = new Cookie(&#x201C;username&#x201D;,&#x201D;helloweenvsfei&#x201D;); // &#x65B0;&#x5EFA;Cookie</p>
+<p>cookie.setMaxAge(0); // &#x8BBE;&#x7F6E;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E3A;0&#xFF0C;&#x4E0D;&#x80FD;&#x4E3A;&#x8D1F;&#x6570;</p>
+<p>response.addCookie(cookie); // &#x5FC5;&#x987B;&#x6267;&#x884C;&#x8FD9;&#x4E00;&#x53E5;</p>
+<p>response&#x5BF9;&#x8C61;&#x63D0;&#x4F9B;&#x7684;Cookie&#x64CD;&#x4F5C;&#x65B9;&#x6CD5;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x6DFB;&#x52A0;&#x64CD;&#x4F5C;add(Cookie cookie)&#x3002;</p>
+<p>&#x8981;&#x60F3;&#x4FEE;&#x6539;Cookie&#x53EA;&#x80FD;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x540C;&#x540D;&#x7684;Cookie&#x6765;&#x8986;&#x76D6;&#x539F;&#x6765;&#x7684;Cookie&#xFF0C;&#x8FBE;&#x5230;&#x4FEE;&#x6539;&#x7684;&#x76EE;&#x7684;&#x3002;&#x5220;&#x9664;&#x65F6;&#x53EA;&#x9700;&#x8981;&#x628A;maxAge&#x4FEE;&#x6539;&#x4E3A;0&#x5373;&#x53EF;&#x3002;</p>
+<p><em>&#x6CE8;&#x610F;&#xFF1A;</em> &#x4ECE;&#x5BA2;&#x6237;&#x7AEF;&#x8BFB;&#x53D6;Cookie&#x65F6;&#xFF0C;&#x5305;&#x62EC;maxAge&#x5728;&#x5185;&#x7684;&#x5176;&#x4ED6;&#x5C5E;&#x6027;&#x90FD;&#x662F;&#x4E0D;&#x53EF;&#x8BFB;&#x7684;&#xFF0C;&#x4E5F;&#x4E0D;&#x4F1A;&#x88AB;&#x63D0;&#x4EA4;&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x63D0;&#x4EA4;Cookie&#x65F6;&#x53EA;&#x4F1A;&#x63D0;&#x4EA4;name&#x4E0E;value&#x5C5E;&#x6027;&#x3002;maxAge&#x5C5E;&#x6027;&#x53EA;&#x88AB;&#x6D4F;&#x89C8;&#x5668;&#x7528;&#x6765;&#x5224;&#x65AD;Cookie&#x662F;&#x5426;&#x8FC7;&#x671F;&#x3002;</p>
+<h5 id="1-1-8-Cookie&#x7684;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;"><a href="#1-1-8-Cookie&#x7684;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;" class="headerlink" title="1.1.8 Cookie&#x7684;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;"></a>1.1.8 Cookie&#x7684;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;</h5><p>Cookie&#x5E76;&#x4E0D;&#x63D0;&#x4F9B;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;&#x64CD;&#x4F5C;&#x3002;&#x5982;&#x679C;&#x8981;&#x4FEE;&#x6539;&#x67D0;&#x4E2A;Cookie&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x540C;&#x540D;&#x7684;Cookie&#xFF0C;&#x6DFB;&#x52A0;&#x5230;response&#x4E2D;&#x8986;&#x76D6;&#x539F;&#x6765;&#x7684;Cookie&#x3002;</p>
+<p>&#x5982;&#x679C;&#x8981;&#x5220;&#x9664;&#x67D0;&#x4E2A;Cookie&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x540C;&#x540D;&#x7684;Cookie&#xFF0C;&#x5E76;&#x5C06;maxAge&#x8BBE;&#x7F6E;&#x4E3A;0&#xFF0C;&#x5E76;&#x6DFB;&#x52A0;&#x5230;response&#x4E2D;&#x8986;&#x76D6;&#x539F;&#x6765;&#x7684;Cookie&#x3002;&#x6CE8;&#x610F;&#x662F;0&#x800C;&#x4E0D;&#x662F;&#x8D1F;&#x6570;&#x3002;&#x8D1F;&#x6570;&#x4EE3;&#x8868;&#x5176;&#x4ED6;&#x7684;&#x610F;&#x4E49;&#x3002;&#x8BFB;&#x8005;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4E0A;&#x4F8B;&#x7684;&#x7A0B;&#x5E8F;&#x8FDB;&#x884C;&#x9A8C;&#x8BC1;&#xFF0C;&#x8BBE;&#x7F6E;&#x4E0D;&#x540C;&#x7684;&#x5C5E;&#x6027;&#x3002;</p>
+<p><em>&#x6CE8;&#x610F;&#xFF1A;</em> &#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;Cookie&#x65F6;&#xFF0C;&#x65B0;&#x5EFA;&#x7684;Cookie&#x9664;value&#x3001;maxAge&#x4E4B;&#x5916;&#x7684;&#x6240;&#x6709;&#x5C5E;&#x6027;&#xFF0C;&#x4F8B;&#x5982;name&#x3001;path&#x3001;domain&#x7B49;&#xFF0C;&#x90FD;&#x8981;&#x4E0E;&#x539F;Cookie&#x5B8C;&#x5168;&#x4E00;&#x6837;&#x3002;&#x5426;&#x5219;&#xFF0C;&#x6D4F;&#x89C8;&#x5668;&#x5C06;&#x89C6;&#x4E3A;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;Cookie&#x4E0D;&#x4E88;&#x8986;&#x76D6;&#xFF0C;&#x5BFC;&#x81F4;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;&#x5931;&#x8D25;&#x3002;</p>
+<h5 id="1-1-9-Cookie&#x7684;&#x57DF;&#x540D;"><a href="#1-1-9-Cookie&#x7684;&#x57DF;&#x540D;" class="headerlink" title="1.1.9 Cookie&#x7684;&#x57DF;&#x540D;"></a>1.1.9 Cookie&#x7684;&#x57DF;&#x540D;</h5><p>Cookie&#x662F;&#x4E0D;&#x53EF;&#x8DE8;&#x57DF;&#x540D;&#x7684;&#x3002;&#x57DF;&#x540D;www.google.com&#x9881;&#x53D1;&#x7684;Cookie&#x4E0D;&#x4F1A;&#x88AB;&#x63D0;&#x4EA4;&#x5230;&#x57DF;&#x540D;www.baidu.com&#x53BB;&#x3002;&#x8FD9;&#x662F;&#x7531;Cookie&#x7684;&#x9690;&#x79C1;&#x5B89;&#x5168;&#x673A;&#x5236;&#x51B3;&#x5B9A;&#x7684;&#x3002;&#x9690;&#x79C1;&#x5B89;&#x5168;&#x673A;&#x5236;&#x80FD;&#x591F;&#x7981;&#x6B62;&#x7F51;&#x7AD9;&#x975E;&#x6CD5;&#x83B7;&#x53D6;&#x5176;&#x4ED6;&#x7F51;&#x7AD9;&#x7684;Cookie&#x3002;</p>
+<p>&#x6B63;&#x5E38;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x540C;&#x4E00;&#x4E2A;&#x4E00;&#x7EA7;&#x57DF;&#x540D;&#x4E0B;&#x7684;&#x4E24;&#x4E2A;&#x4E8C;&#x7EA7;&#x57DF;&#x540D;&#x5982;www.helloweenvsfei.com&#x548C;images.helloweenvsfei.com&#x4E5F;&#x4E0D;&#x80FD;&#x4EA4;&#x4E92;&#x4F7F;&#x7528;Cookie&#xFF0C;&#x56E0;&#x4E3A;&#x4E8C;&#x8005;&#x7684;&#x57DF;&#x540D;&#x5E76;&#x4E0D;&#x4E25;&#x683C;&#x76F8;&#x540C;&#x3002;&#x5982;&#x679C;&#x60F3;&#x6240;&#x6709;helloweenvsfei.com&#x540D;&#x4E0B;&#x7684;&#x4E8C;&#x7EA7;&#x57DF;&#x540D;&#x90FD;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8BE5;Cookie&#xFF0C;&#x9700;&#x8981;&#x8BBE;&#x7F6E;Cookie&#x7684;domain&#x53C2;&#x6570;&#xFF0C;&#x4F8B;&#x5982;&#xFF1A;</p>
+<p>Cookie cookie = new Cookie(&#x201C;time&#x201D;,&#x201D;20080808&#x201D;); // &#x65B0;&#x5EFA;Cookie</p>
+<p>cookie.setDomain(&#x201C;.helloweenvsfei.com&#x201D;); // &#x8BBE;&#x7F6E;&#x57DF;&#x540D;</p>
+<p>cookie.setPath(&#x201C;/&#x201C;); // &#x8BBE;&#x7F6E;&#x8DEF;&#x5F84;</p>
+<p>cookie.setMaxAge(Integer.MAX_VALUE); // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;</p>
+<p>response.addCookie(cookie); // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;</p>
+<p>&#x8BFB;&#x8005;&#x53EF;&#x4EE5;&#x4FEE;&#x6539;&#x672C;&#x673A;C:\WINDOWS\system32\drivers\etc&#x4E0B;&#x7684;hosts&#x6587;&#x4EF6;&#x6765;&#x914D;&#x7F6E;&#x591A;&#x4E2A;&#x4E34;&#x65F6;&#x57DF;&#x540D;&#xFF0C;&#x7136;&#x540E;&#x4F7F;&#x7528;setCookie.jsp&#x7A0B;&#x5E8F;&#x6765;&#x8BBE;&#x7F6E;&#x8DE8;&#x57DF;&#x540D;Cookie&#x9A8C;&#x8BC1;domain&#x5C5E;&#x6027;&#x3002;</p>
+<p>&#x6CE8;&#x610F;&#xFF1A;domain&#x53C2;&#x6570;&#x5FC5;&#x987B;&#x4EE5;&#x70B9;(&#x201C;.&#x201D;)&#x5F00;&#x59CB;&#x3002;&#x53E6;&#x5916;&#xFF0C;name&#x76F8;&#x540C;&#x4F46;domain&#x4E0D;&#x540C;&#x7684;&#x4E24;&#x4E2A;Cookie&#x662F;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;Cookie&#x3002;&#x5982;&#x679C;&#x60F3;&#x8981;&#x4E24;&#x4E2A;&#x57DF;&#x540D;&#x5B8C;&#x5168;&#x4E0D;&#x540C;&#x7684;&#x7F51;&#x7AD9;&#x5171;&#x6709;Cookie&#xFF0C;&#x53EF;&#x4EE5;&#x751F;&#x6210;&#x4E24;&#x4E2A;Cookie&#xFF0C;domain&#x5C5E;&#x6027;&#x5206;&#x522B;&#x4E3A;&#x4E24;&#x4E2A;&#x57DF;&#x540D;&#xFF0C;&#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;&#x3002;</p>
+<h4 id="1-1-10-Cookie&#x7684;&#x8DEF;&#x5F84;"><a href="#1-1-10-Cookie&#x7684;&#x8DEF;&#x5F84;" class="headerlink" title="1.1.10 Cookie&#x7684;&#x8DEF;&#x5F84;"></a>1.1.10 Cookie&#x7684;&#x8DEF;&#x5F84;</h4><p>domain&#x5C5E;&#x6027;&#x51B3;&#x5B9A;&#x8FD0;&#x884C;&#x8BBF;&#x95EE;Cookie&#x7684;&#x57DF;&#x540D;&#xFF0C;&#x800C;path&#x5C5E;&#x6027;&#x51B3;&#x5B9A;&#x5141;&#x8BB8;&#x8BBF;&#x95EE;Cookie&#x7684;&#x8DEF;&#x5F84;&#xFF08;ContextPath&#xFF09;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5982;&#x679C;&#x53EA;&#x5141;&#x8BB8;/sessionWeb/&#x4E0B;&#x7684;&#x7A0B;&#x5E8F;&#x4F7F;&#x7528;Cookie&#xFF0C;&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x5199;&#xFF1A;</p>
+<p>Cookie cookie = new Cookie(&#x201C;time&#x201D;,&#x201D;20080808&#x201D;); // &#x65B0;&#x5EFA;Cookie</p>
+<p>cookie.setPath(&#x201C;/session/&#x201C;); // &#x8BBE;&#x7F6E;&#x8DEF;&#x5F84;</p>
+<p>response.addCookie(cookie); // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;</p>
+<p>&#x8BBE;&#x7F6E;&#x4E3A;&#x201C;/&#x201D;&#x65F6;&#x5141;&#x8BB8;&#x6240;&#x6709;&#x8DEF;&#x5F84;&#x4F7F;&#x7528;Cookie&#x3002;path&#x5C5E;&#x6027;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x7B26;&#x53F7;&#x201C;/&#x201D;&#x7ED3;&#x5C3E;&#x3002;name&#x76F8;&#x540C;&#x4F46;domain&#x76F8;&#x540C;&#x7684;&#x4E24;&#x4E2A;Cookie&#x4E5F;&#x662F;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;Cookie&#x3002;</p>
+<p>&#x6CE8;&#x610F;&#xFF1A;&#x9875;&#x9762;&#x53EA;&#x80FD;&#x83B7;&#x53D6;&#x5B83;&#x5C5E;&#x4E8E;&#x7684;Path&#x7684;Cookie&#x3002;&#x4F8B;&#x5982;/session/test/a.jsp&#x4E0D;&#x80FD;&#x83B7;&#x53D6;&#x5230;&#x8DEF;&#x5F84;&#x4E3A;/session/abc/&#x7684;Cookie&#x3002;&#x4F7F;&#x7528;&#x65F6;&#x4E00;&#x5B9A;&#x8981;&#x6CE8;&#x610F;&#x3002;</p>
+<h4 id="1-1-11-Cookie&#x7684;&#x5B89;&#x5168;&#x5C5E;&#x6027;"><a href="#1-1-11-Cookie&#x7684;&#x5B89;&#x5168;&#x5C5E;&#x6027;" class="headerlink" title="1.1.11 Cookie&#x7684;&#x5B89;&#x5168;&#x5C5E;&#x6027;"></a>1.1.11 Cookie&#x7684;&#x5B89;&#x5168;&#x5C5E;&#x6027;</h4><p>HTTP&#x534F;&#x8BAE;&#x4E0D;&#x4EC5;&#x662F;&#x65E0;&#x72B6;&#x6001;&#x7684;&#xFF0C;&#x800C;&#x4E14;&#x662F;&#x4E0D;&#x5B89;&#x5168;&#x7684;&#x3002;&#x4F7F;&#x7528;HTTP&#x534F;&#x8BAE;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x7ECF;&#x8FC7;&#x4EFB;&#x4F55;&#x52A0;&#x5BC6;&#x5C31;&#x76F4;&#x63A5;&#x5728;&#x7F51;&#x7EDC;&#x4E0A;&#x4F20;&#x64AD;&#xFF0C;&#x6709;&#x88AB;&#x622A;&#x83B7;&#x7684;&#x53EF;&#x80FD;&#x3002;&#x4F7F;&#x7528;HTTP&#x534F;&#x8BAE;&#x4F20;&#x8F93;&#x5F88;&#x673A;&#x5BC6;&#x7684;&#x5185;&#x5BB9;&#x662F;&#x4E00;&#x79CD;&#x9690;&#x60A3;&#x3002;&#x5982;&#x679C;&#x4E0D;&#x5E0C;&#x671B;Cookie&#x5728;HTTP&#x7B49;&#x975E;&#x5B89;&#x5168;&#x534F;&#x8BAE;&#x4E2D;&#x4F20;&#x8F93;&#xFF0C;&#x53EF;&#x4EE5;&#x8BBE;&#x7F6E;Cookie&#x7684;secure&#x5C5E;&#x6027;&#x4E3A;true&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x53EA;&#x4F1A;&#x5728;HTTPS&#x548C;SSL&#x7B49;&#x5B89;&#x5168;&#x534F;&#x8BAE;&#x4E2D;&#x4F20;&#x8F93;&#x6B64;&#x7C7B;Cookie&#x3002;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x8BBE;&#x7F6E;secure&#x5C5E;&#x6027;&#x4E3A;true&#xFF1A;</p>
+<p>Cookie cookie = new Cookie(&#x201C;time&#x201D;, &#x201C;20080808&#x201D;); // &#x65B0;&#x5EFA;Cookie</p>
+<p>cookie.setSecure(true); // &#x8BBE;&#x7F6E;&#x5B89;&#x5168;&#x5C5E;&#x6027;</p>
+<p>response.addCookie(cookie); // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;</p>
+<p>&#x63D0;&#x793A;&#xFF1A; secure&#x5C5E;&#x6027;&#x5E76;&#x4E0D;&#x80FD;&#x5BF9;Cookie&#x5185;&#x5BB9;&#x52A0;&#x5BC6;&#xFF0C;&#x56E0;&#x800C;&#x4E0D;&#x80FD;&#x4FDD;&#x8BC1;&#x7EDD;&#x5BF9;&#x7684;&#x5B89;&#x5168;&#x6027;&#x3002;&#x5982;&#x679C;&#x9700;&#x8981;&#x9AD8;&#x5B89;&#x5168;&#x6027;&#xFF0C;&#x9700;&#x8981;&#x5728;&#x7A0B;&#x5E8F;&#x4E2D;&#x5BF9;Cookie&#x5185;&#x5BB9;&#x52A0;&#x5BC6;&#x3001;&#x89E3;&#x5BC6;&#xFF0C;&#x4EE5;&#x9632;&#x6CC4;&#x5BC6;&#x3002;</p>
+<h4 id="1-1-12-JavaScript&#x64CD;&#x4F5C;Cookie"><a href="#1-1-12-JavaScript&#x64CD;&#x4F5C;Cookie" class="headerlink" title="1.1.12 JavaScript&#x64CD;&#x4F5C;Cookie"></a>1.1.12 JavaScript&#x64CD;&#x4F5C;Cookie</h4><p>Cookie&#x662F;&#x4FDD;&#x5B58;&#x5728;&#x6D4F;&#x89C8;&#x5668;&#x7AEF;&#x7684;&#xFF0C;&#x56E0;&#x6B64;&#x6D4F;&#x89C8;&#x5668;&#x5177;&#x6709;&#x64CD;&#x4F5C;Cookie&#x7684;&#x5148;&#x51B3;&#x6761;&#x4EF6;&#x3002;&#x6D4F;&#x89C8;&#x5668;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x811A;&#x672C;&#x7A0B;&#x5E8F;&#x5982;JavaScript&#x6216;&#x8005;VBScript&#x7B49;&#x64CD;&#x4F5C;Cookie&#x3002;&#x8FD9;&#x91CC;&#x4EE5;JavaScript&#x4E3A;&#x4F8B;&#x4ECB;&#x7ECD;&#x5E38;&#x7528;&#x7684;Cookie&#x64CD;&#x4F5C;&#x3002;&#x4F8B;&#x5982;&#x4E0B;&#x9762;&#x7684;&#x4EE3;&#x7801;&#x4F1A;&#x8F93;&#x51FA;&#x672C;&#x9875;&#x9762;&#x6240;&#x6709;&#x7684;Cookie&#x3002;</p>
+<p>&#x7531;&#x4E8E;JavaScript&#x80FD;&#x591F;&#x4EFB;&#x610F;&#x5730;&#x8BFB;&#x5199;Cookie&#xFF0C;&#x6709;&#x4E9B;&#x597D;&#x4E8B;&#x8005;&#x4FBF;&#x60F3;&#x4F7F;&#x7528;JavaScript&#x7A0B;&#x5E8F;&#x53BB;&#x7AA5;&#x63A2;&#x7528;&#x6237;&#x5728;&#x5176;&#x4ED6;&#x7F51;&#x7AD9;&#x7684;Cookie&#x3002;&#x4E0D;&#x8FC7;&#x8FD9;&#x662F;&#x5F92;&#x52B3;&#x7684;&#xFF0C;W3C&#x7EC4;&#x7EC7;&#x65E9;&#x5C31;&#x610F;&#x8BC6;&#x5230;JavaScript&#x5BF9;Cookie&#x7684;&#x8BFB;&#x5199;&#x6240;&#x5E26;&#x6765;&#x7684;&#x5B89;&#x5168;&#x9690;&#x60A3;&#x5E76;&#x52A0;&#x4EE5;&#x9632;&#x5907;&#x4E86;&#xFF0C;W3C&#x6807;&#x51C6;&#x7684;&#x6D4F;&#x89C8;&#x5668;&#x4F1A;&#x963B;&#x6B62;JavaScript&#x8BFB;&#x5199;&#x4EFB;&#x4F55;&#x4E0D;&#x5C5E;&#x4E8E;&#x81EA;&#x5DF1;&#x7F51;&#x7AD9;&#x7684;Cookie&#x3002;&#x6362;&#x53E5;&#x8BDD;&#x8BF4;&#xFF0C;A&#x7F51;&#x7AD9;&#x7684;JavaScript&#x7A0B;&#x5E8F;&#x8BFB;&#x5199;B&#x7F51;&#x7AD9;&#x7684;Cookie&#x4E0D;&#x4F1A;&#x6709;&#x4EFB;&#x4F55;&#x7ED3;&#x679C;&#x3002;</p>
+<h4 id="1-1-13-&#x6848;&#x4F8B;&#xFF1A;&#x6C38;&#x4E45;&#x767B;&#x5F55;"><a href="#1-1-13-&#x6848;&#x4F8B;&#xFF1A;&#x6C38;&#x4E45;&#x767B;&#x5F55;" class="headerlink" title="1.1.13 &#x6848;&#x4F8B;&#xFF1A;&#x6C38;&#x4E45;&#x767B;&#x5F55;"></a>1.1.13 &#x6848;&#x4F8B;&#xFF1A;&#x6C38;&#x4E45;&#x767B;&#x5F55;</h4><p>&#x5982;&#x679C;&#x7528;&#x6237;&#x662F;&#x5728;&#x81EA;&#x5DF1;&#x5BB6;&#x7684;&#x7535;&#x8111;&#x4E0A;&#x4E0A;&#x7F51;&#xFF0C;&#x767B;&#x5F55;&#x65F6;&#x5C31;&#x53EF;&#x4EE5;&#x8BB0;&#x4F4F;&#x4ED6;&#x7684;&#x767B;&#x5F55;&#x4FE1;&#x606F;&#xFF0C;&#x4E0B;&#x6B21;&#x8BBF;&#x95EE;&#x65F6;&#x4E0D;&#x9700;&#x8981;&#x518D;&#x6B21;&#x767B;&#x5F55;&#xFF0C;&#x76F4;&#x63A5;&#x8BBF;&#x95EE;&#x5373;&#x53EF;&#x3002;&#x5B9E;&#x73B0;&#x65B9;&#x6CD5;&#x662F;&#x628A;&#x767B;&#x5F55;&#x4FE1;&#x606F;&#x5982;&#x8D26;&#x53F7;&#x3001;&#x5BC6;&#x7801;&#x7B49;&#x4FDD;&#x5B58;&#x5728;Cookie&#x4E2D;&#xFF0C;&#x5E76;&#x63A7;&#x5236;Cookie&#x7684;&#x6709;&#x6548;&#x671F;&#xFF0C;&#x4E0B;&#x6B21;&#x8BBF;&#x95EE;&#x65F6;&#x518D;&#x9A8C;&#x8BC1;Cookie&#x4E2D;&#x7684;&#x767B;&#x5F55;&#x4FE1;&#x606F;&#x5373;&#x53EF;&#x3002;</p>
+<p>&#x4FDD;&#x5B58;&#x767B;&#x5F55;&#x4FE1;&#x606F;&#x6709;&#x591A;&#x79CD;&#x65B9;&#x6848;&#x3002;&#x6700;&#x76F4;&#x63A5;&#x7684;&#x662F;&#x628A;&#x7528;&#x6237;&#x540D;&#x4E0E;&#x5BC6;&#x7801;&#x90FD;&#x4FDD;&#x6301;&#x5230;Cookie&#x4E2D;&#xFF0C;&#x4E0B;&#x6B21;&#x8BBF;&#x95EE;&#x65F6;&#x68C0;&#x67E5;Cookie&#x4E2D;&#x7684;&#x7528;&#x6237;&#x540D;&#x4E0E;&#x5BC6;&#x7801;&#xFF0C;&#x4E0E;&#x6570;&#x636E;&#x5E93;&#x6BD4;&#x8F83;&#x3002;&#x8FD9;&#x662F;&#x4E00;&#x79CD;&#x6BD4;&#x8F83;&#x5371;&#x9669;&#x7684;&#x9009;&#x62E9;&#xFF0C;&#x4E00;&#x822C;&#x4E0D;&#x628A;&#x5BC6;&#x7801;&#x7B49;&#x91CD;&#x8981;&#x4FE1;&#x606F;&#x4FDD;&#x5B58;&#x5230;Cookie&#x4E2D;&#x3002;</p>
+<p>&#x8FD8;&#x6709;&#x4E00;&#x79CD;&#x65B9;&#x6848;&#x662F;&#x628A;&#x5BC6;&#x7801;&#x52A0;&#x5BC6;&#x540E;&#x4FDD;&#x5B58;&#x5230;Cookie&#x4E2D;&#xFF0C;&#x4E0B;&#x6B21;&#x8BBF;&#x95EE;&#x65F6;&#x89E3;&#x5BC6;&#x5E76;&#x4E0E;&#x6570;&#x636E;&#x5E93;&#x6BD4;&#x8F83;&#x3002;&#x8FD9;&#x79CD;&#x65B9;&#x6848;&#x7565;&#x5FAE;&#x5B89;&#x5168;&#x4E00;&#x4E9B;&#x3002;&#x5982;&#x679C;&#x4E0D;&#x5E0C;&#x671B;&#x4FDD;&#x5B58;&#x5BC6;&#x7801;&#xFF0C;&#x8FD8;&#x53EF;&#x4EE5;&#x628A;&#x767B;&#x5F55;&#x7684;&#x65F6;&#x95F4;&#x6233;&#x4FDD;&#x5B58;&#x5230;Cookie&#x4E0E;&#x6570;&#x636E;&#x5E93;&#x4E2D;&#xFF0C;&#x5230;&#x65F6;&#x53EA;&#x9A8C;&#x8BC1;&#x7528;&#x6237;&#x540D;&#x4E0E;&#x767B;&#x5F55;&#x65F6;&#x95F4;&#x6233;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</p>
+<p>&#x8FD9;&#x51E0;&#x79CD;&#x65B9;&#x6848;&#x9A8C;&#x8BC1;&#x8D26;&#x53F7;&#x65F6;&#x90FD;&#x8981;&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x3002;</p>
+<p>&#x672C;&#x4F8B;&#x5C06;&#x91C7;&#x7528;&#x53E6;&#x4E00;&#x79CD;&#x65B9;&#x6848;&#xFF0C;&#x53EA;&#x5728;&#x767B;&#x5F55;&#x65F6;&#x67E5;&#x8BE2;&#x4E00;&#x6B21;&#x6570;&#x636E;&#x5E93;&#xFF0C;&#x4EE5;&#x540E;&#x8BBF;&#x95EE;&#x9A8C;&#x8BC1;&#x767B;&#x5F55;&#x4FE1;&#x606F;&#x65F6;&#x4E0D;&#x518D;&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x3002;&#x5B9E;&#x73B0;&#x65B9;&#x5F0F;&#x662F;&#x628A;&#x8D26;&#x53F7;&#x6309;&#x7167;&#x4E00;&#x5B9A;&#x7684;&#x89C4;&#x5219;&#x52A0;&#x5BC6;&#x540E;&#xFF0C;&#x8FDE;&#x540C;&#x8D26;&#x53F7;&#x4E00;&#x5757;&#x4FDD;&#x5B58;&#x5230;Cookie&#x4E2D;&#x3002;&#x4E0B;&#x6B21;&#x8BBF;&#x95EE;&#x65F6;&#x53EA;&#x9700;&#x8981;&#x5224;&#x65AD;&#x8D26;&#x53F7;&#x7684;&#x52A0;&#x5BC6;&#x89C4;&#x5219;&#x662F;&#x5426;&#x6B63;&#x786E;&#x5373;&#x53EF;&#x3002;&#x672C;&#x4F8B;&#x628A;&#x8D26;&#x53F7;&#x4FDD;&#x5B58;&#x5230;&#x540D;&#x4E3A;account&#x7684;Cookie&#x4E2D;&#xFF0C;&#x628A;&#x8D26;&#x53F7;&#x8FDE;&#x540C;&#x5BC6;&#x94A5;&#x7528;MD1&#x7B97;&#x6CD5;&#x52A0;&#x5BC6;&#x540E;&#x4FDD;&#x5B58;&#x5230;&#x540D;&#x4E3A;ssid&#x7684;Cookie&#x4E2D;&#x3002;&#x9A8C;&#x8BC1;&#x65F6;&#x9A8C;&#x8BC1;Cookie&#x4E2D;&#x7684;&#x8D26;&#x53F7;&#x4E0E;&#x5BC6;&#x94A5;&#x52A0;&#x5BC6;&#x540E;&#x662F;&#x5426;&#x4E0E;Cookie&#x4E2D;&#x7684;ssid&#x76F8;&#x7B49;&#x3002;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x5982;&#x4E0B;&#xFF1A;<br>&#x4EE3;&#x7801;1.8 loginCookie.jsp</p>
+<pre><code>  private static final String KEY =&quot;:cookie@helloweenvsfei.com&quot;;  
+                                                 // &#x5BC6;&#x94A5;   
+  public final static String calcMD1(Stringss) { // MD1 &#x52A0;&#x5BC6;&#x7B97;&#x6CD5;  
+   String s = ss==null ?&quot;&quot; : ss;                  // &#x82E5;&#x4E3A;null&#x8FD4;&#x56DE;&#x7A7A;  
+   char hexDigits[] = { &apos;0&apos;,&apos;1&apos;, &apos;2&apos;, &apos;3&apos;, &apos;4&apos;, &apos;1&apos;, &apos;6&apos;, &apos;7&apos;, &apos;8&apos;, &apos;9&apos;,  
+   &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;, &apos;f&apos; };                        // &#x5B57;&#x5178;  
+   try {  
+    byte[] strTemp =s.getBytes();                          // &#x83B7;&#x53D6;&#x5B57;&#x8282;  
+    MessageDigestmdTemp = MessageDigest.getInstance(&quot;MD1&quot;); // &#x83B7;&#x53D6;MD1  
+   mdTemp.update(strTemp);                                // &#x66F4;&#x65B0;&#x6570;&#x636E;  
+    byte[] md =mdTemp.digest();                        // &#x52A0;&#x5BC6;  
+    int j =md.length;                                 // &#x52A0;&#x5BC6;&#x540E;&#x7684;&#x957F;&#x5EA6;  
+    char str[] = newchar[j * 2];                       // &#x65B0;&#x5B57;&#x7B26;&#x4E32;&#x6570;&#x7EC4;  
+    int k =0;                                         // &#x8BA1;&#x6570;&#x5668;k  
+    for (int i = 0; i&lt; j; i++) {                       // &#x5FAA;&#x73AF;&#x8F93;&#x51FA;  
+     byte byte0 =md[i];  
+     str[k++] =hexDigits[byte0 &gt;&gt;&gt; 4 &amp; 0xf];  
+     str[k++] =hexDigits[byte0 &amp; 0xf];  
+    }  
+    return newString(str);                             // &#x52A0;&#x5BC6;&#x540E;&#x5B57;&#x7B26;&#x4E32;  
+   } catch (Exception e){return null; }  
+  }  
+  %&gt;  
+  &lt;%  
+  request.setCharacterEncoding(&quot;UTF-8&quot;);             // &#x8BBE;&#x7F6E;request&#x7F16;&#x7801;  
+  response.setCharacterEncoding(&quot;UTF-8&quot;);        // &#x8BBE;&#x7F6E;response&#x7F16;&#x7801;  
+
+  String action =request.getParameter(&quot;action&quot;); // &#x83B7;&#x53D6;action&#x53C2;&#x6570;  
+
+  if(&quot;login&quot;.equals(action)){                       // &#x5982;&#x679C;&#x4E3A;login&#x52A8;&#x4F5C;  
+    String account =request.getParameter(&quot;account&quot;);  
+                                                 // &#x83B7;&#x53D6;account&#x53C2;&#x6570;  
+    String password =request.getParameter(&quot;password&quot;);  
+                                                 // &#x83B7;&#x53D6;password&#x53C2;&#x6570;  
+    int timeout = newInteger(request.getParameter(&quot;timeout&quot;));  
+                                                 // &#x83B7;&#x53D6;timeout&#x53C2;&#x6570;  
+
+    String ssid =calcMD1(account + KEY); // &#x628A;&#x8D26;&#x53F7;&#x3001;&#x5BC6;&#x94A5;&#x4F7F;&#x7528;MD1&#x52A0;&#x5BC6;&#x540E;&#x4FDD;&#x5B58;  
+
+    CookieaccountCookie = new Cookie(&quot;account&quot;, account);  
+                                                 // &#x65B0;&#x5EFA;Cookie  
+   accountCookie.setMaxAge(timeout);              // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;  
+
+    Cookie ssidCookie =new Cookie(&quot;ssid&quot;, ssid);   // &#x65B0;&#x5EFA;Cookie  
+   ssidCookie.setMaxAge(timeout);                 // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;  
+
+   response.addCookie(accountCookie);             // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+   response.addCookie(ssidCookie);            // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+
+    // &#x91CD;&#x65B0;&#x8BF7;&#x6C42;&#x672C;&#x9875;&#x9762;&#xFF0C;&#x53C2;&#x6570;&#x4E2D;&#x5E26;&#x6709;&#x65F6;&#x95F4;&#x6233;&#xFF0C;&#x7981;&#x6B62;&#x6D4F;&#x89C8;&#x5668;&#x7F13;&#x5B58;&#x9875;&#x9762;&#x5185;&#x5BB9;  
+   response.sendRedirect(request.getRequestURI() + &quot;?&quot; + System.  
+    currentTimeMillis());  
+    return;  
+  }  
+  elseif(&quot;logout&quot;.equals(action)){                  // &#x5982;&#x679C;&#x4E3A;logout&#x52A8;&#x4F5C;  
+
+    CookieaccountCookie = new Cookie(&quot;account&quot;, &quot;&quot;);  
+                                             // &#x65B0;&#x5EFA;Cookie&#xFF0C;&#x5185;&#x5BB9;&#x4E3A;&#x7A7A;  
+   accountCookie.setMaxAge(0);                // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;&#x4E3A;0&#xFF0C;&#x5220;&#x9664;  
+
+    Cookie ssidCookie =new Cookie(&quot;ssid&quot;, &quot;&quot;); // &#x65B0;&#x5EFA;Cookie&#xFF0C;&#x5185;&#x5BB9;&#x4E3A;&#x7A7A;  
+   ssidCookie.setMaxAge(0);                   // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;&#x4E3A;0&#xFF0C;&#x5220;&#x9664;  
+   response.addCookie(accountCookie);         // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+   response.addCookie(ssidCookie);         // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+    //&#x91CD;&#x65B0;&#x8BF7;&#x6C42;&#x672C;&#x9875;&#x9762;&#xFF0C;&#x53C2;&#x6570;&#x4E2D;&#x5E26;&#x6709;&#x65F6;&#x95F4;&#x6233;&#xFF0C;&#x7981;&#x6B62;&#x6D4F;&#x89C8;&#x5668;&#x7F13;&#x5B58;&#x9875;&#x9762;&#x5185;&#x5BB9;  
+   response.sendRedirect(request.getRequestURI() + &quot;?&quot; + System.  
+    currentTimeMillis());  
+    return;  
+  }  
+  boolean login = false;                        // &#x662F;&#x5426;&#x767B;&#x5F55;  
+  String account = null;                        // &#x8D26;&#x53F7;  
+  String ssid = null;                           // SSID&#x6807;&#x8BC6;  
+
+  if(request.getCookies() !=null){               // &#x5982;&#x679C;Cookie&#x4E0D;&#x4E3A;&#x7A7A;  
+    for(Cookie cookie :request.getCookies()){  // &#x904D;&#x5386;Cookie  
+       if(cookie.getName().equals(&quot;account&quot;))  // &#x5982;&#x679C;Cookie&#x540D;&#x4E3A;  
+                                                account  
+  private static final String KEY =&quot;:cookie@helloweenvsfei.com&quot;;  
+                                               // &#x5BC6;&#x94A5;   
+public final static String calcMD1(Stringss) { // MD1 &#x52A0;&#x5BC6;&#x7B97;&#x6CD5;  
+ String s = ss==null ?&quot;&quot; : ss;                  // &#x82E5;&#x4E3A;null&#x8FD4;&#x56DE;&#x7A7A;  
+ char hexDigits[] = { &apos;0&apos;,&apos;1&apos;, &apos;2&apos;, &apos;3&apos;, &apos;4&apos;, &apos;1&apos;, &apos;6&apos;, &apos;7&apos;, &apos;8&apos;, &apos;9&apos;,  
+ &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;, &apos;f&apos; };                        // &#x5B57;&#x5178;  
+ try {  
+  byte[] strTemp =s.getBytes();                          // &#x83B7;&#x53D6;&#x5B57;&#x8282;  
+  MessageDigestmdTemp = MessageDigest.getInstance(&quot;MD1&quot;); // &#x83B7;&#x53D6;MD1  
+ mdTemp.update(strTemp);                                // &#x66F4;&#x65B0;&#x6570;&#x636E;  
+  byte[] md =mdTemp.digest();                        // &#x52A0;&#x5BC6;  
+  int j =md.length;                                 // &#x52A0;&#x5BC6;&#x540E;&#x7684;&#x957F;&#x5EA6;  
+  char str[] = newchar[j * 2];                       // &#x65B0;&#x5B57;&#x7B26;&#x4E32;&#x6570;&#x7EC4;  
+  int k =0;                                         // &#x8BA1;&#x6570;&#x5668;k  
+  for (int i = 0; i&lt; j; i++) {                       // &#x5FAA;&#x73AF;&#x8F93;&#x51FA;  
+   byte byte0 =md[i];  
+   str[k++] =hexDigits[byte0 &gt;&gt;&gt; 4 &amp; 0xf];  
+   str[k++] =hexDigits[byte0 &amp; 0xf];  
+  }  
+  return newString(str);                             // &#x52A0;&#x5BC6;&#x540E;&#x5B57;&#x7B26;&#x4E32;  
+ } catch (Exception e){return null; }  
+}  
+%&gt;  
+&lt;%  
+request.setCharacterEncoding(&quot;UTF-8&quot;);             // &#x8BBE;&#x7F6E;request&#x7F16;&#x7801;  
+response.setCharacterEncoding(&quot;UTF-8&quot;);        // &#x8BBE;&#x7F6E;response&#x7F16;&#x7801;  
+
+String action =request.getParameter(&quot;action&quot;); // &#x83B7;&#x53D6;action&#x53C2;&#x6570;  
+
+if(&quot;login&quot;.equals(action)){                       // &#x5982;&#x679C;&#x4E3A;login&#x52A8;&#x4F5C;  
+  String account =request.getParameter(&quot;account&quot;);  
+                                               // &#x83B7;&#x53D6;account&#x53C2;&#x6570;  
+  String password =request.getParameter(&quot;password&quot;);  
+                                               // &#x83B7;&#x53D6;password&#x53C2;&#x6570;  
+  int timeout = newInteger(request.getParameter(&quot;timeout&quot;));  
+                                               // &#x83B7;&#x53D6;timeout&#x53C2;&#x6570;  
+
+  String ssid =calcMD1(account + KEY); // &#x628A;&#x8D26;&#x53F7;&#x3001;&#x5BC6;&#x94A5;&#x4F7F;&#x7528;MD1&#x52A0;&#x5BC6;&#x540E;&#x4FDD;&#x5B58;  
+
+  CookieaccountCookie = new Cookie(&quot;account&quot;, account);  
+                                               // &#x65B0;&#x5EFA;Cookie  
+ accountCookie.setMaxAge(timeout);              // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;  
+
+  Cookie ssidCookie =new Cookie(&quot;ssid&quot;, ssid);   // &#x65B0;&#x5EFA;Cookie  
+ ssidCookie.setMaxAge(timeout);                 // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;  
+
+ response.addCookie(accountCookie);             // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+ response.addCookie(ssidCookie);            // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+
+  // &#x91CD;&#x65B0;&#x8BF7;&#x6C42;&#x672C;&#x9875;&#x9762;&#xFF0C;&#x53C2;&#x6570;&#x4E2D;&#x5E26;&#x6709;&#x65F6;&#x95F4;&#x6233;&#xFF0C;&#x7981;&#x6B62;&#x6D4F;&#x89C8;&#x5668;&#x7F13;&#x5B58;&#x9875;&#x9762;&#x5185;&#x5BB9;  
+ response.sendRedirect(request.getRequestURI() + &quot;?&quot; + System.  
+  currentTimeMillis());  
+  return;  
+}  
+elseif(&quot;logout&quot;.equals(action)){                  // &#x5982;&#x679C;&#x4E3A;logout&#x52A8;&#x4F5C;  
+
+  CookieaccountCookie = new Cookie(&quot;account&quot;, &quot;&quot;);  
+                                           // &#x65B0;&#x5EFA;Cookie&#xFF0C;&#x5185;&#x5BB9;&#x4E3A;&#x7A7A;  
+ accountCookie.setMaxAge(0);                // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;&#x4E3A;0&#xFF0C;&#x5220;&#x9664;  
+
+  Cookie ssidCookie =new Cookie(&quot;ssid&quot;, &quot;&quot;); // &#x65B0;&#x5EFA;Cookie&#xFF0C;&#x5185;&#x5BB9;&#x4E3A;&#x7A7A;  
+ ssidCookie.setMaxAge(0);                   // &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x671F;&#x4E3A;0&#xFF0C;&#x5220;&#x9664;  
+ response.addCookie(accountCookie);         // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+ response.addCookie(ssidCookie);         // &#x8F93;&#x51FA;&#x5230;&#x5BA2;&#x6237;&#x7AEF;  
+  //&#x91CD;&#x65B0;&#x8BF7;&#x6C42;&#x672C;&#x9875;&#x9762;&#xFF0C;&#x53C2;&#x6570;&#x4E2D;&#x5E26;&#x6709;&#x65F6;&#x95F4;&#x6233;&#xFF0C;&#x7981;&#x6B62;&#x6D4F;&#x89C8;&#x5668;&#x7F13;&#x5B58;&#x9875;&#x9762;&#x5185;&#x5BB9;  
+ response.sendRedirect(request.getRequestURI() + &quot;?&quot; + System.  
+  currentTimeMillis());  
+  return;  
+}  
+boolean login = false;                        // &#x662F;&#x5426;&#x767B;&#x5F55;  
+String account = null;                        // &#x8D26;&#x53F7;  
+String ssid = null;                           // SSID&#x6807;&#x8BC6;  
+
+if(request.getCookies() !=null){               // &#x5982;&#x679C;Cookie&#x4E0D;&#x4E3A;&#x7A7A;  
+  for(Cookie cookie :request.getCookies()){  // &#x904D;&#x5386;Cookie  
+     if(cookie.getName().equals(&quot;account&quot;))  // &#x5982;&#x679C;Cookie&#x540D;&#x4E3A;  
+                                              account  
+         account = cookie.getValue();       // &#x4FDD;&#x5B58;account&#x5185;&#x5BB9;  
+     if(cookie.getName().equals(&quot;ssid&quot;)) // &#x5982;&#x679C;&#x4E3A;SSID  
+         ssid = cookie.getValue();          // &#x4FDD;&#x5B58;SSID&#x5185;&#x5BB9;  
+  }  
+}  
+if(account != null &amp;&amp; ssid !=null){    // &#x5982;&#x679C;account&#x3001;SSID&#x90FD;&#x4E0D;&#x4E3A;&#x7A7A;  
+  login =ssid.equals(calcMD1(account + KEY));  
+                                // &#x5982;&#x679C;&#x52A0;&#x5BC6;&#x89C4;&#x5219;&#x6B63;&#x786E;, &#x5219;&#x89C6;&#x4E3A;&#x5DF2;&#x7ECF;&#x767B;&#x5F55;  
+}  
+%&gt;  
+&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01Transitional//EN&quot;&gt;  
+ &lt;legend&gt;&lt;%= login ? &quot;&#x6B22;&#x8FCE;&#x60A8;&#x56DE;&#x6765;&quot; : &quot;&#x8BF7;&#x5148;&#x767B;&#x5F55;&quot;%&gt;&lt;/legend&gt;  
+  &lt;% if(login){%&gt;  
+      &#x6B22;&#x8FCE;&#x60A8;, ${ cookie.account.value }.     
+     &lt;a href=&quot;${ pageContext.request.requestURI }?action=logout&quot;&gt;  
+      &#x6CE8;&#x9500;&lt;/a&gt;  
+  &lt;% } else {%&gt;  
+  &lt;formaction=&quot;${ pageContext.request.requestURI }?action=login&quot;  
+  method=&quot;post&quot;&gt;  
+     &lt;table&gt;  
+         &lt;tr&gt;&lt;td&gt;&#x8D26;&#x53F7;&#xFF1A; &lt;/td&gt;  
+             &lt;td&gt;&lt;input type=&quot;text&quot;name=&quot;account&quot; style=&quot;width:  
+             200px; &quot;&gt;&lt;/td&gt;  
+         &lt;/tr&gt;  
+         &lt;tr&gt;&lt;td&gt;&#x5BC6;&#x7801;&#xFF1A; &lt;/td&gt;  
+             &lt;td&gt;&lt;inputtype=&quot;password&quot; name=&quot;password&quot;&gt;&lt;/td&gt;  
+         &lt;/tr&gt;  
+         &lt;tr&gt;  
+             &lt;td&gt;&#x6709;&#x6548;&#x671F;&#xFF1A; &lt;/td&gt;  
+             &lt;td&gt;&lt;inputtype=&quot;radio&quot; name=&quot;timeout&quot; value=&quot;-1&quot;  
+             checked&gt; &#x5173;&#x95ED;&#x6D4F;&#x89C8;&#x5668;&#x5373;&#x5931;&#x6548; &lt;br/&gt; &lt;input type=&quot;radio&quot;   
+             name=&quot;timeout&quot; value=&quot;&lt;%= 30*24*60*60 %&gt;&quot;&gt; 30&#x5929;  
+             &#x5185;&#x6709;&#x6548; &lt;br/&gt;&lt;input type=&quot;radio&quot; name=&quot;timeout&quot; value=   
+             &quot;&lt;%= Integer.MAX_VALUE %&gt;&quot;&gt; &#x6C38;&#x4E45;&#x6709;&#x6548; &lt;br/&gt; &lt;/td&gt; &lt;/tr&gt;  
+         &lt;tr&gt;&lt;td&gt;&lt;/td&gt;  
+             &lt;td&gt;&lt;input type=&quot;submit&quot;value=&quot; &#x767B;  &#x5F55; &quot; class=   
+             &quot;button&quot;&gt;&lt;/td&gt;  
+         &lt;/tr&gt;  
+     &lt;/table&gt;  
+  &lt;/form&gt;  
+  &lt;% } %&gt;  
+                                        // &#x5982;&#x679C;&#x52A0;&#x5BC6;&#x89C4;&#x5219;&#x6B63;&#x786E;, &#x5219;&#x89C6;&#x4E3A;&#x5DF2;&#x7ECF;&#x767B;&#x5F55;  
+          }  
+          %&gt;  
+          &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01Transitional//EN&quot;&gt;  
+           &lt;legend&gt;&lt;%= login ? &quot;&#x6B22;&#x8FCE;&#x60A8;&#x56DE;&#x6765;&quot; : &quot;&#x8BF7;&#x5148;&#x767B;&#x5F55;&quot;%&gt;&lt;/legend&gt;  
+            &lt;% if(login){%&gt;  
+                &#x6B22;&#x8FCE;&#x60A8;, ${ cookie.account.value }.     
+               &lt;a href=&quot;${ pageContext.request.requestURI }?action=logout&quot;&gt;  
+                &#x6CE8;&#x9500;&lt;/a&gt;  
+            &lt;% } else {%&gt;  
+            &lt;formaction=&quot;${ pageContext.request.requestURI }?action=login&quot;  
+            method=&quot;post&quot;&gt;  
+               &lt;table&gt;  
+                   &lt;tr&gt;&lt;td&gt;&#x8D26;&#x53F7;&#xFF1A; &lt;/td&gt;  
+                       &lt;td&gt;&lt;input type=&quot;text&quot;name=&quot;account&quot; style=&quot;width:  
+                       200px; &quot;&gt;&lt;/td&gt;  
+                   &lt;/tr&gt;  
+                   &lt;tr&gt;&lt;td&gt;&#x5BC6;&#x7801;&#xFF1A; &lt;/td&gt;  
+                       &lt;td&gt;&lt;inputtype=&quot;password&quot; name=&quot;password&quot;&gt;&lt;/td&gt;  
+                   &lt;/tr&gt;  
+                   &lt;tr&gt;  
+                       &lt;td&gt;&#x6709;&#x6548;&#x671F;&#xFF1A; &lt;/td&gt;  
+                       &lt;td&gt;&lt;inputtype=&quot;radio&quot; name=&quot;timeout&quot; value=&quot;-1&quot;  
+                       checked&gt; &#x5173;&#x95ED;&#x6D4F;&#x89C8;&#x5668;&#x5373;&#x5931;&#x6548; &lt;br/&gt; &lt;input type=&quot;radio&quot;   
+                       name=&quot;timeout&quot; value=&quot;&lt;%= 30*24*60*60 %&gt;&quot;&gt; 30&#x5929;  
+                       &#x5185;&#x6709;&#x6548; &lt;br/&gt;&lt;input type=&quot;radio&quot; name=&quot;timeout&quot; value=   
+                       &quot;&lt;%= Integer.MAX_VALUE %&gt;&quot;&gt; &#x6C38;&#x4E45;&#x6709;&#x6548; &lt;br/&gt; &lt;/td&gt; &lt;/tr&gt;  
+                   &lt;tr&gt;&lt;td&gt;&lt;/td&gt;  
+                       &lt;td&gt;&lt;input type=&quot;submit&quot;value=&quot; &#x767B;  &#x5F55; &quot; class=   
+                       &quot;button&quot;&gt;&lt;/td&gt;  
+                   &lt;/tr&gt;  
+               &lt;/table&gt;  
+            &lt;/form&gt;  
+            &lt;% } %&gt;  
+</code></pre><p>&#x767B;&#x5F55;&#x65F6;&#x53EF;&#x4EE5;&#x9009;&#x62E9;&#x767B;&#x5F55;&#x4FE1;&#x606F;&#x7684;&#x6709;&#x6548;&#x671F;&#xFF1A;&#x5173;&#x95ED;&#x6D4F;&#x89C8;&#x5668;&#x5373;&#x5931;&#x6548;&#x3001;30&#x5929;&#x5185;&#x6709;&#x6548;&#x4E0E;&#x6C38;&#x4E45;&#x6709;&#x6548;&#x3002;&#x901A;&#x8FC7;&#x8BBE;&#x7F6E;Cookie&#x7684;age&#x5C5E;&#x6027;&#x6765;&#x5B9E;&#x73B0;&#xFF0C;&#x6CE8;&#x610F;&#x89C2;&#x5BDF;&#x4EE3;&#x7801;&#x3002;</p>
+<p>&#x63D0;&#x793A;&#xFF1A;&#x8BE5;&#x52A0;&#x5BC6;&#x673A;&#x5236;&#x4E2D;&#x6700;&#x91CD;&#x8981;&#x7684;&#x90E8;&#x5206;&#x4E3A;&#x7B97;&#x6CD5;&#x4E0E;&#x5BC6;&#x94A5;&#x3002;&#x7531;&#x4E8E;MD1&#x7B97;&#x6CD5;&#x7684;&#x4E0D;&#x53EF;&#x9006;&#x6027;&#xFF0C;&#x5373;&#x4F7F;&#x7528;&#x6237;&#x77E5;&#x9053;&#x4E86;&#x8D26;&#x53F7;&#x4E0E;&#x52A0;&#x5BC6;&#x540E;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x4E5F;&#x4E0D;&#x53EF;&#x80FD;&#x89E3;&#x5BC6;&#x5F97;&#x5230;&#x5BC6;&#x94A5;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x53EA;&#x8981;&#x4FDD;&#x7BA1;&#x597D;&#x5BC6;&#x94A5;&#x4E0E;&#x7B97;&#x6CD5;&#xFF0C;&#x8BE5;&#x673A;&#x5236;&#x5C31;&#x662F;&#x5B89;&#x5168;&#x7684;&#x3002;</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/26/Android-tine/" rel="prev">Android tine</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/25/Node-js开发的坑-1/" rel="next">Node.js开发的坑 1</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                             
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                $('#donate_guide').removeClass('hidden');
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <div class="bdsharebuttonbox">
+	<a href="#" class="bds_more" data-cmd="more"></a>
+	<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+	<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+	<a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Deng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Deng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+        </div>
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Cookie机制"><span class="nav-number">1.</span> <span class="nav-text">1.1 Cookie机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-什么是Cookie"><span class="nav-number">1.1.</span> <span class="nav-text">1.1.1 什么是Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-记录用户访问次数"><span class="nav-number">1.2.</span> <span class="nav-text">1.1.2 记录用户访问次数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-3-Cookie的不可跨域名性"><span class="nav-number">1.3.</span> <span class="nav-text">1.1.3 Cookie的不可跨域名性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-4-Unicode编码：保存中文"><span class="nav-number">1.4.</span> <span class="nav-text">1.1.4 Unicode编码：保存中文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-5-BASE64编码：保存二进制图片"><span class="nav-number">1.5.</span> <span class="nav-text">1.1.5 BASE64编码：保存二进制图片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-6-设置Cookie的所有属性"><span class="nav-number">1.6.</span> <span class="nav-text">1.1.6 设置Cookie的所有属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-7-Cookie的有效期"><span class="nav-number">1.7.</span> <span class="nav-text">1.1.7 Cookie的有效期</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-8-Cookie的修改、删除"><span class="nav-number">1.7.1.</span> <span class="nav-text">1.1.8 Cookie的修改、删除</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-9-Cookie的域名"><span class="nav-number">1.7.2.</span> <span class="nav-text">1.1.9 Cookie的域名</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-10-Cookie的路径"><span class="nav-number">1.8.</span> <span class="nav-text">1.1.10 Cookie的路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-11-Cookie的安全属性"><span class="nav-number">1.9.</span> <span class="nav-text">1.1.11 Cookie的安全属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-12-JavaScript操作Cookie"><span class="nav-number">1.10.</span> <span class="nav-text">1.1.12 JavaScript操作Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-13-案例：永久登录"><span class="nav-number">1.11.</span> <span class="nav-text">1.1.13 案例：永久登录</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Deng</span>
+
+  <div class="powered-by"></div>
+  <div class="powered-by">
+    Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  </div>
+
+  <div class="theme-info">
+    Theme by <a class="theme-link" href="http://blog.idhyt.com">idhyt</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+  </div>
+
+  <!-- busuanzi -->
+  
+
+</div>
+
+<!--
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mala
+  </a>
+</div>
+-->
+
+<!--
+<div class="powered-by"></div>
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+-->
+
+<!-- busuanzi -->
+<!--
+
+-->
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

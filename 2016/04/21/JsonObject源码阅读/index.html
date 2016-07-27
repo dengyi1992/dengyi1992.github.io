@@ -36,25 +36,19 @@
   <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="如果向jsonObject里put数据如果值是空的话，会删除该项/**
- * Maps {@code name} to {@code value}, clobbering any existing name/value
- * mapping with the same name. If the value is {@code null}, any existing
- * mapping for {">
+<meta name="description" content="&amp;#x5982;&amp;#x679C;&amp;#x5411;jsonObject&amp;#x91CC;put&amp;#x6570;&amp;#x636E;&amp;#x5982;&amp;#x679C;&amp;#x503C;&amp;#x662F;&amp;#x7A7A;&amp;#x7684;&amp;#x8BDD;&amp;#xFF0C;&amp;#x4F1A;&amp;#x5220;&amp;#x9664;&amp;#x8BE5;&amp;#x9879;/**
+ * Maps {@code name} to {@code">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JsonObject源码阅读">
 <meta property="og:url" content="http://yoursite.com/2016/04/21/JsonObject源码阅读/index.html">
 <meta property="og:site_name" content="似火的Blog">
-<meta property="og:description" content="如果向jsonObject里put数据如果值是空的话，会删除该项/**
- * Maps {@code name} to {@code value}, clobbering any existing name/value
- * mapping with the same name. If the value is {@code null}, any existing
- * mapping for {">
+<meta property="og:description" content="&amp;#x5982;&amp;#x679C;&amp;#x5411;jsonObject&amp;#x91CC;put&amp;#x6570;&amp;#x636E;&amp;#x5982;&amp;#x679C;&amp;#x503C;&amp;#x662F;&amp;#x7A7A;&amp;#x7684;&amp;#x8BDD;&amp;#xFF0C;&amp;#x4F1A;&amp;#x5220;&amp;#x9664;&amp;#x8BE5;&amp;#x9879;/**
+ * Maps {@code name} to {@code">
 <meta property="og:updated_time" content="2016-06-25T15:25:56.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JsonObject源码阅读">
-<meta name="twitter:description" content="如果向jsonObject里put数据如果值是空的话，会删除该项/**
- * Maps {@code name} to {@code value}, clobbering any existing name/value
- * mapping with the same name. If the value is {@code null}, any existing
- * mapping for {">
+<meta name="twitter:description" content="&amp;#x5982;&amp;#x679C;&amp;#x5411;jsonObject&amp;#x91CC;put&amp;#x6570;&amp;#x636E;&amp;#x5982;&amp;#x679C;&amp;#x503C;&amp;#x662F;&amp;#x7A7A;&amp;#x7684;&amp;#x8BDD;&amp;#xFF0C;&amp;#x4F1A;&amp;#x5220;&amp;#x9664;&amp;#x8BE5;&amp;#x9879;/**
+ * Maps {@code name} to {@code">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -341,7 +335,7 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="如果向jsonObject里put数据如果值是空的话，会删除该项"><a href="#如果向jsonObject里put数据如果值是空的话，会删除该项" class="headerlink" title="如果向jsonObject里put数据如果值是空的话，会删除该项"></a>如果向jsonObject里put数据如果值是空的话，会删除该项</h3><pre><code>/**
+        <span itemprop="articleBody"><h3 id="&#x5982;&#x679C;&#x5411;jsonObject&#x91CC;put&#x6570;&#x636E;&#x5982;&#x679C;&#x503C;&#x662F;&#x7A7A;&#x7684;&#x8BDD;&#xFF0C;&#x4F1A;&#x5220;&#x9664;&#x8BE5;&#x9879;"><a href="#&#x5982;&#x679C;&#x5411;jsonObject&#x91CC;put&#x6570;&#x636E;&#x5982;&#x679C;&#x503C;&#x662F;&#x7A7A;&#x7684;&#x8BDD;&#xFF0C;&#x4F1A;&#x5220;&#x9664;&#x8BE5;&#x9879;" class="headerlink" title="&#x5982;&#x679C;&#x5411;jsonObject&#x91CC;put&#x6570;&#x636E;&#x5982;&#x679C;&#x503C;&#x662F;&#x7A7A;&#x7684;&#x8BDD;&#xFF0C;&#x4F1A;&#x5220;&#x9664;&#x8BE5;&#x9879;"></a>&#x5982;&#x679C;&#x5411;jsonObject&#x91CC;put&#x6570;&#x636E;&#x5982;&#x679C;&#x503C;&#x662F;&#x7A7A;&#x7684;&#x8BDD;&#xFF0C;&#x4F1A;&#x5220;&#x9664;&#x8BE5;&#x9879;</h3><pre><code>/**
  * Maps {@code name} to {@code value}, clobbering any existing name/value
  * mapping with the same name. If the value is {@code null}, any existing
  * mapping for {@code name} is removed.
@@ -365,7 +359,7 @@ public JSONObject put(String name, Object value) throws JSONException {
     return this;
 }
 </code></pre><hr>
-<h3 id="推荐使用"><a href="#推荐使用" class="headerlink" title="推荐使用"></a>推荐使用</h3><pre><code>/**
+<h3 id="&#x63A8;&#x8350;&#x4F7F;&#x7528;"><a href="#&#x63A8;&#x8350;&#x4F7F;&#x7528;" class="headerlink" title="&#x63A8;&#x8350;&#x4F7F;&#x7528;"></a>&#x63A8;&#x8350;&#x4F7F;&#x7528;</h3><pre><code>/**
  * Equivalent to {@code put(name, value)} when both parameters are non-null;
  * does nothing otherwise.
  */
@@ -376,7 +370,7 @@ public JSONObject putOpt(String name, Object value) throws JSONException {
     return put(name, value);
 }
 </code></pre><hr>
-<h3 id="判断是否包含某个name，在开发中可用"><a href="#判断是否包含某个name，在开发中可用" class="headerlink" title="判断是否包含某个name，在开发中可用"></a>判断是否包含某个name，在开发中可用</h3><pre><code> /**
+<h3 id="&#x5224;&#x65AD;&#x662F;&#x5426;&#x5305;&#x542B;&#x67D0;&#x4E2A;name&#xFF0C;&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#x53EF;&#x7528;"><a href="#&#x5224;&#x65AD;&#x662F;&#x5426;&#x5305;&#x542B;&#x67D0;&#x4E2A;name&#xFF0C;&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#x53EF;&#x7528;" class="headerlink" title="&#x5224;&#x65AD;&#x662F;&#x5426;&#x5305;&#x542B;&#x67D0;&#x4E2A;name&#xFF0C;&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#x53EF;&#x7528;"></a>&#x5224;&#x65AD;&#x662F;&#x5426;&#x5305;&#x542B;&#x67D0;&#x4E2A;name&#xFF0C;&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#x53EF;&#x7528;</h3><pre><code> /**
  * Returns true if this object has a mapping for {@code name}. The mapping
  * may be {@link #NULL}.
  */
@@ -384,7 +378,7 @@ public boolean has(String name) {
     return nameValuePairs.containsKey(name);
 }
 </code></pre><hr>
-<h3 id="json直接解析，对于只需要提取一些关键字的场景"><a href="#json直接解析，对于只需要提取一些关键字的场景" class="headerlink" title="json直接解析，对于只需要提取一些关键字的场景"></a>json直接解析，对于只需要提取一些关键字的场景</h3><pre><code>/**
+<h3 id="json&#x76F4;&#x63A5;&#x89E3;&#x6790;&#xFF0C;&#x5BF9;&#x4E8E;&#x53EA;&#x9700;&#x8981;&#x63D0;&#x53D6;&#x4E00;&#x4E9B;&#x5173;&#x952E;&#x5B57;&#x7684;&#x573A;&#x666F;"><a href="#json&#x76F4;&#x63A5;&#x89E3;&#x6790;&#xFF0C;&#x5BF9;&#x4E8E;&#x53EA;&#x9700;&#x8981;&#x63D0;&#x53D6;&#x4E00;&#x4E9B;&#x5173;&#x952E;&#x5B57;&#x7684;&#x573A;&#x666F;" class="headerlink" title="json&#x76F4;&#x63A5;&#x89E3;&#x6790;&#xFF0C;&#x5BF9;&#x4E8E;&#x53EA;&#x9700;&#x8981;&#x63D0;&#x53D6;&#x4E00;&#x4E9B;&#x5173;&#x952E;&#x5B57;&#x7684;&#x573A;&#x666F;"></a>json&#x76F4;&#x63A5;&#x89E3;&#x6790;&#xFF0C;&#x5BF9;&#x4E8E;&#x53EA;&#x9700;&#x8981;&#x63D0;&#x53D6;&#x4E00;&#x4E9B;&#x5173;&#x952E;&#x5B57;&#x7684;&#x573A;&#x666F;</h3><pre><code>/**
  * Returns the value mapped by {@code name}, or throws if no such mapping exists.
  *
  * @throws JSONException if no such mapping exists.
@@ -404,7 +398,7 @@ public Object get(String name) throws JSONException {
 public Object opt(String name) {
     return nameValuePairs.get(name);
 }
-</code></pre><h3 id="键获取和设置"><a href="#键获取和设置" class="headerlink" title="键获取和设置"></a>键获取和设置</h3><pre><code>  /**
+</code></pre><h3 id="&#x952E;&#x83B7;&#x53D6;&#x548C;&#x8BBE;&#x7F6E;"><a href="#&#x952E;&#x83B7;&#x53D6;&#x548C;&#x8BBE;&#x7F6E;" class="headerlink" title="&#x952E;&#x83B7;&#x53D6;&#x548C;&#x8BBE;&#x7F6E;"></a>&#x952E;&#x83B7;&#x53D6;&#x548C;&#x8BBE;&#x7F6E;</h3><pre><code>  /**
  * Returns an iterator of the {@code String} names in this object. The
  * returned iterator supports {@link Iterator#remove() remove}, which will
  * remove the corresponding mapping from this object. If this object is
@@ -648,7 +642,7 @@ public Set&lt;String&gt; keySet() {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

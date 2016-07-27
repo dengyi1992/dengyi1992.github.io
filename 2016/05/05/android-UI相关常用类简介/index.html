@@ -36,31 +36,19 @@
   <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="android–UI相关常用类简介
-一、Canvas类android.graphics.CanvasCanvas类好比手机中的画纸，我们可以在Canvas上画图形或者图像。一般我们用android来绘画的时候，需要四个组成部分：
-1、位图：包含像素
-2、Canvas画板：包含绘画内容，写入位图
-3、初始图形：如Rect、Bitmap、text等
-4、Paint：用来描述上面初始图形的颜色和类型等">
+<meta name="description" content="android&amp;#x2013;UI&amp;#x76F8;&amp;#x5173;&amp;#x5E38;&amp;#x7528;&amp;#x7C7B;&amp;#x7B80;&amp;#x4ECB;
+&amp;#x4E00;&amp;#x3001;Canvas&amp;#x7C7B;android.graphics.CanvasCanvas&amp;#x7C7B;&amp;#x597D;&amp;#x6BD4;&amp;#x624B;&amp;#x673A;&amp;#x4E2D;&amp;#x7684;&amp;#x753B;&amp;#x">
 <meta property="og:type" content="article">
 <meta property="og:title" content=" android--UI相关常用类简介">
 <meta property="og:url" content="http://yoursite.com/2016/05/05/android-UI相关常用类简介/index.html">
 <meta property="og:site_name" content="似火的Blog">
-<meta property="og:description" content="android–UI相关常用类简介
-一、Canvas类android.graphics.CanvasCanvas类好比手机中的画纸，我们可以在Canvas上画图形或者图像。一般我们用android来绘画的时候，需要四个组成部分：
-1、位图：包含像素
-2、Canvas画板：包含绘画内容，写入位图
-3、初始图形：如Rect、Bitmap、text等
-4、Paint：用来描述上面初始图形的颜色和类型等">
+<meta property="og:description" content="android&amp;#x2013;UI&amp;#x76F8;&amp;#x5173;&amp;#x5E38;&amp;#x7528;&amp;#x7C7B;&amp;#x7B80;&amp;#x4ECB;
+&amp;#x4E00;&amp;#x3001;Canvas&amp;#x7C7B;android.graphics.CanvasCanvas&amp;#x7C7B;&amp;#x597D;&amp;#x6BD4;&amp;#x624B;&amp;#x673A;&amp;#x4E2D;&amp;#x7684;&amp;#x753B;&amp;#x">
 <meta property="og:updated_time" content="2016-06-25T15:25:56.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content=" android--UI相关常用类简介">
-<meta name="twitter:description" content="android–UI相关常用类简介
-一、Canvas类android.graphics.CanvasCanvas类好比手机中的画纸，我们可以在Canvas上画图形或者图像。一般我们用android来绘画的时候，需要四个组成部分：
-1、位图：包含像素
-2、Canvas画板：包含绘画内容，写入位图
-3、初始图形：如Rect、Bitmap、text等
-4、Paint：用来描述上面初始图形的颜色和类型等">
+<meta name="twitter:description" content="android&amp;#x2013;UI&amp;#x76F8;&amp;#x5173;&amp;#x5E38;&amp;#x7528;&amp;#x7C7B;&amp;#x7B80;&amp;#x4ECB;
+&amp;#x4E00;&amp;#x3001;Canvas&amp;#x7C7B;android.graphics.CanvasCanvas&amp;#x7C7B;&amp;#x597D;&amp;#x6BD4;&amp;#x624B;&amp;#x673A;&amp;#x4E2D;&amp;#x7684;&amp;#x753B;&amp;#x">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -347,44 +335,44 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="android–UI相关常用类简介"><a href="#android–UI相关常用类简介" class="headerlink" title="android–UI相关常用类简介"></a>android–UI相关常用类简介</h2><hr>
-<h4 id="一、Canvas类android-graphics-Canvas"><a href="#一、Canvas类android-graphics-Canvas" class="headerlink" title="一、Canvas类android.graphics.Canvas"></a>一、Canvas类android.graphics.Canvas</h4><p>Canvas类好比手机中的画纸，我们可以在Canvas上画图形或者图像。一般我们用android来绘画的时候，需要四个组成部分：</p>
-<p>1、位图：包含像素</p>
-<p>2、Canvas画板：包含绘画内容，写入位图</p>
-<p>3、初始图形：如Rect、Bitmap、text等</p>
-<p>4、Paint：用来描述上面初始图形的颜色和类型等</p>
-<p>Canvas类提供了三个构造方法：</p>
+        <span itemprop="articleBody"><h2 id="android&#x2013;UI&#x76F8;&#x5173;&#x5E38;&#x7528;&#x7C7B;&#x7B80;&#x4ECB;"><a href="#android&#x2013;UI&#x76F8;&#x5173;&#x5E38;&#x7528;&#x7C7B;&#x7B80;&#x4ECB;" class="headerlink" title="android&#x2013;UI&#x76F8;&#x5173;&#x5E38;&#x7528;&#x7C7B;&#x7B80;&#x4ECB;"></a>android&#x2013;UI&#x76F8;&#x5173;&#x5E38;&#x7528;&#x7C7B;&#x7B80;&#x4ECB;</h2><hr>
+<h4 id="&#x4E00;&#x3001;Canvas&#x7C7B;android-graphics-Canvas"><a href="#&#x4E00;&#x3001;Canvas&#x7C7B;android-graphics-Canvas" class="headerlink" title="&#x4E00;&#x3001;Canvas&#x7C7B;android.graphics.Canvas"></a>&#x4E00;&#x3001;Canvas&#x7C7B;android.graphics.Canvas</h4><p>Canvas&#x7C7B;&#x597D;&#x6BD4;&#x624B;&#x673A;&#x4E2D;&#x7684;&#x753B;&#x7EB8;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5728;Canvas&#x4E0A;&#x753B;&#x56FE;&#x5F62;&#x6216;&#x8005;&#x56FE;&#x50CF;&#x3002;&#x4E00;&#x822C;&#x6211;&#x4EEC;&#x7528;android&#x6765;&#x7ED8;&#x753B;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x9700;&#x8981;&#x56DB;&#x4E2A;&#x7EC4;&#x6210;&#x90E8;&#x5206;&#xFF1A;</p>
+<p>1&#x3001;&#x4F4D;&#x56FE;&#xFF1A;&#x5305;&#x542B;&#x50CF;&#x7D20;</p>
+<p>2&#x3001;Canvas&#x753B;&#x677F;&#xFF1A;&#x5305;&#x542B;&#x7ED8;&#x753B;&#x5185;&#x5BB9;&#xFF0C;&#x5199;&#x5165;&#x4F4D;&#x56FE;</p>
+<p>3&#x3001;&#x521D;&#x59CB;&#x56FE;&#x5F62;&#xFF1A;&#x5982;Rect&#x3001;Bitmap&#x3001;text&#x7B49;</p>
+<p>4&#x3001;Paint&#xFF1A;&#x7528;&#x6765;&#x63CF;&#x8FF0;&#x4E0A;&#x9762;&#x521D;&#x59CB;&#x56FE;&#x5F62;&#x7684;&#x989C;&#x8272;&#x548C;&#x7C7B;&#x578B;&#x7B49;</p>
+<p>Canvas&#x7C7B;&#x63D0;&#x4F9B;&#x4E86;&#x4E09;&#x4E2A;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF1A;</p>
 <ul>
-<li>Public Canvas（）；构造一个默认无参的Canvas对象</li>
-<li>Public Canvas（Bitmap bitmap）；根据一个Bitmap构造一个Canvas对象</li>
-<li>Public Canvas（GL gl）；根据一个GL来构造一个对象</li>
-<li>下面我们来了解一下Canvas类提供的方法：<br>在Canvas类提供的方法中比较多经常用的是以draw开头的方法，draw开头的方法很容易理解就是向画板中画图形，比如可以向Canvas中画位图，给图形填充颜色等。</li>
+<li>Public Canvas&#xFF08;&#xFF09;&#xFF1B;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x9ED8;&#x8BA4;&#x65E0;&#x53C2;&#x7684;Canvas&#x5BF9;&#x8C61;</li>
+<li>Public Canvas&#xFF08;Bitmap bitmap&#xFF09;&#xFF1B;&#x6839;&#x636E;&#x4E00;&#x4E2A;Bitmap&#x6784;&#x9020;&#x4E00;&#x4E2A;Canvas&#x5BF9;&#x8C61;</li>
+<li>Public Canvas&#xFF08;GL gl&#xFF09;&#xFF1B;&#x6839;&#x636E;&#x4E00;&#x4E2A;GL&#x6765;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;</li>
+<li>&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x6765;&#x4E86;&#x89E3;&#x4E00;&#x4E0B;Canvas&#x7C7B;&#x63D0;&#x4F9B;&#x7684;&#x65B9;&#x6CD5;&#xFF1A;<br>&#x5728;Canvas&#x7C7B;&#x63D0;&#x4F9B;&#x7684;&#x65B9;&#x6CD5;&#x4E2D;&#x6BD4;&#x8F83;&#x591A;&#x7ECF;&#x5E38;&#x7528;&#x7684;&#x662F;&#x4EE5;draw&#x5F00;&#x5934;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;draw&#x5F00;&#x5934;&#x7684;&#x65B9;&#x6CD5;&#x5F88;&#x5BB9;&#x6613;&#x7406;&#x89E3;&#x5C31;&#x662F;&#x5411;&#x753B;&#x677F;&#x4E2D;&#x753B;&#x56FE;&#x5F62;&#xFF0C;&#x6BD4;&#x5982;&#x53EF;&#x4EE5;&#x5411;Canvas&#x4E2D;&#x753B;&#x4F4D;&#x56FE;&#xFF0C;&#x7ED9;&#x56FE;&#x5F62;&#x586B;&#x5145;&#x989C;&#x8272;&#x7B49;&#x3002;</li>
 </ul>
 <hr>
-<h4 id="二、Paint类android-graphics-Paint"><a href="#二、Paint类android-graphics-Paint" class="headerlink" title="二、Paint类android.graphics.Paint"></a>二、Paint类android.graphics.Paint</h4><p>Paint类包含有用来画几何图形、文本、位图的类型和颜色等信息，如果把Canvas类看作是画板，那我们可以把Paint类看做是画笔，可以根据需要画出不同颜色和样式的图形、文本等内容。</p>
-<h5 id="Paint类有三个构造方法："><a href="#Paint类有三个构造方法：" class="headerlink" title="Paint类有三个构造方法："></a>Paint类有三个构造方法：</h5><p>Public Paint()构造一个缺省的Paint对象</p>
+<h4 id="&#x4E8C;&#x3001;Paint&#x7C7B;android-graphics-Paint"><a href="#&#x4E8C;&#x3001;Paint&#x7C7B;android-graphics-Paint" class="headerlink" title="&#x4E8C;&#x3001;Paint&#x7C7B;android.graphics.Paint"></a>&#x4E8C;&#x3001;Paint&#x7C7B;android.graphics.Paint</h4><p>Paint&#x7C7B;&#x5305;&#x542B;&#x6709;&#x7528;&#x6765;&#x753B;&#x51E0;&#x4F55;&#x56FE;&#x5F62;&#x3001;&#x6587;&#x672C;&#x3001;&#x4F4D;&#x56FE;&#x7684;&#x7C7B;&#x578B;&#x548C;&#x989C;&#x8272;&#x7B49;&#x4FE1;&#x606F;&#xFF0C;&#x5982;&#x679C;&#x628A;Canvas&#x7C7B;&#x770B;&#x4F5C;&#x662F;&#x753B;&#x677F;&#xFF0C;&#x90A3;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x628A;Paint&#x7C7B;&#x770B;&#x505A;&#x662F;&#x753B;&#x7B14;&#xFF0C;&#x53EF;&#x4EE5;&#x6839;&#x636E;&#x9700;&#x8981;&#x753B;&#x51FA;&#x4E0D;&#x540C;&#x989C;&#x8272;&#x548C;&#x6837;&#x5F0F;&#x7684;&#x56FE;&#x5F62;&#x3001;&#x6587;&#x672C;&#x7B49;&#x5185;&#x5BB9;&#x3002;</p>
+<h5 id="Paint&#x7C7B;&#x6709;&#x4E09;&#x4E2A;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF1A;"><a href="#Paint&#x7C7B;&#x6709;&#x4E09;&#x4E2A;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF1A;" class="headerlink" title="Paint&#x7C7B;&#x6709;&#x4E09;&#x4E2A;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF1A;"></a>Paint&#x7C7B;&#x6709;&#x4E09;&#x4E2A;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF1A;</h5><p>Public Paint()&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x7F3A;&#x7701;&#x7684;Paint&#x5BF9;&#x8C61;</p>
 <p>Public Paint(int flags);</p>
-<p>根据指定的flags来构造一个Paint对象，创建之后可以用</p>
-<p>setFlags（）方法来更改</p>
-<p>Public Paint(Paint paint)根据指定的paint对象来构造一个Paint对象</p>
-<p>Paint类提供了很多方法来设置和获取Paint对象的属性，比如：</p>
-<p>public int getColor ()获得Paint对象的颜色值</p>
-<p>public ColorFilter getColorFilter ()获得颜色过滤器</p>
-<p>public float getTextSize ()获得字体大小数值</p>
-<p>public void setStyle (Paint.Style style)设置paint的类型</p>
+<p>&#x6839;&#x636E;&#x6307;&#x5B9A;&#x7684;flags&#x6765;&#x6784;&#x9020;&#x4E00;&#x4E2A;Paint&#x5BF9;&#x8C61;&#xFF0C;&#x521B;&#x5EFA;&#x4E4B;&#x540E;&#x53EF;&#x4EE5;&#x7528;</p>
+<p>setFlags&#xFF08;&#xFF09;&#x65B9;&#x6CD5;&#x6765;&#x66F4;&#x6539;</p>
+<p>Public Paint(Paint paint)&#x6839;&#x636E;&#x6307;&#x5B9A;&#x7684;paint&#x5BF9;&#x8C61;&#x6765;&#x6784;&#x9020;&#x4E00;&#x4E2A;Paint&#x5BF9;&#x8C61;</p>
+<p>Paint&#x7C7B;&#x63D0;&#x4F9B;&#x4E86;&#x5F88;&#x591A;&#x65B9;&#x6CD5;&#x6765;&#x8BBE;&#x7F6E;&#x548C;&#x83B7;&#x53D6;Paint&#x5BF9;&#x8C61;&#x7684;&#x5C5E;&#x6027;&#xFF0C;&#x6BD4;&#x5982;&#xFF1A;</p>
+<p>public int getColor ()&#x83B7;&#x5F97;Paint&#x5BF9;&#x8C61;&#x7684;&#x989C;&#x8272;&#x503C;</p>
+<p>public ColorFilter getColorFilter ()&#x83B7;&#x5F97;&#x989C;&#x8272;&#x8FC7;&#x6EE4;&#x5668;</p>
+<p>public float getTextSize ()&#x83B7;&#x5F97;&#x5B57;&#x4F53;&#x5927;&#x5C0F;&#x6570;&#x503C;</p>
+<p>public void setStyle (Paint.Style style)&#x8BBE;&#x7F6E;paint&#x7684;&#x7C7B;&#x578B;</p>
 <hr>
-<h4 id="三-Color类android-graphics-Color"><a href="#三-Color类android-graphics-Color" class="headerlink" title="三  Color类android.graphics.Color"></a>三  Color类android.graphics.Color</h4><p>此类 定义了一些方法来创建和转换颜色值。颜色被表示为封装的数值，这个数值由四个字节组成，分别是：alpha、red、green、blue，这些值是非自 左乘的，也就是说任何透明性只存储在alpha部分，而不是在颜色组成部分。每一部分按照如下的顺序保存：（alpha&lt;&lt;24）| (red&lt;&lt;16)|&lt;green&lt;&lt;8)|blue.每一部分的取值范围在0-255之间，0意味着这部分不起作 用，255表示100%的起作用。因此不透明的黑色应该是0xFF000000,不透明的白色应该是0xFFFFFFFF 。</p>
-<p>Color类提供了12个常量值来代表不同的颜色值，我们在开发工程中可以直接调用这些常量值来设置我们所要修饰的文本、图形等对象。</p>
+<h4 id="&#x4E09;-Color&#x7C7B;android-graphics-Color"><a href="#&#x4E09;-Color&#x7C7B;android-graphics-Color" class="headerlink" title="&#x4E09;  Color&#x7C7B;android.graphics.Color"></a>&#x4E09;  Color&#x7C7B;android.graphics.Color</h4><p>&#x6B64;&#x7C7B; &#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E9B;&#x65B9;&#x6CD5;&#x6765;&#x521B;&#x5EFA;&#x548C;&#x8F6C;&#x6362;&#x989C;&#x8272;&#x503C;&#x3002;&#x989C;&#x8272;&#x88AB;&#x8868;&#x793A;&#x4E3A;&#x5C01;&#x88C5;&#x7684;&#x6570;&#x503C;&#xFF0C;&#x8FD9;&#x4E2A;&#x6570;&#x503C;&#x7531;&#x56DB;&#x4E2A;&#x5B57;&#x8282;&#x7EC4;&#x6210;&#xFF0C;&#x5206;&#x522B;&#x662F;&#xFF1A;alpha&#x3001;red&#x3001;green&#x3001;blue&#xFF0C;&#x8FD9;&#x4E9B;&#x503C;&#x662F;&#x975E;&#x81EA; &#x5DE6;&#x4E58;&#x7684;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8BF4;&#x4EFB;&#x4F55;&#x900F;&#x660E;&#x6027;&#x53EA;&#x5B58;&#x50A8;&#x5728;alpha&#x90E8;&#x5206;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x5728;&#x989C;&#x8272;&#x7EC4;&#x6210;&#x90E8;&#x5206;&#x3002;&#x6BCF;&#x4E00;&#x90E8;&#x5206;&#x6309;&#x7167;&#x5982;&#x4E0B;&#x7684;&#x987A;&#x5E8F;&#x4FDD;&#x5B58;&#xFF1A;&#xFF08;alpha&lt;&lt;24&#xFF09;| (red&lt;&lt;16)|&lt;green&lt;&lt;8)|blue.&#x6BCF;&#x4E00;&#x90E8;&#x5206;&#x7684;&#x53D6;&#x503C;&#x8303;&#x56F4;&#x5728;0-255&#x4E4B;&#x95F4;&#xFF0C;0&#x610F;&#x5473;&#x7740;&#x8FD9;&#x90E8;&#x5206;&#x4E0D;&#x8D77;&#x4F5C; &#x7528;&#xFF0C;255&#x8868;&#x793A;100%&#x7684;&#x8D77;&#x4F5C;&#x7528;&#x3002;&#x56E0;&#x6B64;&#x4E0D;&#x900F;&#x660E;&#x7684;&#x9ED1;&#x8272;&#x5E94;&#x8BE5;&#x662F;0xFF000000,&#x4E0D;&#x900F;&#x660E;&#x7684;&#x767D;&#x8272;&#x5E94;&#x8BE5;&#x662F;0xFFFFFFFF &#x3002;</p>
+<p>Color&#x7C7B;&#x63D0;&#x4F9B;&#x4E86;12&#x4E2A;&#x5E38;&#x91CF;&#x503C;&#x6765;&#x4EE3;&#x8868;&#x4E0D;&#x540C;&#x7684;&#x989C;&#x8272;&#x503C;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x5F00;&#x53D1;&#x5DE5;&#x7A0B;&#x4E2D;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x8C03;&#x7528;&#x8FD9;&#x4E9B;&#x5E38;&#x91CF;&#x503C;&#x6765;&#x8BBE;&#x7F6E;&#x6211;&#x4EEC;&#x6240;&#x8981;&#x4FEE;&#x9970;&#x7684;&#x6587;&#x672C;&#x3001;&#x56FE;&#x5F62;&#x7B49;&#x5BF9;&#x8C61;&#x3002;</p>
 <ul>
-<li>Color类提供了一个无参的构造方法Color()</li>
-<li>Color类提供了一些方法来进行颜色值的创建和转换如下：</li>
-<li>其中三个方法是用来返回一个颜色常量值的红绿蓝分色，数值分别在0-255之间，如下：</li>
+<li>Color&#x7C7B;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E2A;&#x65E0;&#x53C2;&#x7684;&#x6784;&#x9020;&#x65B9;&#x6CD5;Color()</li>
+<li>Color&#x7C7B;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E9B;&#x65B9;&#x6CD5;&#x6765;&#x8FDB;&#x884C;&#x989C;&#x8272;&#x503C;&#x7684;&#x521B;&#x5EFA;&#x548C;&#x8F6C;&#x6362;&#x5982;&#x4E0B;&#xFF1A;</li>
+<li>&#x5176;&#x4E2D;&#x4E09;&#x4E2A;&#x65B9;&#x6CD5;&#x662F;&#x7528;&#x6765;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x989C;&#x8272;&#x5E38;&#x91CF;&#x503C;&#x7684;&#x7EA2;&#x7EFF;&#x84DD;&#x5206;&#x8272;&#xFF0C;&#x6570;&#x503C;&#x5206;&#x522B;&#x5728;0-255&#x4E4B;&#x95F4;&#xFF0C;&#x5982;&#x4E0B;&#xFF1A;</li>
 </ul>
 <p>Public static red(int color);</p>
 <p>Public static green(int color);</p>
 <p>Public static blue(int color);</p>
-<p>其中Public static int rgb(int red,int green,int blue);输入红绿蓝三色，返回一个RGB颜色值。</p>
-<p>下面几个方法大家可以参考Android API来了解：</p>
+<p>&#x5176;&#x4E2D;Public static int rgb(int red,int green,int blue);&#x8F93;&#x5165;&#x7EA2;&#x7EFF;&#x84DD;&#x4E09;&#x8272;&#xFF0C;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;RGB&#x989C;&#x8272;&#x503C;&#x3002;</p>
+<p>&#x4E0B;&#x9762;&#x51E0;&#x4E2A;&#x65B9;&#x6CD5;&#x5927;&#x5BB6;&#x53EF;&#x4EE5;&#x53C2;&#x8003;Android API&#x6765;&#x4E86;&#x89E3;&#xFF1A;</p>
 <p>Public static int HSVToColor(int alpha,float[] hsv);</p>
 <p>Public static int HSVToColor(float[] hsv);</p>
 <p>Public static void RGBToHSV(int red,int green,int blue,float[] hsv);</p>
@@ -392,55 +380,55 @@
 <p>Public static int argb(int alpha,int red,int green,int blue);</p>
 <p>Public static colorToHSV(int color,float[] hsv);</p>
 <p>Public static parseColor(String colorString);</p>
-<h4 id="四．Typeface类android-graphics-Typeface"><a href="#四．Typeface类android-graphics-Typeface" class="headerlink" title="四．Typeface类android.graphics.Typeface"></a>四．Typeface类android.graphics.Typeface</h4><p>Typeface类定义字体和字体内在的类型。这个类被用在画笔Paint设置的时候，比如用textSize,textSkewX和textScale设置来指定text在画的时候如何来显示和测量。</p>
-<p>Typeface 提供了一些常量值来表示自身的一些属性，比如BOLD，BOLD_ITALIC，ITALIC等，开发者可以用 defaultFrOPhone SDNtyle(int style)获得内在的Typeface对象。读者可以参考详细的API文档再这里就不再赘述了。</p>
-<p>下面我们来看一下Typeface的主要方法。</p>
-<p>Typeface类没有构造方法，通常如果一个类没有构造函数就无法通过构造来生成一个对象实体，此时一般会有特定的静态方法来取得这个类的实体。Typeface就提供了四个静态方法间接来得到Typeface实体分别如下：</p>
-<p>Public static Typeface create（Typeface family，int style）；</p>
-<p>此方法返回一个与已经存在的Typeface字形体系相匹配且类型是指定类型的Typeface。如果你想得到一个与已经存在的Typeface字形体系 相类似，但是样式不一样的Typeface时可以调用此方法。其中family参数可以为null，如果为空则表示从默认的Typeface字形体系中选 择。</p>
+<h4 id="&#x56DB;&#xFF0E;Typeface&#x7C7B;android-graphics-Typeface"><a href="#&#x56DB;&#xFF0E;Typeface&#x7C7B;android-graphics-Typeface" class="headerlink" title="&#x56DB;&#xFF0E;Typeface&#x7C7B;android.graphics.Typeface"></a>&#x56DB;&#xFF0E;Typeface&#x7C7B;android.graphics.Typeface</h4><p>Typeface&#x7C7B;&#x5B9A;&#x4E49;&#x5B57;&#x4F53;&#x548C;&#x5B57;&#x4F53;&#x5185;&#x5728;&#x7684;&#x7C7B;&#x578B;&#x3002;&#x8FD9;&#x4E2A;&#x7C7B;&#x88AB;&#x7528;&#x5728;&#x753B;&#x7B14;Paint&#x8BBE;&#x7F6E;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6BD4;&#x5982;&#x7528;textSize,textSkewX&#x548C;textScale&#x8BBE;&#x7F6E;&#x6765;&#x6307;&#x5B9A;text&#x5728;&#x753B;&#x7684;&#x65F6;&#x5019;&#x5982;&#x4F55;&#x6765;&#x663E;&#x793A;&#x548C;&#x6D4B;&#x91CF;&#x3002;</p>
+<p>Typeface &#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E9B;&#x5E38;&#x91CF;&#x503C;&#x6765;&#x8868;&#x793A;&#x81EA;&#x8EAB;&#x7684;&#x4E00;&#x4E9B;&#x5C5E;&#x6027;&#xFF0C;&#x6BD4;&#x5982;BOLD&#xFF0C;BOLD_ITALIC&#xFF0C;ITALIC&#x7B49;&#xFF0C;&#x5F00;&#x53D1;&#x8005;&#x53EF;&#x4EE5;&#x7528; defaultFrOPhone SDNtyle(int style)&#x83B7;&#x5F97;&#x5185;&#x5728;&#x7684;Typeface&#x5BF9;&#x8C61;&#x3002;&#x8BFB;&#x8005;&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#x8BE6;&#x7EC6;&#x7684;API&#x6587;&#x6863;&#x518D;&#x8FD9;&#x91CC;&#x5C31;&#x4E0D;&#x518D;&#x8D58;&#x8FF0;&#x4E86;&#x3002;</p>
+<p>&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x6765;&#x770B;&#x4E00;&#x4E0B;Typeface&#x7684;&#x4E3B;&#x8981;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>Typeface&#x7C7B;&#x6CA1;&#x6709;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF0C;&#x901A;&#x5E38;&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x7C7B;&#x6CA1;&#x6709;&#x6784;&#x9020;&#x51FD;&#x6570;&#x5C31;&#x65E0;&#x6CD5;&#x901A;&#x8FC7;&#x6784;&#x9020;&#x6765;&#x751F;&#x6210;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x5B9E;&#x4F53;&#xFF0C;&#x6B64;&#x65F6;&#x4E00;&#x822C;&#x4F1A;&#x6709;&#x7279;&#x5B9A;&#x7684;&#x9759;&#x6001;&#x65B9;&#x6CD5;&#x6765;&#x53D6;&#x5F97;&#x8FD9;&#x4E2A;&#x7C7B;&#x7684;&#x5B9E;&#x4F53;&#x3002;Typeface&#x5C31;&#x63D0;&#x4F9B;&#x4E86;&#x56DB;&#x4E2A;&#x9759;&#x6001;&#x65B9;&#x6CD5;&#x95F4;&#x63A5;&#x6765;&#x5F97;&#x5230;Typeface&#x5B9E;&#x4F53;&#x5206;&#x522B;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p>Public static Typeface create&#xFF08;Typeface family&#xFF0C;int style&#xFF09;&#xFF1B;</p>
+<p>&#x6B64;&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x4E0E;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x7684;Typeface&#x5B57;&#x5F62;&#x4F53;&#x7CFB;&#x76F8;&#x5339;&#x914D;&#x4E14;&#x7C7B;&#x578B;&#x662F;&#x6307;&#x5B9A;&#x7C7B;&#x578B;&#x7684;Typeface&#x3002;&#x5982;&#x679C;&#x4F60;&#x60F3;&#x5F97;&#x5230;&#x4E00;&#x4E2A;&#x4E0E;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x7684;Typeface&#x5B57;&#x5F62;&#x4F53;&#x7CFB; &#x76F8;&#x7C7B;&#x4F3C;&#xFF0C;&#x4F46;&#x662F;&#x6837;&#x5F0F;&#x4E0D;&#x4E00;&#x6837;&#x7684;Typeface&#x65F6;&#x53EF;&#x4EE5;&#x8C03;&#x7528;&#x6B64;&#x65B9;&#x6CD5;&#x3002;&#x5176;&#x4E2D;family&#x53C2;&#x6570;&#x53EF;&#x4EE5;&#x4E3A;null&#xFF0C;&#x5982;&#x679C;&#x4E3A;&#x7A7A;&#x5219;&#x8868;&#x793A;&#x4ECE;&#x9ED8;&#x8BA4;&#x7684;Typeface&#x5B57;&#x5F62;&#x4F53;&#x7CFB;&#x4E2D;&#x9009; &#x62E9;&#x3002;</p>
 <p>Public static Typefaxe create(String familyname,int style);</p>
-<p>此方法通过给定的字形体系的名称familyname和指定的类型返回一个Typeface对象。如果给定字形体系的名称为null，我们可以通过getStyle（）方法来获得返回Typeface对象的真正的属性。</p>
+<p>&#x6B64;&#x65B9;&#x6CD5;&#x901A;&#x8FC7;&#x7ED9;&#x5B9A;&#x7684;&#x5B57;&#x5F62;&#x4F53;&#x7CFB;&#x7684;&#x540D;&#x79F0;familyname&#x548C;&#x6307;&#x5B9A;&#x7684;&#x7C7B;&#x578B;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;Typeface&#x5BF9;&#x8C61;&#x3002;&#x5982;&#x679C;&#x7ED9;&#x5B9A;&#x5B57;&#x5F62;&#x4F53;&#x7CFB;&#x7684;&#x540D;&#x79F0;&#x4E3A;null&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;getStyle&#xFF08;&#xFF09;&#x65B9;&#x6CD5;&#x6765;&#x83B7;&#x5F97;&#x8FD4;&#x56DE;Typeface&#x5BF9;&#x8C61;&#x7684;&#x771F;&#x6B63;&#x7684;&#x5C5E;&#x6027;&#x3002;</p>
 <p>Public static Typeface createFromAsset(AssetManager mgr,String path);</p>
-<p>此方法通过规定的字体数据来返回一个Typeface对象。第一个参数为资源管理器，第二个参数是指定字体类型。</p>
-<p>Public static Typeface defaultFrOPhone SDNtyle(int style);此方法返回一个指定类型的Typeface对象</p>
-<p>Typeface还提供了另外三个方法：</p>
+<p>&#x6B64;&#x65B9;&#x6CD5;&#x901A;&#x8FC7;&#x89C4;&#x5B9A;&#x7684;&#x5B57;&#x4F53;&#x6570;&#x636E;&#x6765;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;Typeface&#x5BF9;&#x8C61;&#x3002;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x4E3A;&#x8D44;&#x6E90;&#x7BA1;&#x7406;&#x5668;&#xFF0C;&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#x662F;&#x6307;&#x5B9A;&#x5B57;&#x4F53;&#x7C7B;&#x578B;&#x3002;</p>
+<p>Public static Typeface defaultFrOPhone SDNtyle(int style);&#x6B64;&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x6307;&#x5B9A;&#x7C7B;&#x578B;&#x7684;Typeface&#x5BF9;&#x8C61;</p>
+<p>Typeface&#x8FD8;&#x63D0;&#x4F9B;&#x4E86;&#x53E6;&#x5916;&#x4E09;&#x4E2A;&#x65B9;&#x6CD5;&#xFF1A;</p>
 <ul>
-<li><p>Public int getStyle();此方法返回Typeface内在的类型属性</p>
+<li><p>Public int getStyle();&#x6B64;&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;Typeface&#x5185;&#x5728;&#x7684;&#x7C7B;&#x578B;&#x5C5E;&#x6027;</p>
 </li>
-<li><p>Public final Boolean isBold();如果getStyle（）有BOLD位组将返回true</p>
+<li><p>Public final Boolean isBold();&#x5982;&#x679C;getStyle&#xFF08;&#xFF09;&#x6709;BOLD&#x4F4D;&#x7EC4;&#x5C06;&#x8FD4;&#x56DE;true</p>
 </li>
-<li><p>Public final Boolean isItalic();如果getStyle（）有ITALIC位组将返回true</p>
+<li><p>Public final Boolean isItalic();&#x5982;&#x679C;getStyle&#xFF08;&#xFF09;&#x6709;ITALIC&#x4F4D;&#x7EC4;&#x5C06;&#x8FD4;&#x56DE;true</p>
 </li>
 </ul>
-<h4 id="五、Path类android-graphics-Path"><a href="#五、Path类android-graphics-Path" class="headerlink" title="五、Path类android.graphics.Path"></a>五、Path类android.graphics.Path</h4><p>Path类（一组区域）的描画，类囊括多种几何图形比如直线线段、二次曲线、三次曲线等，</p>
-<p>调用Canvas.drawPath()方法可以将Path以所定义的paint的方式来画到画板上或者填出图形，也可以用paint所指定方式来画图形。</p>
-<h4 id="六、RectF类android-graphics-RectF和Rect类android-graphics-Rect"><a href="#六、RectF类android-graphics-RectF和Rect类android-graphics-Rect" class="headerlink" title="六、RectF类android.graphics.RectF和Rect类android.graphics.Rect"></a>六、RectF类android.graphics.RectF和Rect类android.graphics.Rect</h4><p>RectF 这个类包含一个矩形的四个单精度浮点坐标。矩形通过上下左右4个边的坐标来表示一个矩形。这些坐标值属性可以被直接访问，用width（）和 height（）方法可以获取矩形的宽和高。注意：大多数方法不会检查这些坐标分类是否错误（也就是left&lt;=right和top&amp; lt;=bottom）.</p>
-<p>RectF一共有四个构造方法：</p>
+<h4 id="&#x4E94;&#x3001;Path&#x7C7B;android-graphics-Path"><a href="#&#x4E94;&#x3001;Path&#x7C7B;android-graphics-Path" class="headerlink" title="&#x4E94;&#x3001;Path&#x7C7B;android.graphics.Path"></a>&#x4E94;&#x3001;Path&#x7C7B;android.graphics.Path</h4><p>Path&#x7C7B;&#xFF08;&#x4E00;&#x7EC4;&#x533A;&#x57DF;&#xFF09;&#x7684;&#x63CF;&#x753B;&#xFF0C;&#x7C7B;&#x56CA;&#x62EC;&#x591A;&#x79CD;&#x51E0;&#x4F55;&#x56FE;&#x5F62;&#x6BD4;&#x5982;&#x76F4;&#x7EBF;&#x7EBF;&#x6BB5;&#x3001;&#x4E8C;&#x6B21;&#x66F2;&#x7EBF;&#x3001;&#x4E09;&#x6B21;&#x66F2;&#x7EBF;&#x7B49;&#xFF0C;</p>
+<p>&#x8C03;&#x7528;Canvas.drawPath()&#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x5C06;Path&#x4EE5;&#x6240;&#x5B9A;&#x4E49;&#x7684;paint&#x7684;&#x65B9;&#x5F0F;&#x6765;&#x753B;&#x5230;&#x753B;&#x677F;&#x4E0A;&#x6216;&#x8005;&#x586B;&#x51FA;&#x56FE;&#x5F62;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x7528;paint&#x6240;&#x6307;&#x5B9A;&#x65B9;&#x5F0F;&#x6765;&#x753B;&#x56FE;&#x5F62;&#x3002;</p>
+<h4 id="&#x516D;&#x3001;RectF&#x7C7B;android-graphics-RectF&#x548C;Rect&#x7C7B;android-graphics-Rect"><a href="#&#x516D;&#x3001;RectF&#x7C7B;android-graphics-RectF&#x548C;Rect&#x7C7B;android-graphics-Rect" class="headerlink" title="&#x516D;&#x3001;RectF&#x7C7B;android.graphics.RectF&#x548C;Rect&#x7C7B;android.graphics.Rect"></a>&#x516D;&#x3001;RectF&#x7C7B;android.graphics.RectF&#x548C;Rect&#x7C7B;android.graphics.Rect</h4><p>RectF &#x8FD9;&#x4E2A;&#x7C7B;&#x5305;&#x542B;&#x4E00;&#x4E2A;&#x77E9;&#x5F62;&#x7684;&#x56DB;&#x4E2A;&#x5355;&#x7CBE;&#x5EA6;&#x6D6E;&#x70B9;&#x5750;&#x6807;&#x3002;&#x77E9;&#x5F62;&#x901A;&#x8FC7;&#x4E0A;&#x4E0B;&#x5DE6;&#x53F3;4&#x4E2A;&#x8FB9;&#x7684;&#x5750;&#x6807;&#x6765;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x77E9;&#x5F62;&#x3002;&#x8FD9;&#x4E9B;&#x5750;&#x6807;&#x503C;&#x5C5E;&#x6027;&#x53EF;&#x4EE5;&#x88AB;&#x76F4;&#x63A5;&#x8BBF;&#x95EE;&#xFF0C;&#x7528;width&#xFF08;&#xFF09;&#x548C; height&#xFF08;&#xFF09;&#x65B9;&#x6CD5;&#x53EF;&#x4EE5;&#x83B7;&#x53D6;&#x77E9;&#x5F62;&#x7684;&#x5BBD;&#x548C;&#x9AD8;&#x3002;&#x6CE8;&#x610F;&#xFF1A;&#x5927;&#x591A;&#x6570;&#x65B9;&#x6CD5;&#x4E0D;&#x4F1A;&#x68C0;&#x67E5;&#x8FD9;&#x4E9B;&#x5750;&#x6807;&#x5206;&#x7C7B;&#x662F;&#x5426;&#x9519;&#x8BEF;&#xFF08;&#x4E5F;&#x5C31;&#x662F;left&lt;=right&#x548C;top&amp; lt;=bottom&#xFF09;.</p>
+<p>RectF&#x4E00;&#x5171;&#x6709;&#x56DB;&#x4E2A;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#xFF1A;</p>
 <ul>
-<li><p>RectF（）构造一个无参的矩形</p>
+<li><p>RectF&#xFF08;&#xFF09;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x65E0;&#x53C2;&#x7684;&#x77E9;&#x5F62;</p>
 </li>
-<li><p>RectF（float left,float top,float right,float bottom）构造一个指定了4个参数的矩形</p>
+<li><p>RectF&#xFF08;float left,float top,float right,float bottom&#xFF09;&#x6784;&#x9020;&#x4E00;&#x4E2A;&#x6307;&#x5B9A;&#x4E86;4&#x4E2A;&#x53C2;&#x6570;&#x7684;&#x77E9;&#x5F62;</p>
 </li>
-<li><p>RectF(Rect F r)根据指定的RectF对象来构造一个RectF对象(对象的左边坐标不变)</p>
+<li><p>RectF(Rect F r)&#x6839;&#x636E;&#x6307;&#x5B9A;&#x7684;RectF&#x5BF9;&#x8C61;&#x6765;&#x6784;&#x9020;&#x4E00;&#x4E2A;RectF&#x5BF9;&#x8C61;(&#x5BF9;&#x8C61;&#x7684;&#x5DE6;&#x8FB9;&#x5750;&#x6807;&#x4E0D;&#x53D8;)</p>
 </li>
-<li><p>RectF(Rect r)根据给定的Rect对象来构造一个RectF对象</p>
+<li><p>RectF(Rect r)&#x6839;&#x636E;&#x7ED9;&#x5B9A;&#x7684;Rect&#x5BF9;&#x8C61;&#x6765;&#x6784;&#x9020;&#x4E00;&#x4E2A;RectF&#x5BF9;&#x8C61;</p>
 </li>
 </ul>
-<p>RectF提供了很多方法，下面介绍几个方法：</p>
-<p>Public Boolean contain(RectF r);判断一个矩形是否在此矩形内，如果在这个矩形内或者和这个矩形等价则返回true，同样类似的方法还有public Boolean contain(float left,float top,float right,float bottom)和public Boolean contain(float x,float y)。</p>
-<p>Public void union(float x,float y)更新这个矩形，使它包含矩形自己和（x，y）这个点。</p>
-<p>RectF类提供的方法都比较简单，容易理解，再此就不再一一赘述</p>
-<p>Android.graphics.Rect类，这个类同android.graphics.RectF很相似，不同的地方是Rect类的坐标是用整形表示的，而RectF的坐标是用单精度浮点型表示的。这里大家一定要注意 啊。</p>
-<h4 id="七、Point类android-graphics-Point"><a href="#七、Point类android-graphics-Point" class="headerlink" title="七、Point类android.graphics.Point"></a>七、Point类android.graphics.Point</h4><pre><code>这个类从字面意思就可以看出它跟点有关系，是点的一个对象类。
-</code></pre><p>这个类有两个属性，分别是：X坐标和y坐标。</p>
-<p>构造函数有三个：Point（），Point（int x，int y），Point（Point p）</p>
-<p>主要方法有：</p>
-<p>Public void set（x，y）；重新设定一下x，y的坐标</p>
-<p>Public final void offset(int dx,int dy);给坐标一个补偿值，值可以使正的也可以是负的。</p>
-<p>Public final void negate();否定坐标值。</p>
-<p>Point类和android.graphics.PointF类似，不同点是前者坐标值的类型是int型，而后者的坐标值是float型。除此之外PointF类多加了几个方法，比如：</p>
-<p>Public final float length();返回（0，0）点到该点的距离。</p>
-<p>Public static float length(float x,float y);返回（0，0）点到（x，y）点的距离。</p>
+<p>RectF&#x63D0;&#x4F9B;&#x4E86;&#x5F88;&#x591A;&#x65B9;&#x6CD5;&#xFF0C;&#x4E0B;&#x9762;&#x4ECB;&#x7ECD;&#x51E0;&#x4E2A;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<p>Public Boolean contain(RectF r);&#x5224;&#x65AD;&#x4E00;&#x4E2A;&#x77E9;&#x5F62;&#x662F;&#x5426;&#x5728;&#x6B64;&#x77E9;&#x5F62;&#x5185;&#xFF0C;&#x5982;&#x679C;&#x5728;&#x8FD9;&#x4E2A;&#x77E9;&#x5F62;&#x5185;&#x6216;&#x8005;&#x548C;&#x8FD9;&#x4E2A;&#x77E9;&#x5F62;&#x7B49;&#x4EF7;&#x5219;&#x8FD4;&#x56DE;true&#xFF0C;&#x540C;&#x6837;&#x7C7B;&#x4F3C;&#x7684;&#x65B9;&#x6CD5;&#x8FD8;&#x6709;public Boolean contain(float left,float top,float right,float bottom)&#x548C;public Boolean contain(float x,float y)&#x3002;</p>
+<p>Public void union(float x,float y)&#x66F4;&#x65B0;&#x8FD9;&#x4E2A;&#x77E9;&#x5F62;&#xFF0C;&#x4F7F;&#x5B83;&#x5305;&#x542B;&#x77E9;&#x5F62;&#x81EA;&#x5DF1;&#x548C;&#xFF08;x&#xFF0C;y&#xFF09;&#x8FD9;&#x4E2A;&#x70B9;&#x3002;</p>
+<p>RectF&#x7C7B;&#x63D0;&#x4F9B;&#x7684;&#x65B9;&#x6CD5;&#x90FD;&#x6BD4;&#x8F83;&#x7B80;&#x5355;&#xFF0C;&#x5BB9;&#x6613;&#x7406;&#x89E3;&#xFF0C;&#x518D;&#x6B64;&#x5C31;&#x4E0D;&#x518D;&#x4E00;&#x4E00;&#x8D58;&#x8FF0;</p>
+<p>Android.graphics.Rect&#x7C7B;&#xFF0C;&#x8FD9;&#x4E2A;&#x7C7B;&#x540C;android.graphics.RectF&#x5F88;&#x76F8;&#x4F3C;&#xFF0C;&#x4E0D;&#x540C;&#x7684;&#x5730;&#x65B9;&#x662F;Rect&#x7C7B;&#x7684;&#x5750;&#x6807;&#x662F;&#x7528;&#x6574;&#x5F62;&#x8868;&#x793A;&#x7684;&#xFF0C;&#x800C;RectF&#x7684;&#x5750;&#x6807;&#x662F;&#x7528;&#x5355;&#x7CBE;&#x5EA6;&#x6D6E;&#x70B9;&#x578B;&#x8868;&#x793A;&#x7684;&#x3002;&#x8FD9;&#x91CC;&#x5927;&#x5BB6;&#x4E00;&#x5B9A;&#x8981;&#x6CE8;&#x610F; &#x554A;&#x3002;</p>
+<h4 id="&#x4E03;&#x3001;Point&#x7C7B;android-graphics-Point"><a href="#&#x4E03;&#x3001;Point&#x7C7B;android-graphics-Point" class="headerlink" title="&#x4E03;&#x3001;Point&#x7C7B;android.graphics.Point"></a>&#x4E03;&#x3001;Point&#x7C7B;android.graphics.Point</h4><pre><code>&#x8FD9;&#x4E2A;&#x7C7B;&#x4ECE;&#x5B57;&#x9762;&#x610F;&#x601D;&#x5C31;&#x53EF;&#x4EE5;&#x770B;&#x51FA;&#x5B83;&#x8DDF;&#x70B9;&#x6709;&#x5173;&#x7CFB;&#xFF0C;&#x662F;&#x70B9;&#x7684;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7C7B;&#x3002;
+</code></pre><p>&#x8FD9;&#x4E2A;&#x7C7B;&#x6709;&#x4E24;&#x4E2A;&#x5C5E;&#x6027;&#xFF0C;&#x5206;&#x522B;&#x662F;&#xFF1A;X&#x5750;&#x6807;&#x548C;y&#x5750;&#x6807;&#x3002;</p>
+<p>&#x6784;&#x9020;&#x51FD;&#x6570;&#x6709;&#x4E09;&#x4E2A;&#xFF1A;Point&#xFF08;&#xFF09;&#xFF0C;Point&#xFF08;int x&#xFF0C;int y&#xFF09;&#xFF0C;Point&#xFF08;Point p&#xFF09;</p>
+<p>&#x4E3B;&#x8981;&#x65B9;&#x6CD5;&#x6709;&#xFF1A;</p>
+<p>Public void set&#xFF08;x&#xFF0C;y&#xFF09;&#xFF1B;&#x91CD;&#x65B0;&#x8BBE;&#x5B9A;&#x4E00;&#x4E0B;x&#xFF0C;y&#x7684;&#x5750;&#x6807;</p>
+<p>Public final void offset(int dx,int dy);&#x7ED9;&#x5750;&#x6807;&#x4E00;&#x4E2A;&#x8865;&#x507F;&#x503C;&#xFF0C;&#x503C;&#x53EF;&#x4EE5;&#x4F7F;&#x6B63;&#x7684;&#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x8D1F;&#x7684;&#x3002;</p>
+<p>Public final void negate();&#x5426;&#x5B9A;&#x5750;&#x6807;&#x503C;&#x3002;</p>
+<p>Point&#x7C7B;&#x548C;android.graphics.PointF&#x7C7B;&#x4F3C;&#xFF0C;&#x4E0D;&#x540C;&#x70B9;&#x662F;&#x524D;&#x8005;&#x5750;&#x6807;&#x503C;&#x7684;&#x7C7B;&#x578B;&#x662F;int&#x578B;&#xFF0C;&#x800C;&#x540E;&#x8005;&#x7684;&#x5750;&#x6807;&#x503C;&#x662F;float&#x578B;&#x3002;&#x9664;&#x6B64;&#x4E4B;&#x5916;PointF&#x7C7B;&#x591A;&#x52A0;&#x4E86;&#x51E0;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x6BD4;&#x5982;&#xFF1A;</p>
+<p>Public final float length();&#x8FD4;&#x56DE;&#xFF08;0&#xFF0C;0&#xFF09;&#x70B9;&#x5230;&#x8BE5;&#x70B9;&#x7684;&#x8DDD;&#x79BB;&#x3002;</p>
+<p>Public static float length(float x,float y);&#x8FD4;&#x56DE;&#xFF08;0&#xFF0C;0&#xFF09;&#x70B9;&#x5230;&#xFF08;x&#xFF0C;y&#xFF09;&#x70B9;&#x7684;&#x8DDD;&#x79BB;&#x3002;</p>
 </span>
       
     </div>
@@ -663,7 +651,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

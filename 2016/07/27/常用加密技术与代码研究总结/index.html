@@ -36,24 +36,18 @@
   <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。
-首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。
-具体来说：系统必须可用，非数学上不可译码。系统不一定要保密，可以轻易落入敌人手中。密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。系统可以用于电讯。系统可以转">
+<meta name="description" content="&amp;#x603B;&amp;#x7ED3;&amp;#x7C7B;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x628A;&amp;#x4E00;&amp;#x4E9B;&amp;#x5E38;&amp;#x7528;&amp;#x7684;Java&amp;#x52A0;&amp;#x5BC6;&amp;#x6280;&amp;#x672F;&amp;#x548C;&amp;#x6838;&amp;#x5FC3;&amp;#x4EE3;&amp;#x7801;&amp;#x5199;&amp;#x5728;&amp;#x8FD9;&amp;#x8">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常用加密技术与代码研究总结">
 <meta property="og:url" content="http://yoursite.com/2016/07/27/常用加密技术与代码研究总结/index.html">
 <meta property="og:site_name" content="似火的Blog">
-<meta property="og:description" content="总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。
-首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。
-具体来说：系统必须可用，非数学上不可译码。系统不一定要保密，可以轻易落入敌人手中。密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。系统可以用于电讯。系统可以转">
-<meta property="og:image" content="http://yoursite.com/常用加密技术与代码研究总结/20160715224112503.png">
+<meta property="og:description" content="&amp;#x603B;&amp;#x7ED3;&amp;#x7C7B;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x628A;&amp;#x4E00;&amp;#x4E9B;&amp;#x5E38;&amp;#x7528;&amp;#x7684;Java&amp;#x52A0;&amp;#x5BC6;&amp;#x6280;&amp;#x672F;&amp;#x548C;&amp;#x6838;&amp;#x5FC3;&amp;#x4EE3;&amp;#x7801;&amp;#x5199;&amp;#x5728;&amp;#x8FD9;&amp;#x8">
+<meta property="og:image" content="http://yoursite.com/2016/07/27/常用加密技术与代码研究总结/20160715224112503.png">
 <meta property="og:updated_time" content="2016-07-27T14:46:41.373Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常用加密技术与代码研究总结">
-<meta name="twitter:description" content="总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。
-首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。
-具体来说：系统必须可用，非数学上不可译码。系统不一定要保密，可以轻易落入敌人手中。密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。系统可以用于电讯。系统可以转">
-<meta name="twitter:image" content="http://yoursite.com/常用加密技术与代码研究总结/20160715224112503.png">
+<meta name="twitter:description" content="&amp;#x603B;&amp;#x7ED3;&amp;#x7C7B;&amp;#x6587;&amp;#x7AE0;&amp;#xFF0C;&amp;#x628A;&amp;#x4E00;&amp;#x4E9B;&amp;#x5E38;&amp;#x7528;&amp;#x7684;Java&amp;#x52A0;&amp;#x5BC6;&amp;#x6280;&amp;#x672F;&amp;#x548C;&amp;#x6838;&amp;#x5FC3;&amp;#x4EE3;&amp;#x7801;&amp;#x5199;&amp;#x5728;&amp;#x8FD9;&amp;#x8">
+<meta name="twitter:image" content="http://yoursite.com/2016/07/27/常用加密技术与代码研究总结/20160715224112503.png">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -340,25 +334,25 @@
       
 
       
-        <span itemprop="articleBody"><p>总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。</p>
-<p>首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。</p>
-<p>具体来说：<br>系统必须可用，非数学上不可译码。<br>系统不一定要保密，可以轻易落入敌人手中。<br>密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。<br>系统可以用于电讯。<br>系统可以转移位置，它的功能必须不用经过几个人之手才可达到。<br>系统容易使用，不要求使用者的脑力过份操劳或有很多的规则。</p>
+        <span itemprop="articleBody"><p>&#x603B;&#x7ED3;&#x7C7B;&#x6587;&#x7AE0;&#xFF0C;&#x628A;&#x4E00;&#x4E9B;&#x5E38;&#x7528;&#x7684;Java&#x52A0;&#x5BC6;&#x6280;&#x672F;&#x548C;&#x6838;&#x5FC3;&#x4EE3;&#x7801;&#x5199;&#x5728;&#x8FD9;&#x8FB9;&#xFF0C;&#x4F9B;&#x53C2;&#x8003;&#x3002;</p>
+<p>&#x9996;&#x5148;&#x5927;&#x5BB6;&#x8981;&#x8BB0;&#x4F4F;&#x73B0;&#x4EE3;&#x5BC6;&#x7801;&#x5B66;&#x6700;&#x91CD;&#x8981;&#x7684;&#x539F;&#x5219;&#x67EF;&#x514B;&#x970D;&#x592B;&#x539F;&#x5219;&#xFF1A;&#x6570;&#x636E;&#x7684;&#x5B89;&#x5168;&#x57FA;&#x4E8E;&#x5BC6;&#x94A5;&#x800C;&#x4E0D;&#x662F;&#x7B97;&#x6CD5;&#x7684;&#x4FDD;&#x5BC6;&#x3002;&#x4E5F;&#x5C31;&#x662F;&#x8BF4;&#x5373;&#x4F7F;&#x5BC6;&#x7801;&#x7CFB;&#x7EDF;&#x7684;&#x4EFB;&#x4F55;&#x7EC6;&#x8282;&#x5DF2;&#x4E3A;&#x4EBA;&#x6089;&#x77E5;&#xFF0C;&#x53EA;&#x8981;&#x5BC6;&#x5319;&#x672A;&#x6D29;&#x6F0F;&#xFF0C;&#x5B83;&#x4E5F;&#x5E94;&#x662F;&#x5B89;&#x5168;&#x7684;&#x3002;</p>
+<p>&#x5177;&#x4F53;&#x6765;&#x8BF4;&#xFF1A;<br>&#x7CFB;&#x7EDF;&#x5FC5;&#x987B;&#x53EF;&#x7528;&#xFF0C;&#x975E;&#x6570;&#x5B66;&#x4E0A;&#x4E0D;&#x53EF;&#x8BD1;&#x7801;&#x3002;<br>&#x7CFB;&#x7EDF;&#x4E0D;&#x4E00;&#x5B9A;&#x8981;&#x4FDD;&#x5BC6;&#xFF0C;&#x53EF;&#x4EE5;&#x8F7B;&#x6613;&#x843D;&#x5165;&#x654C;&#x4EBA;&#x624B;&#x4E2D;&#x3002;<br>&#x5BC6;&#x5319;&#x5FC5;&#x987B;&#x53EF;&#x4EE5;&#x4E0D;&#x7ECF;&#x4E66;&#x5199;&#x7684;&#x8D44;&#x6599;&#x4EA4;&#x6362;&#x548C;&#x8BB0;&#x5FC6;&#xFF0C;&#x4E14;&#x53CC;&#x65B9;&#x53EF;&#x4EE5;&#x6539;&#x53D8;&#x5BC6;&#x5319;&#x3002;<br>&#x7CFB;&#x7EDF;&#x53EF;&#x4EE5;&#x7528;&#x4E8E;&#x7535;&#x8BAF;&#x3002;<br>&#x7CFB;&#x7EDF;&#x53EF;&#x4EE5;&#x8F6C;&#x79FB;&#x4F4D;&#x7F6E;&#xFF0C;&#x5B83;&#x7684;&#x529F;&#x80FD;&#x5FC5;&#x987B;&#x4E0D;&#x7528;&#x7ECF;&#x8FC7;&#x51E0;&#x4E2A;&#x4EBA;&#x4E4B;&#x624B;&#x624D;&#x53EF;&#x8FBE;&#x5230;&#x3002;<br>&#x7CFB;&#x7EDF;&#x5BB9;&#x6613;&#x4F7F;&#x7528;&#xFF0C;&#x4E0D;&#x8981;&#x6C42;&#x4F7F;&#x7528;&#x8005;&#x7684;&#x8111;&#x529B;&#x8FC7;&#x4EFD;&#x64CD;&#x52B3;&#x6216;&#x6709;&#x5F88;&#x591A;&#x7684;&#x89C4;&#x5219;&#x3002;</p>
 <hr>
-<h1 id="一、主要的加密方式代码提供方"><a href="#一、主要的加密方式代码提供方" class="headerlink" title="一、主要的加密方式代码提供方"></a>一、主要的加密方式代码提供方</h1><hr>
-<p>JDK：代码在java安装目录下的jre\lib\jce.jar包里;</p>
-<p>CC：Apache公司提供的org.apache.commons.codec</p>
-<p>主页： <a href="http://commons.apache.org/proper/commons-codec/" target="_blank" rel="external">http://commons.apache.org/proper/commons-codec/</a></p>
-<p>BC：org.bouncecastle</p>
-<p>主页： <a href="http://www.bouncycastle.org/java.html" target="_blank" rel="external">http://www.bouncycastle.org/java.html</a></p>
-<p>基本常用的使用JDK就够了。</p>
-<h1 id="二、Base64算法"><a href="#二、Base64算法" class="headerlink" title="二、Base64算法"></a>二、Base64算法</h1><hr>
-<p>1、从现在加密算法的复杂性来看Base64这种都不好意思说自己是加密，不过对于完全不懂计算机的人来说也够用了。采用Base64编码具有不可读性，即所编码的数据不会被人用肉眼所直接看到。<br>Base64编码一般用于url的处理，或者说任何你不想让普通人一眼就知道是啥的东西都可以用Base64编码处理后再发布在网络上。</p>
+<h1 id="&#x4E00;&#x3001;&#x4E3B;&#x8981;&#x7684;&#x52A0;&#x5BC6;&#x65B9;&#x5F0F;&#x4EE3;&#x7801;&#x63D0;&#x4F9B;&#x65B9;"><a href="#&#x4E00;&#x3001;&#x4E3B;&#x8981;&#x7684;&#x52A0;&#x5BC6;&#x65B9;&#x5F0F;&#x4EE3;&#x7801;&#x63D0;&#x4F9B;&#x65B9;" class="headerlink" title="&#x4E00;&#x3001;&#x4E3B;&#x8981;&#x7684;&#x52A0;&#x5BC6;&#x65B9;&#x5F0F;&#x4EE3;&#x7801;&#x63D0;&#x4F9B;&#x65B9;"></a>&#x4E00;&#x3001;&#x4E3B;&#x8981;&#x7684;&#x52A0;&#x5BC6;&#x65B9;&#x5F0F;&#x4EE3;&#x7801;&#x63D0;&#x4F9B;&#x65B9;</h1><hr>
+<p>JDK&#xFF1A;&#x4EE3;&#x7801;&#x5728;java&#x5B89;&#x88C5;&#x76EE;&#x5F55;&#x4E0B;&#x7684;jre\lib\jce.jar&#x5305;&#x91CC;;</p>
+<p>CC&#xFF1A;Apache&#x516C;&#x53F8;&#x63D0;&#x4F9B;&#x7684;org.apache.commons.codec</p>
+<p>&#x4E3B;&#x9875;&#xFF1A; <a href="http://commons.apache.org/proper/commons-codec/" target="_blank" rel="external">http://commons.apache.org/proper/commons-codec/</a></p>
+<p>BC&#xFF1A;org.bouncecastle</p>
+<p>&#x4E3B;&#x9875;&#xFF1A; <a href="http://www.bouncycastle.org/java.html" target="_blank" rel="external">http://www.bouncycastle.org/java.html</a></p>
+<p>&#x57FA;&#x672C;&#x5E38;&#x7528;&#x7684;&#x4F7F;&#x7528;JDK&#x5C31;&#x591F;&#x4E86;&#x3002;</p>
+<h1 id="&#x4E8C;&#x3001;Base64&#x7B97;&#x6CD5;"><a href="#&#x4E8C;&#x3001;Base64&#x7B97;&#x6CD5;" class="headerlink" title="&#x4E8C;&#x3001;Base64&#x7B97;&#x6CD5;"></a>&#x4E8C;&#x3001;Base64&#x7B97;&#x6CD5;</h1><hr>
+<p>1&#x3001;&#x4ECE;&#x73B0;&#x5728;&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x7684;&#x590D;&#x6742;&#x6027;&#x6765;&#x770B;Base64&#x8FD9;&#x79CD;&#x90FD;&#x4E0D;&#x597D;&#x610F;&#x601D;&#x8BF4;&#x81EA;&#x5DF1;&#x662F;&#x52A0;&#x5BC6;&#xFF0C;&#x4E0D;&#x8FC7;&#x5BF9;&#x4E8E;&#x5B8C;&#x5168;&#x4E0D;&#x61C2;&#x8BA1;&#x7B97;&#x673A;&#x7684;&#x4EBA;&#x6765;&#x8BF4;&#x4E5F;&#x591F;&#x7528;&#x4E86;&#x3002;&#x91C7;&#x7528;Base64&#x7F16;&#x7801;&#x5177;&#x6709;&#x4E0D;&#x53EF;&#x8BFB;&#x6027;&#xFF0C;&#x5373;&#x6240;&#x7F16;&#x7801;&#x7684;&#x6570;&#x636E;&#x4E0D;&#x4F1A;&#x88AB;&#x4EBA;&#x7528;&#x8089;&#x773C;&#x6240;&#x76F4;&#x63A5;&#x770B;&#x5230;&#x3002;<br>Base64&#x7F16;&#x7801;&#x4E00;&#x822C;&#x7528;&#x4E8E;url&#x7684;&#x5904;&#x7406;&#xFF0C;&#x6216;&#x8005;&#x8BF4;&#x4EFB;&#x4F55;&#x4F60;&#x4E0D;&#x60F3;&#x8BA9;&#x666E;&#x901A;&#x4EBA;&#x4E00;&#x773C;&#x5C31;&#x77E5;&#x9053;&#x662F;&#x5565;&#x7684;&#x4E1C;&#x897F;&#x90FD;&#x53EF;&#x4EE5;&#x7528;Base64&#x7F16;&#x7801;&#x5904;&#x7406;&#x540E;&#x518D;&#x53D1;&#x5E03;&#x5728;&#x7F51;&#x7EDC;&#x4E0A;&#x3002;</p>
 <pre><code>import java.util.Base64;
 
 import com.amuro.strategy.IStrategy;
 
 /**
- * Base64算法基于64个基本字符，加密后的string中只包含这64个字符
+ * Base64&#x7B97;&#x6CD5;&#x57FA;&#x4E8E;64&#x4E2A;&#x57FA;&#x672C;&#x5B57;&#x7B26;&#xFF0C;&#x52A0;&#x5BC6;&#x540E;&#x7684;string&#x4E2D;&#x53EA;&#x5305;&#x542B;&#x8FD9;64&#x4E2A;&#x5B57;&#x7B26;
  * @author Amuro
  *
  * /
@@ -376,12 +370,12 @@ public class Base64Strategy implements IStrategy
         return new String(decodeBytes);
     }
 }
-</code></pre><p>2、Base64编码对应关系表</p>
-<p><img src="/常用加密技术与代码研究总结/20160715224112503.png"></p>
-<h1 id="三、消息摘要算法（Message-Digest）"><a href="#三、消息摘要算法（Message-Digest）" class="headerlink" title="三、消息摘要算法（Message Digest）"></a>三、消息摘要算法（Message Digest）</h1><p>消息摘要（Message Digest）又称为数字摘要(Digital Digest)。它是一个唯一对应一个消息或文本的固定长度的值，它由一个单向Hash加密函数对消息进行作用而产生。HASH函数的抗冲突性使得如果一段明文稍有变化，哪怕只更改该段落的一个字母，通过哈希算法作用后都将产生不同的值。而HASH算法的单向性使得要找到哈希值相同的两个不同的输入消息，在计算上是不可能的。所以数据的哈希值，即消息摘要，可以检验数据的完整性。</p>
-<p>用大白话来说，任何一段数据应该都和人一样是唯一的，唯一的标识是什么，人类的话目前就是指纹，而数据的指纹是什么呢？没错，就是消息摘要算法产生的这一段String。比如我们在注册网站的时候，客户端向服务器传输的，应该是我们输入的密码进行消息摘要处理后的内容，这样就算服务器被攻破，Hack也无法知道用户真实的密码是什么。不过有说现在MD5和SHA已经被攻破了，具体大家可以谷歌。</p>
+</code></pre><p>2&#x3001;Base64&#x7F16;&#x7801;&#x5BF9;&#x5E94;&#x5173;&#x7CFB;&#x8868;</p>
+<p><img src="/2016/07/27/&#x5E38;&#x7528;&#x52A0;&#x5BC6;&#x6280;&#x672F;&#x4E0E;&#x4EE3;&#x7801;&#x7814;&#x7A76;&#x603B;&#x7ED3;/20160715224112503.png"></p>
+<h1 id="&#x4E09;&#x3001;&#x6D88;&#x606F;&#x6458;&#x8981;&#x7B97;&#x6CD5;&#xFF08;Message-Digest&#xFF09;"><a href="#&#x4E09;&#x3001;&#x6D88;&#x606F;&#x6458;&#x8981;&#x7B97;&#x6CD5;&#xFF08;Message-Digest&#xFF09;" class="headerlink" title="&#x4E09;&#x3001;&#x6D88;&#x606F;&#x6458;&#x8981;&#x7B97;&#x6CD5;&#xFF08;Message Digest&#xFF09;"></a>&#x4E09;&#x3001;&#x6D88;&#x606F;&#x6458;&#x8981;&#x7B97;&#x6CD5;&#xFF08;Message Digest&#xFF09;</h1><p>&#x6D88;&#x606F;&#x6458;&#x8981;&#xFF08;Message Digest&#xFF09;&#x53C8;&#x79F0;&#x4E3A;&#x6570;&#x5B57;&#x6458;&#x8981;(Digital Digest)&#x3002;&#x5B83;&#x662F;&#x4E00;&#x4E2A;&#x552F;&#x4E00;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A;&#x6D88;&#x606F;&#x6216;&#x6587;&#x672C;&#x7684;&#x56FA;&#x5B9A;&#x957F;&#x5EA6;&#x7684;&#x503C;&#xFF0C;&#x5B83;&#x7531;&#x4E00;&#x4E2A;&#x5355;&#x5411;Hash&#x52A0;&#x5BC6;&#x51FD;&#x6570;&#x5BF9;&#x6D88;&#x606F;&#x8FDB;&#x884C;&#x4F5C;&#x7528;&#x800C;&#x4EA7;&#x751F;&#x3002;HASH&#x51FD;&#x6570;&#x7684;&#x6297;&#x51B2;&#x7A81;&#x6027;&#x4F7F;&#x5F97;&#x5982;&#x679C;&#x4E00;&#x6BB5;&#x660E;&#x6587;&#x7A0D;&#x6709;&#x53D8;&#x5316;&#xFF0C;&#x54EA;&#x6015;&#x53EA;&#x66F4;&#x6539;&#x8BE5;&#x6BB5;&#x843D;&#x7684;&#x4E00;&#x4E2A;&#x5B57;&#x6BCD;&#xFF0C;&#x901A;&#x8FC7;&#x54C8;&#x5E0C;&#x7B97;&#x6CD5;&#x4F5C;&#x7528;&#x540E;&#x90FD;&#x5C06;&#x4EA7;&#x751F;&#x4E0D;&#x540C;&#x7684;&#x503C;&#x3002;&#x800C;HASH&#x7B97;&#x6CD5;&#x7684;&#x5355;&#x5411;&#x6027;&#x4F7F;&#x5F97;&#x8981;&#x627E;&#x5230;&#x54C8;&#x5E0C;&#x503C;&#x76F8;&#x540C;&#x7684;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x8F93;&#x5165;&#x6D88;&#x606F;&#xFF0C;&#x5728;&#x8BA1;&#x7B97;&#x4E0A;&#x662F;&#x4E0D;&#x53EF;&#x80FD;&#x7684;&#x3002;&#x6240;&#x4EE5;&#x6570;&#x636E;&#x7684;&#x54C8;&#x5E0C;&#x503C;&#xFF0C;&#x5373;&#x6D88;&#x606F;&#x6458;&#x8981;&#xFF0C;&#x53EF;&#x4EE5;&#x68C0;&#x9A8C;&#x6570;&#x636E;&#x7684;&#x5B8C;&#x6574;&#x6027;&#x3002;</p>
+<p>&#x7528;&#x5927;&#x767D;&#x8BDD;&#x6765;&#x8BF4;&#xFF0C;&#x4EFB;&#x4F55;&#x4E00;&#x6BB5;&#x6570;&#x636E;&#x5E94;&#x8BE5;&#x90FD;&#x548C;&#x4EBA;&#x4E00;&#x6837;&#x662F;&#x552F;&#x4E00;&#x7684;&#xFF0C;&#x552F;&#x4E00;&#x7684;&#x6807;&#x8BC6;&#x662F;&#x4EC0;&#x4E48;&#xFF0C;&#x4EBA;&#x7C7B;&#x7684;&#x8BDD;&#x76EE;&#x524D;&#x5C31;&#x662F;&#x6307;&#x7EB9;&#xFF0C;&#x800C;&#x6570;&#x636E;&#x7684;&#x6307;&#x7EB9;&#x662F;&#x4EC0;&#x4E48;&#x5462;&#xFF1F;&#x6CA1;&#x9519;&#xFF0C;&#x5C31;&#x662F;&#x6D88;&#x606F;&#x6458;&#x8981;&#x7B97;&#x6CD5;&#x4EA7;&#x751F;&#x7684;&#x8FD9;&#x4E00;&#x6BB5;String&#x3002;&#x6BD4;&#x5982;&#x6211;&#x4EEC;&#x5728;&#x6CE8;&#x518C;&#x7F51;&#x7AD9;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5BA2;&#x6237;&#x7AEF;&#x5411;&#x670D;&#x52A1;&#x5668;&#x4F20;&#x8F93;&#x7684;&#xFF0C;&#x5E94;&#x8BE5;&#x662F;&#x6211;&#x4EEC;&#x8F93;&#x5165;&#x7684;&#x5BC6;&#x7801;&#x8FDB;&#x884C;&#x6D88;&#x606F;&#x6458;&#x8981;&#x5904;&#x7406;&#x540E;&#x7684;&#x5185;&#x5BB9;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x7B97;&#x670D;&#x52A1;&#x5668;&#x88AB;&#x653B;&#x7834;&#xFF0C;Hack&#x4E5F;&#x65E0;&#x6CD5;&#x77E5;&#x9053;&#x7528;&#x6237;&#x771F;&#x5B9E;&#x7684;&#x5BC6;&#x7801;&#x662F;&#x4EC0;&#x4E48;&#x3002;&#x4E0D;&#x8FC7;&#x6709;&#x8BF4;&#x73B0;&#x5728;MD5&#x548C;SHA&#x5DF2;&#x7ECF;&#x88AB;&#x653B;&#x7834;&#x4E86;&#xFF0C;&#x5177;&#x4F53;&#x5927;&#x5BB6;&#x53EF;&#x4EE5;&#x8C37;&#x6B4C;&#x3002;</p>
 <ul>
-<li><p>1、MD5</p>
+<li><p>1&#x3001;MD5</p>
 <pre><code>import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -390,7 +384,7 @@ import org.apache.commons.codec.binary.Hex;
 import com.amuro.strategy.IStrategy;
 
 /**
- * 消息摘要算法
+ * &#x6D88;&#x606F;&#x6458;&#x8981;&#x7B97;&#x6CD5;
  * @author Amuro
  *
  * /
@@ -420,7 +414,7 @@ public class MD5Strategy implements IStrategy
 
 }
 </code></pre></li>
-<li><p>2、SHA</p>
+<li><p>2&#x3001;SHA</p>
 <pre><code>import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -429,7 +423,7 @@ import org.apache.commons.codec.binary.Hex;
 import com.amuro.strategy.IStrategy;
 
 /**
-* 安全散列算法
+* &#x5B89;&#x5168;&#x6563;&#x5217;&#x7B97;&#x6CD5;
 * @author Amuro
 *
 * /
@@ -459,13 +453,13 @@ public String decode(String src)
 }
 </code></pre></li>
 </ul>
-<h1 id="四、对称加密"><a href="#四、对称加密" class="headerlink" title="四、对称加密"></a>四、对称加密</h1><hr>
-<p>采用单钥密码系统的加密方法，同一个密钥可以同时用作信息的加密和解密，这种加密方法称为对称加密，也称为单密钥加密。而因为加密和解密都使用同一个密钥，如何把密钥安全地传递到解密者手上就成了必须要解决的问题。当然，安全性较低带来的优点就是优计算量小、加密速度快、加密效率高。</p>
-<p>然并卵，现代计算机对这种级别的计算量早就不care了，安全才是最重要的。</p>
+<h1 id="&#x56DB;&#x3001;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;"><a href="#&#x56DB;&#x3001;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;" class="headerlink" title="&#x56DB;&#x3001;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;"></a>&#x56DB;&#x3001;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;</h1><hr>
+<p>&#x91C7;&#x7528;&#x5355;&#x94A5;&#x5BC6;&#x7801;&#x7CFB;&#x7EDF;&#x7684;&#x52A0;&#x5BC6;&#x65B9;&#x6CD5;&#xFF0C;&#x540C;&#x4E00;&#x4E2A;&#x5BC6;&#x94A5;&#x53EF;&#x4EE5;&#x540C;&#x65F6;&#x7528;&#x4F5C;&#x4FE1;&#x606F;&#x7684;&#x52A0;&#x5BC6;&#x548C;&#x89E3;&#x5BC6;&#xFF0C;&#x8FD9;&#x79CD;&#x52A0;&#x5BC6;&#x65B9;&#x6CD5;&#x79F0;&#x4E3A;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;&#xFF0C;&#x4E5F;&#x79F0;&#x4E3A;&#x5355;&#x5BC6;&#x94A5;&#x52A0;&#x5BC6;&#x3002;&#x800C;&#x56E0;&#x4E3A;&#x52A0;&#x5BC6;&#x548C;&#x89E3;&#x5BC6;&#x90FD;&#x4F7F;&#x7528;&#x540C;&#x4E00;&#x4E2A;&#x5BC6;&#x94A5;&#xFF0C;&#x5982;&#x4F55;&#x628A;&#x5BC6;&#x94A5;&#x5B89;&#x5168;&#x5730;&#x4F20;&#x9012;&#x5230;&#x89E3;&#x5BC6;&#x8005;&#x624B;&#x4E0A;&#x5C31;&#x6210;&#x4E86;&#x5FC5;&#x987B;&#x8981;&#x89E3;&#x51B3;&#x7684;&#x95EE;&#x9898;&#x3002;&#x5F53;&#x7136;&#xFF0C;&#x5B89;&#x5168;&#x6027;&#x8F83;&#x4F4E;&#x5E26;&#x6765;&#x7684;&#x4F18;&#x70B9;&#x5C31;&#x662F;&#x4F18;&#x8BA1;&#x7B97;&#x91CF;&#x5C0F;&#x3001;&#x52A0;&#x5BC6;&#x901F;&#x5EA6;&#x5FEB;&#x3001;&#x52A0;&#x5BC6;&#x6548;&#x7387;&#x9AD8;&#x3002;</p>
+<p>&#x7136;&#x5E76;&#x5375;&#xFF0C;&#x73B0;&#x4EE3;&#x8BA1;&#x7B97;&#x673A;&#x5BF9;&#x8FD9;&#x79CD;&#x7EA7;&#x522B;&#x7684;&#x8BA1;&#x7B97;&#x91CF;&#x65E9;&#x5C31;&#x4E0D;care&#x4E86;&#xFF0C;&#x5B89;&#x5168;&#x624D;&#x662F;&#x6700;&#x91CD;&#x8981;&#x7684;&#x3002;</p>
 <ul>
-<li>1、DES</li>
+<li>1&#x3001;DES</li>
 </ul>
-<p>DES，全称为“Data Encryption Standard”，中文名为“数据加密标准”，是一种使用密钥加密的块算法。DES 算法为密码体制中的对称密码体制，又被称为美国数据加密标准，是 1972 年美国 IBM 公司研制的对称密码体制加密算法。 明文按 64 位进行分组，密钥长 64 位，密钥事实上是 56 位参与 DES 运算（第8、16、24、32、40、48、56、64 位是校验位， 使得每个密钥都有奇数个 1）分组后的明文组和 56 位的密钥按位替代或交换的方法形成密文组的加密方法。</p>
+<p>DES&#xFF0C;&#x5168;&#x79F0;&#x4E3A;&#x201C;Data Encryption Standard&#x201D;&#xFF0C;&#x4E2D;&#x6587;&#x540D;&#x4E3A;&#x201C;&#x6570;&#x636E;&#x52A0;&#x5BC6;&#x6807;&#x51C6;&#x201D;&#xFF0C;&#x662F;&#x4E00;&#x79CD;&#x4F7F;&#x7528;&#x5BC6;&#x94A5;&#x52A0;&#x5BC6;&#x7684;&#x5757;&#x7B97;&#x6CD5;&#x3002;DES &#x7B97;&#x6CD5;&#x4E3A;&#x5BC6;&#x7801;&#x4F53;&#x5236;&#x4E2D;&#x7684;&#x5BF9;&#x79F0;&#x5BC6;&#x7801;&#x4F53;&#x5236;&#xFF0C;&#x53C8;&#x88AB;&#x79F0;&#x4E3A;&#x7F8E;&#x56FD;&#x6570;&#x636E;&#x52A0;&#x5BC6;&#x6807;&#x51C6;&#xFF0C;&#x662F; 1972 &#x5E74;&#x7F8E;&#x56FD; IBM &#x516C;&#x53F8;&#x7814;&#x5236;&#x7684;&#x5BF9;&#x79F0;&#x5BC6;&#x7801;&#x4F53;&#x5236;&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x3002; &#x660E;&#x6587;&#x6309; 64 &#x4F4D;&#x8FDB;&#x884C;&#x5206;&#x7EC4;&#xFF0C;&#x5BC6;&#x94A5;&#x957F; 64 &#x4F4D;&#xFF0C;&#x5BC6;&#x94A5;&#x4E8B;&#x5B9E;&#x4E0A;&#x662F; 56 &#x4F4D;&#x53C2;&#x4E0E; DES &#x8FD0;&#x7B97;&#xFF08;&#x7B2C;8&#x3001;16&#x3001;24&#x3001;32&#x3001;40&#x3001;48&#x3001;56&#x3001;64 &#x4F4D;&#x662F;&#x6821;&#x9A8C;&#x4F4D;&#xFF0C; &#x4F7F;&#x5F97;&#x6BCF;&#x4E2A;&#x5BC6;&#x94A5;&#x90FD;&#x6709;&#x5947;&#x6570;&#x4E2A; 1&#xFF09;&#x5206;&#x7EC4;&#x540E;&#x7684;&#x660E;&#x6587;&#x7EC4;&#x548C; 56 &#x4F4D;&#x7684;&#x5BC6;&#x94A5;&#x6309;&#x4F4D;&#x66FF;&#x4EE3;&#x6216;&#x4EA4;&#x6362;&#x7684;&#x65B9;&#x6CD5;&#x5F62;&#x6210;&#x5BC6;&#x6587;&#x7EC4;&#x7684;&#x52A0;&#x5BC6;&#x65B9;&#x6CD5;&#x3002;</p>
 <pre><code>import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -531,7 +525,7 @@ public class DESStrategy implements IStrategy
 
 }
 </code></pre><ul>
-<li><p>2、3DES3DES，也就是“Triple DES”，中文名“三重数据加密算法”，它相当于是对每个数据块应用三次 DES 加密算法。由于计算机运算能力的增强，原版 DES 密码的密钥长度变得容易被暴力破解；3DES 即是设计用来提供一种相对简单的方法，即通过增加 DES 的密钥长度来避免类似的攻击，而不是设计一种全新的块密码算法。</p>
+<li><p>2&#x3001;3DES3DES&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x201C;Triple DES&#x201D;&#xFF0C;&#x4E2D;&#x6587;&#x540D;&#x201C;&#x4E09;&#x91CD;&#x6570;&#x636E;&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x201D;&#xFF0C;&#x5B83;&#x76F8;&#x5F53;&#x4E8E;&#x662F;&#x5BF9;&#x6BCF;&#x4E2A;&#x6570;&#x636E;&#x5757;&#x5E94;&#x7528;&#x4E09;&#x6B21; DES &#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x3002;&#x7531;&#x4E8E;&#x8BA1;&#x7B97;&#x673A;&#x8FD0;&#x7B97;&#x80FD;&#x529B;&#x7684;&#x589E;&#x5F3A;&#xFF0C;&#x539F;&#x7248; DES &#x5BC6;&#x7801;&#x7684;&#x5BC6;&#x94A5;&#x957F;&#x5EA6;&#x53D8;&#x5F97;&#x5BB9;&#x6613;&#x88AB;&#x66B4;&#x529B;&#x7834;&#x89E3;&#xFF1B;3DES &#x5373;&#x662F;&#x8BBE;&#x8BA1;&#x7528;&#x6765;&#x63D0;&#x4F9B;&#x4E00;&#x79CD;&#x76F8;&#x5BF9;&#x7B80;&#x5355;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x5373;&#x901A;&#x8FC7;&#x589E;&#x52A0; DES &#x7684;&#x5BC6;&#x94A5;&#x957F;&#x5EA6;&#x6765;&#x907F;&#x514D;&#x7C7B;&#x4F3C;&#x7684;&#x653B;&#x51FB;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x8BBE;&#x8BA1;&#x4E00;&#x79CD;&#x5168;&#x65B0;&#x7684;&#x5757;&#x5BC6;&#x7801;&#x7B97;&#x6CD5;&#x3002;</p>
 <pre><code>import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -593,7 +587,7 @@ public class _ 3DESStrategy implements IStrategy
 </code></pre></li>
 </ul>
 <ul>
-<li><p>3、AESAES，全称为“Advanced Encryption Standard”，中文名“高级加密标准”，在密码学中又称 Rijndael 加密法，是美国联邦政府采用的一种区块加密标准。AES 加密算法作为新一代的数据加密标准汇聚了强安全性、高性能、高效率、易用和灵活等优点。AES 设计有三个密钥长度：128，192，256 位。相对而言，AES 的 128 密钥比 DES 的 56 密钥强了 1021 倍。</p>
+<li><p>3&#x3001;AESAES&#xFF0C;&#x5168;&#x79F0;&#x4E3A;&#x201C;Advanced Encryption Standard&#x201D;&#xFF0C;&#x4E2D;&#x6587;&#x540D;&#x201C;&#x9AD8;&#x7EA7;&#x52A0;&#x5BC6;&#x6807;&#x51C6;&#x201D;&#xFF0C;&#x5728;&#x5BC6;&#x7801;&#x5B66;&#x4E2D;&#x53C8;&#x79F0; Rijndael &#x52A0;&#x5BC6;&#x6CD5;&#xFF0C;&#x662F;&#x7F8E;&#x56FD;&#x8054;&#x90A6;&#x653F;&#x5E9C;&#x91C7;&#x7528;&#x7684;&#x4E00;&#x79CD;&#x533A;&#x5757;&#x52A0;&#x5BC6;&#x6807;&#x51C6;&#x3002;AES &#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x4F5C;&#x4E3A;&#x65B0;&#x4E00;&#x4EE3;&#x7684;&#x6570;&#x636E;&#x52A0;&#x5BC6;&#x6807;&#x51C6;&#x6C47;&#x805A;&#x4E86;&#x5F3A;&#x5B89;&#x5168;&#x6027;&#x3001;&#x9AD8;&#x6027;&#x80FD;&#x3001;&#x9AD8;&#x6548;&#x7387;&#x3001;&#x6613;&#x7528;&#x548C;&#x7075;&#x6D3B;&#x7B49;&#x4F18;&#x70B9;&#x3002;AES &#x8BBE;&#x8BA1;&#x6709;&#x4E09;&#x4E2A;&#x5BC6;&#x94A5;&#x957F;&#x5EA6;&#xFF1A;128&#xFF0C;192&#xFF0C;256 &#x4F4D;&#x3002;&#x76F8;&#x5BF9;&#x800C;&#x8A00;&#xFF0C;AES &#x7684; 128 &#x5BC6;&#x94A5;&#x6BD4; DES &#x7684; 56 &#x5BC6;&#x94A5;&#x5F3A;&#x4E86; 1021 &#x500D;&#x3002;</p>
 <pre><code>import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -650,11 +644,11 @@ public class AESStrategy implements IStrategy
     }
 }
 </code></pre></li>
-<li><p>4、PBE</p>
+<li><p>4&#x3001;PBE</p>
 </li>
 </ul>
-<p>PBE，全称为“Password Base Encryption”，中文名“基于口令加密”，是一种基于密码的加密算法，其特点是使用口令代替了密钥，而口令由用户自己掌管，采用随机数杂凑多重加密等方法保证数据的安全性。</p>
-<p>PBE算法没有密钥的概念，把口令当做密钥了。因为密钥长短影响算法安全性，还不方便记忆，这里我们直接换成我们自己常用的口令就大大不同了，便于我们的记忆。但是单纯的口令很容易被字典法给穷举出来，所以我们这里给口令加了点“盐”，这个盐和口令组合，想破解就难了。同时我们将盐和口令合并后用消息摘要算法进行迭代很多次来构建密钥初始化向量的基本材料，使破译更加难了。</p>
+<p>PBE&#xFF0C;&#x5168;&#x79F0;&#x4E3A;&#x201C;Password Base Encryption&#x201D;&#xFF0C;&#x4E2D;&#x6587;&#x540D;&#x201C;&#x57FA;&#x4E8E;&#x53E3;&#x4EE4;&#x52A0;&#x5BC6;&#x201D;&#xFF0C;&#x662F;&#x4E00;&#x79CD;&#x57FA;&#x4E8E;&#x5BC6;&#x7801;&#x7684;&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#xFF0C;&#x5176;&#x7279;&#x70B9;&#x662F;&#x4F7F;&#x7528;&#x53E3;&#x4EE4;&#x4EE3;&#x66FF;&#x4E86;&#x5BC6;&#x94A5;&#xFF0C;&#x800C;&#x53E3;&#x4EE4;&#x7531;&#x7528;&#x6237;&#x81EA;&#x5DF1;&#x638C;&#x7BA1;&#xFF0C;&#x91C7;&#x7528;&#x968F;&#x673A;&#x6570;&#x6742;&#x51D1;&#x591A;&#x91CD;&#x52A0;&#x5BC6;&#x7B49;&#x65B9;&#x6CD5;&#x4FDD;&#x8BC1;&#x6570;&#x636E;&#x7684;&#x5B89;&#x5168;&#x6027;&#x3002;</p>
+<p>PBE&#x7B97;&#x6CD5;&#x6CA1;&#x6709;&#x5BC6;&#x94A5;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x628A;&#x53E3;&#x4EE4;&#x5F53;&#x505A;&#x5BC6;&#x94A5;&#x4E86;&#x3002;&#x56E0;&#x4E3A;&#x5BC6;&#x94A5;&#x957F;&#x77ED;&#x5F71;&#x54CD;&#x7B97;&#x6CD5;&#x5B89;&#x5168;&#x6027;&#xFF0C;&#x8FD8;&#x4E0D;&#x65B9;&#x4FBF;&#x8BB0;&#x5FC6;&#xFF0C;&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x76F4;&#x63A5;&#x6362;&#x6210;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x5E38;&#x7528;&#x7684;&#x53E3;&#x4EE4;&#x5C31;&#x5927;&#x5927;&#x4E0D;&#x540C;&#x4E86;&#xFF0C;&#x4FBF;&#x4E8E;&#x6211;&#x4EEC;&#x7684;&#x8BB0;&#x5FC6;&#x3002;&#x4F46;&#x662F;&#x5355;&#x7EAF;&#x7684;&#x53E3;&#x4EE4;&#x5F88;&#x5BB9;&#x6613;&#x88AB;&#x5B57;&#x5178;&#x6CD5;&#x7ED9;&#x7A77;&#x4E3E;&#x51FA;&#x6765;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x8FD9;&#x91CC;&#x7ED9;&#x53E3;&#x4EE4;&#x52A0;&#x4E86;&#x70B9;&#x201C;&#x76D0;&#x201D;&#xFF0C;&#x8FD9;&#x4E2A;&#x76D0;&#x548C;&#x53E3;&#x4EE4;&#x7EC4;&#x5408;&#xFF0C;&#x60F3;&#x7834;&#x89E3;&#x5C31;&#x96BE;&#x4E86;&#x3002;&#x540C;&#x65F6;&#x6211;&#x4EEC;&#x5C06;&#x76D0;&#x548C;&#x53E3;&#x4EE4;&#x5408;&#x5E76;&#x540E;&#x7528;&#x6D88;&#x606F;&#x6458;&#x8981;&#x7B97;&#x6CD5;&#x8FDB;&#x884C;&#x8FED;&#x4EE3;&#x5F88;&#x591A;&#x6B21;&#x6765;&#x6784;&#x5EFA;&#x5BC6;&#x94A5;&#x521D;&#x59CB;&#x5316;&#x5411;&#x91CF;&#x7684;&#x57FA;&#x672C;&#x6750;&#x6599;&#xFF0C;&#x4F7F;&#x7834;&#x8BD1;&#x66F4;&#x52A0;&#x96BE;&#x4E86;&#x3002;</p>
 <pre><code>import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
@@ -668,7 +662,7 @@ import org.apache.commons.codec.binary.Hex;
 import com.amuro.strategy.IStrategy;
 
 /**
- * 基于口令的加密（password），对称 + 消息摘要
+ * &#x57FA;&#x4E8E;&#x53E3;&#x4EE4;&#x7684;&#x52A0;&#x5BC6;&#xFF08;password&#xFF09;&#xFF0C;&#x5BF9;&#x79F0; + &#x6D88;&#x606F;&#x6458;&#x8981;
  * @author Amuro
  *
  * /
@@ -721,11 +715,11 @@ public class PBEStrategy implements IStrategy
     }
 
 }
-</code></pre><h1 id="五、非对称加密"><a href="#五、非对称加密" class="headerlink" title="五、非对称加密"></a>五、非对称加密</h1><p>非对称加密算法需要两个密钥来进行加密和解密，分别是公钥和私钥。需要注意的一点，这个公钥和私钥必须是一对的，如果用公钥对数据进行加密，那么只有使用对应的私钥才能解密，反之亦然。由于加密和解密使用的是两个不同的密钥，因此，这种算法叫做非对称加密算法。</p>
+</code></pre><h1 id="&#x4E94;&#x3001;&#x975E;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;"><a href="#&#x4E94;&#x3001;&#x975E;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;" class="headerlink" title="&#x4E94;&#x3001;&#x975E;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;"></a>&#x4E94;&#x3001;&#x975E;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;</h1><p>&#x975E;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x9700;&#x8981;&#x4E24;&#x4E2A;&#x5BC6;&#x94A5;&#x6765;&#x8FDB;&#x884C;&#x52A0;&#x5BC6;&#x548C;&#x89E3;&#x5BC6;&#xFF0C;&#x5206;&#x522B;&#x662F;&#x516C;&#x94A5;&#x548C;&#x79C1;&#x94A5;&#x3002;&#x9700;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x4E00;&#x70B9;&#xFF0C;&#x8FD9;&#x4E2A;&#x516C;&#x94A5;&#x548C;&#x79C1;&#x94A5;&#x5FC5;&#x987B;&#x662F;&#x4E00;&#x5BF9;&#x7684;&#xFF0C;&#x5982;&#x679C;&#x7528;&#x516C;&#x94A5;&#x5BF9;&#x6570;&#x636E;&#x8FDB;&#x884C;&#x52A0;&#x5BC6;&#xFF0C;&#x90A3;&#x4E48;&#x53EA;&#x6709;&#x4F7F;&#x7528;&#x5BF9;&#x5E94;&#x7684;&#x79C1;&#x94A5;&#x624D;&#x80FD;&#x89E3;&#x5BC6;&#xFF0C;&#x53CD;&#x4E4B;&#x4EA6;&#x7136;&#x3002;&#x7531;&#x4E8E;&#x52A0;&#x5BC6;&#x548C;&#x89E3;&#x5BC6;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x4E24;&#x4E2A;&#x4E0D;&#x540C;&#x7684;&#x5BC6;&#x94A5;&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x8FD9;&#x79CD;&#x7B97;&#x6CD5;&#x53EB;&#x505A;&#x975E;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x3002;</p>
 <ul>
-<li>1、RSA</li>
+<li>1&#x3001;RSA</li>
 </ul>
-<p>其实，在早在 1978 年的时候，RSA就已经出现了，它是第一个既能用于数据加密也能用于数字签名的算法。它易于理解和操作，也很流行。其原理就如上面的工作过程所述。RSA 算法基于一个十分简单的数论事实：将两个大素数相乘十分容易，但是想要对其乘积进行因式分解却极其困难，因此可以将乘积公开作为加密密钥。</p>
+<p>&#x5176;&#x5B9E;&#xFF0C;&#x5728;&#x65E9;&#x5728; 1978 &#x5E74;&#x7684;&#x65F6;&#x5019;&#xFF0C;RSA&#x5C31;&#x5DF2;&#x7ECF;&#x51FA;&#x73B0;&#x4E86;&#xFF0C;&#x5B83;&#x662F;&#x7B2C;&#x4E00;&#x4E2A;&#x65E2;&#x80FD;&#x7528;&#x4E8E;&#x6570;&#x636E;&#x52A0;&#x5BC6;&#x4E5F;&#x80FD;&#x7528;&#x4E8E;&#x6570;&#x5B57;&#x7B7E;&#x540D;&#x7684;&#x7B97;&#x6CD5;&#x3002;&#x5B83;&#x6613;&#x4E8E;&#x7406;&#x89E3;&#x548C;&#x64CD;&#x4F5C;&#xFF0C;&#x4E5F;&#x5F88;&#x6D41;&#x884C;&#x3002;&#x5176;&#x539F;&#x7406;&#x5C31;&#x5982;&#x4E0A;&#x9762;&#x7684;&#x5DE5;&#x4F5C;&#x8FC7;&#x7A0B;&#x6240;&#x8FF0;&#x3002;RSA &#x7B97;&#x6CD5;&#x57FA;&#x4E8E;&#x4E00;&#x4E2A;&#x5341;&#x5206;&#x7B80;&#x5355;&#x7684;&#x6570;&#x8BBA;&#x4E8B;&#x5B9E;&#xFF1A;&#x5C06;&#x4E24;&#x4E2A;&#x5927;&#x7D20;&#x6570;&#x76F8;&#x4E58;&#x5341;&#x5206;&#x5BB9;&#x6613;&#xFF0C;&#x4F46;&#x662F;&#x60F3;&#x8981;&#x5BF9;&#x5176;&#x4E58;&#x79EF;&#x8FDB;&#x884C;&#x56E0;&#x5F0F;&#x5206;&#x89E3;&#x5374;&#x6781;&#x5176;&#x56F0;&#x96BE;&#xFF0C;&#x56E0;&#x6B64;&#x53EF;&#x4EE5;&#x5C06;&#x4E58;&#x79EF;&#x516C;&#x5F00;&#x4F5C;&#x4E3A;&#x52A0;&#x5BC6;&#x5BC6;&#x94A5;&#x3002;</p>
 <pre><code>import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -751,14 +745,14 @@ public class RSAStrategy implements IStrategy
     {
         try
         {
-            //初始化密钥
+            //&#x521D;&#x59CB;&#x5316;&#x5BC6;&#x94A5;
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(&quot;RSA&quot;);
             keyPairGenerator.initialize(512);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
             rsaPublicKey = (RSAPublicKey)keyPair.getPublic();
             rsaPrivateKey = (RSAPrivateKey)keyPair.getPrivate();
 
-            //私钥加密 公钥解密
+            //&#x79C1;&#x94A5;&#x52A0;&#x5BC6; &#x516C;&#x94A5;&#x89E3;&#x5BC6;
             PKCS8EncodedKeySpec pkcs8EncodedKeySpec
                 = new PKCS8EncodedKeySpec(rsaPrivateKey.getEncoded());
             KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
@@ -767,7 +761,7 @@ public class RSAStrategy implements IStrategy
             cipher.init(Cipher.ENCRYPT_MODE, privateKey);
             byte[] resultBytes = cipher.doFinal(src.getBytes());
 
-            //私钥解密 公钥加密
+            //&#x79C1;&#x94A5;&#x89E3;&#x5BC6; &#x516C;&#x94A5;&#x52A0;&#x5BC6;
 //          X509EncodedKeySpec x509EncodedKeySpec =
 //                  new X509EncodedKeySpec(rsaPublicKey.getEncoded());
 //          KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
@@ -790,7 +784,7 @@ public class RSAStrategy implements IStrategy
     {
         try
         {
-            //私钥加密 公钥解密
+            //&#x79C1;&#x94A5;&#x52A0;&#x5BC6; &#x516C;&#x94A5;&#x89E3;&#x5BC6;
             X509EncodedKeySpec x509EncodedKeySpec =
                     new X509EncodedKeySpec(rsaPublicKey.getEncoded());
             KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
@@ -799,7 +793,7 @@ public class RSAStrategy implements IStrategy
             cipher.init(Cipher.DECRYPT_MODE, publicKey);
             byte[] resultBytes = cipher.doFinal(Hex.decodeHex(src.toCharArray()));
 
-            //私钥解密 公钥加密
+            //&#x79C1;&#x94A5;&#x89E3;&#x5BC6; &#x516C;&#x94A5;&#x52A0;&#x5BC6;
 //          PKCS8EncodedKeySpec pkcs8EncodedKeySpec
 //              = new PKCS8EncodedKeySpec(rsaPrivateKey.getEncoded());
 //          KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
@@ -819,10 +813,10 @@ public class RSAStrategy implements IStrategy
 
 }
 </code></pre><ul>
-<li>2、DH算法</li>
+<li>2&#x3001;DH&#x7B97;&#x6CD5;</li>
 </ul>
-<p>DH，全称为“Diffie-Hellman”，他是一种确保共享KEY安全穿越不安全网络的方法，也就是常说的密钥一致协议。由公开密钥密码体制的奠基人Diffie和Hellman所提出的一种思想。简单的说就是允许两名用户在公开媒体上交换信息以生成“一致”的、可以共享的密钥。也就是由甲方产出一对密钥（公钥、私钥），乙方依照甲方公钥产生乙方密钥对（公钥、私钥）。</p>
-<p>以此为基线，作为数据传输保密基础，同时双方使用同一种对称加密算法构建本地密钥（SecretKey）对数据加密。这样，在互通了本地密钥（SecretKey）算法后，甲乙双方公开自己的公钥，使用对方的公钥和刚才产生的私钥加密数据，同时可以使用对方的公钥和自己的私钥对数据解密。不单单是甲乙双方两方，可以扩展为多方共享数据通讯，这样就完成了网络交互数据的安全通讯！</p>
+<p>DH&#xFF0C;&#x5168;&#x79F0;&#x4E3A;&#x201C;Diffie-Hellman&#x201D;&#xFF0C;&#x4ED6;&#x662F;&#x4E00;&#x79CD;&#x786E;&#x4FDD;&#x5171;&#x4EAB;KEY&#x5B89;&#x5168;&#x7A7F;&#x8D8A;&#x4E0D;&#x5B89;&#x5168;&#x7F51;&#x7EDC;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x5E38;&#x8BF4;&#x7684;&#x5BC6;&#x94A5;&#x4E00;&#x81F4;&#x534F;&#x8BAE;&#x3002;&#x7531;&#x516C;&#x5F00;&#x5BC6;&#x94A5;&#x5BC6;&#x7801;&#x4F53;&#x5236;&#x7684;&#x5960;&#x57FA;&#x4EBA;Diffie&#x548C;Hellman&#x6240;&#x63D0;&#x51FA;&#x7684;&#x4E00;&#x79CD;&#x601D;&#x60F3;&#x3002;&#x7B80;&#x5355;&#x7684;&#x8BF4;&#x5C31;&#x662F;&#x5141;&#x8BB8;&#x4E24;&#x540D;&#x7528;&#x6237;&#x5728;&#x516C;&#x5F00;&#x5A92;&#x4F53;&#x4E0A;&#x4EA4;&#x6362;&#x4FE1;&#x606F;&#x4EE5;&#x751F;&#x6210;&#x201C;&#x4E00;&#x81F4;&#x201D;&#x7684;&#x3001;&#x53EF;&#x4EE5;&#x5171;&#x4EAB;&#x7684;&#x5BC6;&#x94A5;&#x3002;&#x4E5F;&#x5C31;&#x662F;&#x7531;&#x7532;&#x65B9;&#x4EA7;&#x51FA;&#x4E00;&#x5BF9;&#x5BC6;&#x94A5;&#xFF08;&#x516C;&#x94A5;&#x3001;&#x79C1;&#x94A5;&#xFF09;&#xFF0C;&#x4E59;&#x65B9;&#x4F9D;&#x7167;&#x7532;&#x65B9;&#x516C;&#x94A5;&#x4EA7;&#x751F;&#x4E59;&#x65B9;&#x5BC6;&#x94A5;&#x5BF9;&#xFF08;&#x516C;&#x94A5;&#x3001;&#x79C1;&#x94A5;&#xFF09;&#x3002;</p>
+<p>&#x4EE5;&#x6B64;&#x4E3A;&#x57FA;&#x7EBF;&#xFF0C;&#x4F5C;&#x4E3A;&#x6570;&#x636E;&#x4F20;&#x8F93;&#x4FDD;&#x5BC6;&#x57FA;&#x7840;&#xFF0C;&#x540C;&#x65F6;&#x53CC;&#x65B9;&#x4F7F;&#x7528;&#x540C;&#x4E00;&#x79CD;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;&#x7B97;&#x6CD5;&#x6784;&#x5EFA;&#x672C;&#x5730;&#x5BC6;&#x94A5;&#xFF08;SecretKey&#xFF09;&#x5BF9;&#x6570;&#x636E;&#x52A0;&#x5BC6;&#x3002;&#x8FD9;&#x6837;&#xFF0C;&#x5728;&#x4E92;&#x901A;&#x4E86;&#x672C;&#x5730;&#x5BC6;&#x94A5;&#xFF08;SecretKey&#xFF09;&#x7B97;&#x6CD5;&#x540E;&#xFF0C;&#x7532;&#x4E59;&#x53CC;&#x65B9;&#x516C;&#x5F00;&#x81EA;&#x5DF1;&#x7684;&#x516C;&#x94A5;&#xFF0C;&#x4F7F;&#x7528;&#x5BF9;&#x65B9;&#x7684;&#x516C;&#x94A5;&#x548C;&#x521A;&#x624D;&#x4EA7;&#x751F;&#x7684;&#x79C1;&#x94A5;&#x52A0;&#x5BC6;&#x6570;&#x636E;&#xFF0C;&#x540C;&#x65F6;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5BF9;&#x65B9;&#x7684;&#x516C;&#x94A5;&#x548C;&#x81EA;&#x5DF1;&#x7684;&#x79C1;&#x94A5;&#x5BF9;&#x6570;&#x636E;&#x89E3;&#x5BC6;&#x3002;&#x4E0D;&#x5355;&#x5355;&#x662F;&#x7532;&#x4E59;&#x53CC;&#x65B9;&#x4E24;&#x65B9;&#xFF0C;&#x53EF;&#x4EE5;&#x6269;&#x5C55;&#x4E3A;&#x591A;&#x65B9;&#x5171;&#x4EAB;&#x6570;&#x636E;&#x901A;&#x8BAF;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x5B8C;&#x6210;&#x4E86;&#x7F51;&#x7EDC;&#x4EA4;&#x4E92;&#x6570;&#x636E;&#x7684;&#x5B89;&#x5168;&#x901A;&#x8BAF;&#xFF01;</p>
 <pre><code>import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -850,14 +844,14 @@ public class DHStrategy implements IStrategy
     {
         try
         {
-            //初始化发送方密钥
+            //&#x521D;&#x59CB;&#x5316;&#x53D1;&#x9001;&#x65B9;&#x5BC6;&#x94A5;
             KeyPairGenerator senderKeyPairGenerator = KeyPairGenerator.getInstance(&quot;DH&quot;);
             senderKeyPairGenerator.initialize(512);
             KeyPair senderkeyPair = senderKeyPairGenerator.generateKeyPair();
             PrivateKey senderPrivateKey = senderkeyPair.getPrivate();
-            byte[] senderPublicKeyBytes = senderkeyPair.getPublic().getEncoded();//发送方的公钥
+            byte[] senderPublicKeyBytes = senderkeyPair.getPublic().getEncoded();//&#x53D1;&#x9001;&#x65B9;&#x7684;&#x516C;&#x94A5;
 
-            //初始化接收方密钥,用发送方的公钥
+            //&#x521D;&#x59CB;&#x5316;&#x63A5;&#x6536;&#x65B9;&#x5BC6;&#x94A5;,&#x7528;&#x53D1;&#x9001;&#x65B9;&#x7684;&#x516C;&#x94A5;
             KeyFactory receiverKeyFactory = KeyFactory.getInstance(&quot;DH&quot;);
             X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(senderPublicKeyBytes);
             PublicKey receiverPublicKey = receiverKeyFactory.generatePublic(x509EncodedKeySpec);
@@ -874,7 +868,7 @@ public class DHStrategy implements IStrategy
             receiverKeyAgreement.doPhase(receiverPublicKey, true);
             receiverSecretKey = receiverKeyAgreement.generateSecret(&quot;DES&quot;);
 
-            //发送方拿到接收方的public key就可以做加密了
+            //&#x53D1;&#x9001;&#x65B9;&#x62FF;&#x5230;&#x63A5;&#x6536;&#x65B9;&#x7684;public key&#x5C31;&#x53EF;&#x4EE5;&#x505A;&#x52A0;&#x5BC6;&#x4E86;
             KeyFactory senderKeyFactory = KeyFactory.getInstance(&quot;DH&quot;);
             x509EncodedKeySpec = new X509EncodedKeySpec(receiverPublicKeyBytes);
             PublicKey senderPublicKey = senderKeyFactory.generatePublic(x509EncodedKeySpec);
@@ -917,10 +911,10 @@ public class DHStrategy implements IStrategy
     }
 
 }
-</code></pre><h1 id="六、数字签名证书"><a href="#六、数字签名证书" class="headerlink" title="六、数字签名证书"></a>六、数字签名证书</h1><hr>
-<p>非对称加密已经灰常安全了，但是还有一个破绽：<br>服务器A公布了自己的公钥，我的电脑是用服务器A的公钥加密数据后再发给服务器A的；这时候服务器B侵入了我的电脑，把我用来加密的公钥换成了它的公钥，于是我发出去的数据就会被服务器B的私钥破解了。肿么防止公钥被篡改呢？</p>
-<p>对，我们想到了前面的消息摘要，服务器A把公钥丢给我的时候，同时去CA申请一份数字证书，其实主要就是公钥的消息摘要，有了这份证书，当我再用公钥加密的时候，我就可以先验证一下当前的公钥是否确定是服务器A发送给我的。</p>
-<p>这里就贴一种RSA的：</p>
+</code></pre><h1 id="&#x516D;&#x3001;&#x6570;&#x5B57;&#x7B7E;&#x540D;&#x8BC1;&#x4E66;"><a href="#&#x516D;&#x3001;&#x6570;&#x5B57;&#x7B7E;&#x540D;&#x8BC1;&#x4E66;" class="headerlink" title="&#x516D;&#x3001;&#x6570;&#x5B57;&#x7B7E;&#x540D;&#x8BC1;&#x4E66;"></a>&#x516D;&#x3001;&#x6570;&#x5B57;&#x7B7E;&#x540D;&#x8BC1;&#x4E66;</h1><hr>
+<p>&#x975E;&#x5BF9;&#x79F0;&#x52A0;&#x5BC6;&#x5DF2;&#x7ECF;&#x7070;&#x5E38;&#x5B89;&#x5168;&#x4E86;&#xFF0C;&#x4F46;&#x662F;&#x8FD8;&#x6709;&#x4E00;&#x4E2A;&#x7834;&#x7EFD;&#xFF1A;<br>&#x670D;&#x52A1;&#x5668;A&#x516C;&#x5E03;&#x4E86;&#x81EA;&#x5DF1;&#x7684;&#x516C;&#x94A5;&#xFF0C;&#x6211;&#x7684;&#x7535;&#x8111;&#x662F;&#x7528;&#x670D;&#x52A1;&#x5668;A&#x7684;&#x516C;&#x94A5;&#x52A0;&#x5BC6;&#x6570;&#x636E;&#x540E;&#x518D;&#x53D1;&#x7ED9;&#x670D;&#x52A1;&#x5668;A&#x7684;&#xFF1B;&#x8FD9;&#x65F6;&#x5019;&#x670D;&#x52A1;&#x5668;B&#x4FB5;&#x5165;&#x4E86;&#x6211;&#x7684;&#x7535;&#x8111;&#xFF0C;&#x628A;&#x6211;&#x7528;&#x6765;&#x52A0;&#x5BC6;&#x7684;&#x516C;&#x94A5;&#x6362;&#x6210;&#x4E86;&#x5B83;&#x7684;&#x516C;&#x94A5;&#xFF0C;&#x4E8E;&#x662F;&#x6211;&#x53D1;&#x51FA;&#x53BB;&#x7684;&#x6570;&#x636E;&#x5C31;&#x4F1A;&#x88AB;&#x670D;&#x52A1;&#x5668;B&#x7684;&#x79C1;&#x94A5;&#x7834;&#x89E3;&#x4E86;&#x3002;&#x80BF;&#x4E48;&#x9632;&#x6B62;&#x516C;&#x94A5;&#x88AB;&#x7BE1;&#x6539;&#x5462;&#xFF1F;</p>
+<p>&#x5BF9;&#xFF0C;&#x6211;&#x4EEC;&#x60F3;&#x5230;&#x4E86;&#x524D;&#x9762;&#x7684;&#x6D88;&#x606F;&#x6458;&#x8981;&#xFF0C;&#x670D;&#x52A1;&#x5668;A&#x628A;&#x516C;&#x94A5;&#x4E22;&#x7ED9;&#x6211;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x540C;&#x65F6;&#x53BB;CA&#x7533;&#x8BF7;&#x4E00;&#x4EFD;&#x6570;&#x5B57;&#x8BC1;&#x4E66;&#xFF0C;&#x5176;&#x5B9E;&#x4E3B;&#x8981;&#x5C31;&#x662F;&#x516C;&#x94A5;&#x7684;&#x6D88;&#x606F;&#x6458;&#x8981;&#xFF0C;&#x6709;&#x4E86;&#x8FD9;&#x4EFD;&#x8BC1;&#x4E66;&#xFF0C;&#x5F53;&#x6211;&#x518D;&#x7528;&#x516C;&#x94A5;&#x52A0;&#x5BC6;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6211;&#x5C31;&#x53EF;&#x4EE5;&#x5148;&#x9A8C;&#x8BC1;&#x4E00;&#x4E0B;&#x5F53;&#x524D;&#x7684;&#x516C;&#x94A5;&#x662F;&#x5426;&#x786E;&#x5B9A;&#x662F;&#x670D;&#x52A1;&#x5668;A&#x53D1;&#x9001;&#x7ED9;&#x6211;&#x7684;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x5C31;&#x8D34;&#x4E00;&#x79CD;RSA&#x7684;&#xFF1A;</p>
 <pre><code>import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -951,7 +945,7 @@ public class RSASign
             Signature signature = Signature.getInstance(&quot;MD5withRSA&quot;);
             signature.initSign(privateKey);
             signature.update(src.getBytes());
-            //生成签名bytes
+            //&#x751F;&#x6210;&#x7B7E;&#x540D;bytes
             byte[] signBytes = signature.sign();
 
             X509EncodedKeySpec x509EncodedKeySpec =
@@ -986,11 +980,13 @@ public class RSASign
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/07/27/解决Exception-raised-during-rendering-com-android-util-PropertiesMap-Details/" rel="prev">解决Exception raised during rendering: com/android/util/PropertiesMap (Details)</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/06/android-防手抖/" rel="next">android 防手抖</a>
+              <a href="/2016/06/26/Android-tine/" rel="next">Android tine</a>
             
           </div>
         </div>
@@ -1195,7 +1191,7 @@ public class RSASign
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
