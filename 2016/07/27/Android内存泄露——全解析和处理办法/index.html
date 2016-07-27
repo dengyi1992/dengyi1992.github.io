@@ -1,0 +1,978 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="JAVA&amp;#x662F;&amp;#x5783;&amp;#x573E;&amp;#x56DE;&amp;#x6536;&amp;#x8BED;&amp;#x8A00;&amp;#x7684;&amp;#x4E00;&amp;#x79CD;&amp;#xFF0C;&amp;#x5F00;&amp;#x53D1;&amp;#x8005;&amp;#x65E0;&amp;#x9700;&amp;#x7279;&amp;#x610F;&amp;#x7BA1;&amp;#x7406;&amp;#x5185;&amp;#x5B58;&amp;#x5206;&amp;#x914D;&amp;#x3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android内存泄露——全解析和处理办法">
+<meta property="og:url" content="http://yoursite.com/2016/07/27/Android内存泄露——全解析和处理办法/index.html">
+<meta property="og:site_name" content="似火的Blog">
+<meta property="og:description" content="JAVA&amp;#x662F;&amp;#x5783;&amp;#x573E;&amp;#x56DE;&amp;#x6536;&amp;#x8BED;&amp;#x8A00;&amp;#x7684;&amp;#x4E00;&amp;#x79CD;&amp;#xFF0C;&amp;#x5F00;&amp;#x53D1;&amp;#x8005;&amp;#x65E0;&amp;#x9700;&amp;#x7279;&amp;#x610F;&amp;#x7BA1;&amp;#x7406;&amp;#x5185;&amp;#x5B58;&amp;#x5206;&amp;#x914D;&amp;#x3">
+<meta property="og:image" content="http://yoursite.com/2016/07/27/Android内存泄露——全解析和处理办法/pic1.png">
+<meta property="og:updated_time" content="2016-07-27T15:48:57.134Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android内存泄露——全解析和处理办法">
+<meta name="twitter:description" content="JAVA&amp;#x662F;&amp;#x5783;&amp;#x573E;&amp;#x56DE;&amp;#x6536;&amp;#x8BED;&amp;#x8A00;&amp;#x7684;&amp;#x4E00;&amp;#x79CD;&amp;#xFF0C;&amp;#x5F00;&amp;#x53D1;&amp;#x8005;&amp;#x65E0;&amp;#x9700;&amp;#x7279;&amp;#x610F;&amp;#x7BA1;&amp;#x7406;&amp;#x5185;&amp;#x5B58;&amp;#x5206;&amp;#x914D;&amp;#x3">
+<meta name="twitter:image" content="http://yoursite.com/2016/07/27/Android内存泄露——全解析和处理办法/pic1.png">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> Android内存泄露——全解析和处理办法 | 似火的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title"></span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        $(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        $("#assist_btn").hide();
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Android内存泄露——全解析和处理办法
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-07-27T23:38:27+08:00" content="2016-07-27">
+            2016-07-27
+          </time>
+        </span>
+
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>JAVA&#x662F;&#x5783;&#x573E;&#x56DE;&#x6536;&#x8BED;&#x8A00;&#x7684;&#x4E00;&#x79CD;&#xFF0C;&#x5F00;&#x53D1;&#x8005;&#x65E0;&#x9700;&#x7279;&#x610F;&#x7BA1;&#x7406;&#x5185;&#x5B58;&#x5206;&#x914D;&#x3002;&#x4F46;&#x662F;JAVA&#x4E2D;&#x8FD8;&#x662F;&#x5B58;&#x5728;&#x7740;&#x8BB8;&#x591A;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x7684;&#x53EF;&#x80FD;&#x6027;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x597D;&#x597D;&#x5904;&#x7406;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#xFF0C;&#x4F1A;&#x5BFC;&#x81F4;APP&#x5185;&#x5B58;&#x5355;&#x5143;&#x65E0;&#x6CD5;&#x91CA;&#x653E;&#x88AB;&#x6D6A;&#x8D39;&#x6389;&#xFF0C;&#x6700;&#x7EC8;&#x5BFC;&#x81F4;&#x5185;&#x5B58;&#x5168;&#x90E8;&#x5360;&#x636E; <em>&#x5806;&#x6808;(heap)</em> &#x6324;&#x7206;&#x8FDB;&#x800C; <em>&#x7A0B;&#x5E8F;&#x5D29;&#x6E83;</em>&#x3002;</p>
+<h1 id="&#x5185;&#x5B58;&#x6CC4;&#x9732;"><a href="#&#x5185;&#x5B58;&#x6CC4;&#x9732;" class="headerlink" title="&#x5185;&#x5B58;&#x6CC4;&#x9732;"></a>&#x5185;&#x5B58;&#x6CC4;&#x9732;</h1><hr>
+<p>&#x8BF4;&#x5230;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#xFF0C;&#x5C31;&#x4E0D;&#x5F97;&#x4E0D;&#x63D0;&#x5230;&#x5185;&#x5B58;&#x6EA2;&#x51FA;&#xFF0C;&#x8FD9;&#x4E24;&#x4E2A;&#x6BD4;&#x8F83;&#x5BB9;&#x6613;&#x6DF7;&#x6DC6;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x6211;&#x4EEC;&#x6765;&#x5206;&#x6790;&#x4E00;&#x4E0B;&#x3002;</p>
+<ul>
+<li><p>&#x5185;&#x5B58;&#x6CC4;&#x9732;&#xFF1A;&#x7A0B;&#x5E8F;&#x5728;&#x5411;&#x7CFB;&#x7EDF;&#x7533;&#x8BF7;&#x5206;&#x914D;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x540E;(new)&#xFF0C;&#x5728;&#x4F7F;&#x7528;&#x5B8C;&#x6BD5;&#x540E;&#x672A;&#x91CA;&#x653E;&#x3002;&#x7ED3;&#x679C;&#x5BFC;&#x81F4;&#x4E00;&#x76F4;&#x5360;&#x636E;&#x8BE5;&#x5185;&#x5B58;&#x5355;&#x5143;&#xFF0C;&#x6211;&#x4EEC;&#x548C;&#x7A0B;&#x5E8F;&#x90FD;&#x65E0;&#x6CD5;&#x518D;&#x4F7F;&#x7528;&#x8BE5;&#x5185;&#x5B58;&#x5355;&#x5143;&#xFF0C;&#x76F4;&#x5230;&#x7A0B;&#x5E8F;&#x7ED3;&#x675F;&#xFF0C;&#x8FD9;&#x662F;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x3002;</p>
+</li>
+<li><p>&#x5185;&#x5B58;&#x6EA2;&#x51FA;&#xFF1A;&#x7A0B;&#x5E8F;&#x5411;&#x7CFB;&#x7EDF;&#x7533;&#x8BF7;&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x8D85;&#x51FA;&#x4E86;&#x7CFB;&#x7EDF;&#x80FD;&#x7ED9;&#x7684;&#x3002;&#x6BD4;&#x5982;&#x5185;&#x5B58;&#x53EA;&#x80FD;&#x5206;&#x914D;&#x4E00;&#x4E2A;int&#x7C7B;&#x578B;&#xFF0C;&#x6211;&#x5374;&#x8981;&#x585E;&#x7ED9;&#x4ED6;&#x4E00;&#x4E2A;long&#x7C7B;&#x578B;&#xFF0C;&#x7CFB;&#x7EDF;&#x5C31;&#x51FA;&#x73B0;oom&#x3002;&#x53C8;&#x6BD4;&#x5982;&#x4E00;&#x8F66;&#x6700;&#x591A;&#x80FD;&#x5750;5&#x4E2A;&#x4EBA;&#xFF0C;&#x4F60;&#x5374;&#x975E;&#x8981;&#x585E;&#x4E0B;10&#x4E2A;&#xFF0C;&#x8F66;&#x5C31;&#x6324;&#x7206;&#x4E86;&#x3002;</p>
+</li>
+</ul>
+<p>&#x5927;&#x91CF;&#x7684;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x4F1A;&#x5BFC;&#x81F4;&#x5185;&#x5B58;&#x6EA2;&#x51FA;(oom)&#x3002;</p>
+<h1 id="&#x5185;&#x5B58;"><a href="#&#x5185;&#x5B58;" class="headerlink" title="&#x5185;&#x5B58;"></a>&#x5185;&#x5B58;</h1><hr>
+<p>&#x60F3;&#x8981;&#x4E86;&#x89E3;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#xFF0C;&#x5BF9;&#x5185;&#x5B58;&#x7684;&#x4E86;&#x89E3;&#x5FC5;&#x4E0D;&#x53EF;&#x5C11;&#x3002;</p>
+<p>JAVA&#x662F;&#x5728;JVM&#x6240;&#x865A;&#x62DF;&#x51FA;&#x7684;&#x5185;&#x5B58;&#x73AF;&#x5883;&#x4E2D;&#x8FD0;&#x884C;&#x7684;&#xFF0C;JVM&#x7684;&#x5185;&#x5B58;&#x53EF;&#x5206;&#x4E3A;&#x4E09;&#x4E2A;&#x533A;&#xFF1A;&#x5806;(heap)&#x3001;&#x6808;(stack)&#x548C;&#x65B9;&#x6CD5;&#x533A;(method)&#x3002;</p>
+<ul>
+<li><p>&#x6808;(stack)&#xFF1A;&#x662F;&#x7B80;&#x5355;&#x7684;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x4F46;&#x5728;&#x8BA1;&#x7B97;&#x673A;&#x4E2D;&#x4F7F;&#x7528;&#x5E7F;&#x6CDB;&#x3002;&#x6808;&#x6700;&#x663E;&#x8457;&#x7684;&#x7279;&#x5F81;&#x662F;&#xFF1A;LIFO(Last In, First Out, &#x540E;&#x8FDB;&#x5148;&#x51FA;)&#x3002;&#x6BD4;&#x5982;&#x6211;&#x4EEC;&#x5F80;&#x7BB1;&#x5B50;&#x91CC;&#x9762;&#x653E;&#x8863;&#x670D;&#xFF0C;&#x5148;&#x653E;&#x5165;&#x7684;&#x5728;&#x6700;&#x4E0B;&#x65B9;&#xFF0C;&#x53EA;&#x6709;&#x62FF;&#x51FA;&#x540E;&#x6765;&#x653E;&#x5165;&#x7684;&#x624D;&#x80FD;&#x62FF;&#x5230;&#x4E0B;&#x65B9;&#x7684;&#x8863;&#x670D;&#x3002;&#x6808;&#x4E2D;&#x53EA;&#x5B58;&#x653E;&#x57FA;&#x672C;&#x7C7B;&#x578B;&#x548C;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;(&#x4E0D;&#x662F;&#x5BF9;&#x8C61;)&#x3002;</p>
+</li>
+<li><p>&#x5806;(heap)&#xFF1A;&#x5806;&#x5185;&#x5B58;&#x7528;&#x4E8E;&#x5B58;&#x653E;&#x7531;new&#x521B;&#x5EFA;&#x7684;&#x5BF9;&#x8C61;&#x548C;&#x6570;&#x7EC4;&#x3002;&#x5728;&#x5806;&#x4E2D;&#x5206;&#x914D;&#x7684;&#x5185;&#x5B58;&#xFF0C;&#x7531;java&#x865A;&#x62DF;&#x673A;&#x81EA;&#x52A8;&#x5783;&#x573E;&#x56DE;&#x6536;&#x5668;&#x6765;&#x7BA1;&#x7406;&#x3002;JVM&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x5806;&#x533A;(heap)&#x88AB;&#x6240;&#x6709;&#x7EBF;&#x7A0B;&#x5171;&#x4EAB;&#xFF0C;&#x5806;&#x4E2D;&#x4E0D;&#x5B58;&#x653E;&#x57FA;&#x672C;&#x7C7B;&#x578B;&#x548C;&#x5BF9;&#x8C61;&#x5F15;&#x7528;&#xFF0C;&#x53EA;&#x5B58;&#x653E;&#x5BF9;&#x8C61;&#x672C;&#x8EAB;&#x3002;</p>
+</li>
+<li><p>&#x65B9;&#x6CD5;&#x533A;(method)&#xFF1A;&#x53C8;&#x53EB;&#x9759;&#x6001;&#x533A;&#xFF0C;&#x8DDF;&#x5806;&#x4E00;&#x6837;&#xFF0C;&#x88AB;&#x6240;&#x6709;&#x7684;&#x7EBF;&#x7A0B;&#x5171;&#x4EAB;&#x3002;&#x65B9;&#x6CD5;&#x533A;&#x5305;&#x542B;&#x6240;&#x6709;&#x7684;class&#x548C;static&#x53D8;&#x91CF;&#x3002;</p>
+</li>
+</ul>
+<p>&#x5185;&#x5B58;&#x7684;&#x6982;&#x5FF5;&#x5927;&#x6982;&#x7406;&#x89E3;&#x6E05;&#x695A;&#x540E;&#xFF0C;&#x8981;&#x8003;&#x8651;&#x7684;&#x95EE;&#x9898;&#x6765;&#x4E86;&#xFF1A;</p>
+<p><em>&#x5230;&#x5E95;&#x662F;&#x54EA;&#x91CC;&#x7684;&#x5185;&#x5B58;&#x4F1A;&#x8BA9;&#x6211;&#x4EEC;&#x9020;&#x6210;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#xFF1F;</em></p>
+<h1 id="&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;&#x5206;&#x6790;"><a href="#&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;&#x5206;&#x6790;" class="headerlink" title="&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;&#x5206;&#x6790;"></a>&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;&#x5206;&#x6790;</h1><p>&#x5728;JAVA&#x4E2D;JVM&#x7684;&#x6808;&#x8BB0;&#x5F55;&#x4E86;&#x65B9;&#x6CD5;&#x7684;&#x8C03;&#x7528;&#xFF0C;&#x6BCF;&#x4E2A;&#x7EBF;&#x7A0B;&#x62E5;&#x6709;&#x4E00;&#x4E2A;&#x6808;&#x3002;&#x5728;&#x7EBF;&#x7A0B;&#x7684;&#x8FD0;&#x884C;&#x8FC7;&#x7A0B;&#x5F53;&#x4E2D;&#xFF0C;&#x6267;&#x884C;&#x5230;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x65B9;&#x6CD5;&#x8C03;&#x7528;&#xFF0C;&#x5C31;&#x5728;&#x6808;&#x4E2D;&#x589E;&#x52A0;&#x4E00;&#x4E2A;&#x5185;&#x5B58;&#x5355;&#x5143;&#xFF0C;&#x5373;&#x5E27;(frame)&#x3002;&#x5728;frame&#x4E2D;&#xFF0C;&#x4FDD;&#x5B58;&#x6709;&#x8BE5;&#x65B9;&#x6CD5;&#x8C03;&#x7528;&#x7684;&#x53C2;&#x6570;&#x3001;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x548C;&#x8FD4;&#x56DE;&#x5730;&#x5740;&#x3002;&#x7136;&#x800C;JAVA&#x4E2D;&#x7684;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x53EA;&#x80FD;&#x662F;&#x57FA;&#x672C;&#x7C7B;&#x578B;&#x53D8;&#x91CF;(int)&#xFF0C;&#x6216;&#x8005;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x3002; <em>&#x6240;&#x4EE5;&#x5728;&#x6808;&#x4E2D;&#x53EA;&#x5B58;&#x653E;&#x57FA;&#x672C;&#x7C7B;&#x578B;&#x53D8;&#x91CF;&#x548C;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;</em> &#x3002;&#x5F15;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#x4FDD;&#x5B58;&#x5728;&#x5806;&#x4E2D;&#x3002;</p>
+<p><em>&#x5F53;&#x67D0;&#x65B9;&#x6CD5;&#x8FD0;&#x884C;&#x7ED3;&#x675F;&#x65F6;&#xFF0C;&#x8BE5;&#x65B9;&#x6CD5;&#x5BF9;&#x5E94;&#x7684;frame&#x5C06;&#x4F1A;&#x4ECE;&#x6808;&#x4E2D;&#x5220;&#x9664;&#xFF0C;frame&#x4E2D;&#x6240;&#x6709;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#x548C;&#x53C2;&#x6570;&#x6240;&#x5360;&#x6709;&#x7684;&#x7A7A;&#x95F4;&#x4E5F;&#x968F;&#x4E4B;&#x91CA;&#x653E;&#x3002;&#x7EBF;&#x7A0B;&#x56DE;&#x5230;&#x539F;&#x65B9;&#x6CD5;&#x7EE7;&#x7EED;&#x6267;&#x884C;&#xFF0C;&#x5F53;&#x6240;&#x6709;&#x7684;&#x6808;&#x90FD;&#x6E05;&#x7A7A;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x7A0B;&#x5E8F;&#x4E5F;&#x5C31;&#x968F;&#x4E4B;&#x8FD0;&#x884C;&#x7ED3;&#x675F;&#x3002;</em></p>
+<p>&#x800C;&#x5BF9;&#x4E8E;&#x5806;&#x5185;&#x5B58;&#xFF0C;&#x5806;&#x5B58;&#x653E;&#x7740;&#x666E;&#x901A;&#x53D8;&#x91CF;&#x3002;&#x5728;JAVA&#x4E2D;&#x5806;&#x5185;&#x5B58;&#x4E0D;&#x4F1A;&#x968F;&#x7740;&#x65B9;&#x6CD5;&#x7684;&#x7ED3;&#x675F;&#x800C;&#x6E05;&#x7A7A;&#xFF0C;&#x6240;&#x4EE5;&#x5728;&#x65B9;&#x6CD5;&#x4E2D;&#x5B9A;&#x4E49;&#x4E86;&#x5C40;&#x90E8;&#x53D8;&#x91CF;&#xFF0C;&#x5728;&#x65B9;&#x6CD5;&#x7ED3;&#x675F;&#x540E;&#x53D8;&#x91CF;&#x4F9D;&#x7136;&#x5B58;&#x6D3B;&#x5728;&#x5806;&#x4E2D;&#x3002;</p>
+<p>&#x7EFC;&#x4E0A;&#x6240;&#x8FF0;&#xFF0C;&#x6808;(stack)&#x53EF;&#x4EE5;&#x81EA;&#x884C;&#x6E05;&#x9664;&#x4E0D;&#x7528;&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x3002;&#x4F46;&#x662F;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x4E0D;&#x505C;&#x7684;&#x521B;&#x5EFA;&#x65B0;&#x5BF9;&#x8C61;&#xFF0C;&#x5806;(heap)&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x5C31;&#x4F1A;&#x88AB;&#x6D88;&#x8017;&#x5C3D;&#x3002;&#x6240;&#x4EE5;JAVA&#x5F15;&#x5165;&#x4E86;&#x5783;&#x573E;&#x56DE;&#x6536;(garbage collection&#xFF0C;&#x7B80;&#x79F0;GC)&#x53BB;&#x5904;&#x7406;&#x5806;&#x5185;&#x5B58;&#x7684;&#x56DE;&#x6536;&#xFF0C;&#x4F46;&#x5982;&#x679C;&#x5BF9;&#x8C61;&#x4E00;&#x76F4;&#x88AB;&#x5F15;&#x7528;&#x65E0;&#x6CD5;&#x88AB;&#x56DE;&#x6536;&#xFF0C;&#x9020;&#x6210;&#x5185;&#x5B58;&#x7684;&#x6D6A;&#x8D39;&#xFF0C;&#x65E0;&#x6CD5;&#x518D;&#x88AB;&#x4F7F;&#x7528;&#x3002;&#x6240;&#x4EE5;&#x5BF9;&#x8C61;&#x65E0;&#x6CD5;&#x88AB;GC&#x56DE;&#x6536;&#x5C31;&#x662F;&#x9020;&#x6210;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x7684;&#x539F;&#x56E0;&#xFF01;</p>
+<h1 id="&#x5783;&#x573E;&#x56DE;&#x6536;&#x673A;&#x5236;"><a href="#&#x5783;&#x573E;&#x56DE;&#x6536;&#x673A;&#x5236;" class="headerlink" title="&#x5783;&#x573E;&#x56DE;&#x6536;&#x673A;&#x5236;"></a>&#x5783;&#x573E;&#x56DE;&#x6536;&#x673A;&#x5236;</h1><hr>
+<p>&#x5783;&#x573E;&#x56DE;&#x6536;(garbage collection&#xFF0C;&#x7B80;&#x79F0;GC)&#x53EF;&#x4EE5;&#x81EA;&#x52A8;&#x6E05;&#x7A7A;&#x5806;&#x4E2D;&#x4E0D;&#x518D;&#x4F7F;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#x3002;&#x5728;JAVA&#x4E2D;&#x5BF9;&#x8C61;&#x662F;&#x901A;&#x8FC7;&#x5F15;&#x7528;&#x4F7F;&#x7528;&#x7684;&#x3002;&#x5982;&#x679C;&#x518D;&#x6CA1;&#x6709;&#x5F15;&#x7528;&#x6307;&#x5411;&#x8BE5;&#x5BF9;&#x8C61;&#xFF0C;&#x90A3;&#x4E48;&#x8BE5;&#x5BF9;&#x8C61;&#x5C31;&#x65E0;&#x4ECE;&#x5904;&#x7406;&#x6216;&#x8C03;&#x7528;&#x8BE5;&#x5BF9;&#x8C61;&#xFF0C;&#x8FD9;&#x6837;&#x7684;&#x5BF9;&#x8C61;&#x79F0;&#x4E3A;&#x4E0D;&#x53EF;&#x5230;&#x8FBE;&#xFF08;unreachable&#xFF09;&#x3002;&#x5783;&#x573E;&#x56DE;&#x6536;&#x7528;&#x4E8E;&#x91CA;&#x653E;&#x4E0D;&#x53EF;&#x5230;&#x8FBE;&#x7684;&#x5BF9;&#x8C61;&#x6240;&#x5360;&#x636E;&#x7684;&#x5185;&#x5B58;&#x3002;</p>
+<p>&#x5B9E;&#x73B0;&#x601D;&#x60F3;&#xFF1A;&#x6211;&#x4EEC;&#x5C06;&#x6808;&#x5B9A;&#x4E49;&#x4E3A;root&#xFF0C;&#x904D;&#x5386;&#x6808;&#x4E2D;&#x6240;&#x6709;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x518D;&#x904D;&#x5386;&#x4E00;&#x904D;&#x5806;&#x4E2D;&#x7684;&#x5BF9;&#x8C61;&#x3002;&#x56E0;&#x4E3A;&#x6808;&#x4E2D;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x6267;&#x884C;&#x5B8C;&#x6BD5;&#x5C31;&#x5220;&#x9664;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x6808;&#x4E2D;&#x7684;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x67E5;&#x627E;&#x5230;&#x5806;&#x4E2D;&#x6CA1;&#x6709;&#x88AB;&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x8FD9;&#x4E9B;&#x5BF9;&#x8C61;&#x5373;&#x4E3A;&#x4E0D;&#x53EF;&#x5230;&#x8FBE;&#x5BF9;&#x8C61;&#xFF0C;&#x5BF9;&#x5176;&#x8FDB;&#x884C;&#x5783;&#x573E;&#x56DE;&#x6536;&#x3002;</p>
+<p><img src="/2016/07/27/Android&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x2014;&#x2014;&#x5168;&#x89E3;&#x6790;&#x548C;&#x5904;&#x7406;&#x529E;&#x6CD5;/pic1.png"></p>
+<p>&#x5982;&#x679C;&#x6301;&#x6709;&#x5BF9;&#x8C61;&#x7684;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x5783;&#x573E;&#x56DE;&#x6536;&#x5668;&#x662F;&#x65E0;&#x6CD5;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x56DE;&#x6536;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x3002;</p>
+<h1 id="&#x5F15;&#x7528;&#x7C7B;&#x578B;"><a href="#&#x5F15;&#x7528;&#x7C7B;&#x578B;" class="headerlink" title="&#x5F15;&#x7528;&#x7C7B;&#x578B;"></a>&#x5F15;&#x7528;&#x7C7B;&#x578B;</h1><hr>
+<p>&#x5728;JDK 1.2&#x4EE5;&#x524D;&#x7684;&#x7248;&#x672C;&#x4E2D;&#xFF0C;&#x82E5;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x4E0D;&#x88AB;&#x4EFB;&#x4F55;&#x53D8;&#x91CF;&#x5F15;&#x7528;&#xFF0C;&#x90A3;&#x4E48;&#x7A0B;&#x5E8F;&#x5C31;&#x65E0;&#x6CD5;&#x518D;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x3002;&#x4E5F;&#x5C31;&#x662F;&#x8BF4;&#xFF0C;&#x53EA;&#x6709;&#x5BF9;&#x8C61;&#x5904;&#x4E8E;&#x53EF;&#x89E6;&#x53CA;(reachable)&#x72B6;&#x6001;&#xFF0C;&#x7A0B;&#x5E8F;&#x624D;&#x80FD;&#x4F7F;&#x7528;&#x5B83;&#x3002;&#x4ECE;JDK 1.2&#x7248;&#x672C;&#x5F00;&#x59CB;&#xFF0C;&#x628A;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x5206;&#x4E3A;4&#x79CD;&#x7EA7;&#x522B;&#xFF0C;&#x4ECE;&#x800C;&#x4F7F;&#x7A0B;&#x5E8F;&#x80FD;&#x66F4;&#x52A0;&#x7075;&#x6D3B;&#x5730;&#x63A7;&#x5236;&#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#x3002;&#x8FD9;4&#x79CD;&#x7EA7;&#x522B;&#x7531;&#x9AD8;&#x5230;&#x4F4E;&#x4F9D;&#x6B21;&#x4E3A;&#xFF1A;&#x5F3A;&#x5F15;&#x7528;&#x3001;&#x8F6F;&#x5F15;&#x7528;&#x3001;&#x5F31;&#x5F15;&#x7528;&#x548C;&#x865A;&#x5F15;&#x7528;&#x3002;</p>
+<h2 id="Java-Android&#x5F15;&#x7528;&#x7C7B;&#x578B;&#x53CA;&#x5176;&#x4F7F;&#x7528;&#x5206;&#x6790;"><a href="#Java-Android&#x5F15;&#x7528;&#x7C7B;&#x578B;&#x53CA;&#x5176;&#x4F7F;&#x7528;&#x5206;&#x6790;" class="headerlink" title="Java/Android&#x5F15;&#x7528;&#x7C7B;&#x578B;&#x53CA;&#x5176;&#x4F7F;&#x7528;&#x5206;&#x6790;"></a>Java/Android&#x5F15;&#x7528;&#x7C7B;&#x578B;&#x53CA;&#x5176;&#x4F7F;&#x7528;&#x5206;&#x6790;</h2><ul>
+<li><ol>
+<li>&#x5F3A;&#x5F15;&#x7528;(Strong reference)</li>
+</ol>
+</li>
+</ul>
+<p>&#x5B9E;&#x9645;&#x7F16;&#x7801;&#x4E2D;&#x6700;&#x5E38;&#x89C1;&#x7684;&#x4E00;&#x79CD;&#x5F15;&#x7528;&#x7C7B;&#x578B;&#x3002;&#x5E38;&#x89C1;&#x5F62;&#x5F0F;&#x5982;&#xFF1A;A a = new A();&#x7B49;&#x3002;&#x5F3A;&#x5F15;&#x7528;&#x672C;&#x8EAB;&#x5B58;&#x50A8;&#x5728;&#x6808;&#x5185;&#x5B58;&#x4E2D;&#xFF0C;&#x5176;&#x5B58;&#x50A8;&#x6307;&#x5411;&#x5BF9;&#x5185;&#x5B58;&#x4E2D;&#x5BF9;&#x8C61;&#x7684;&#x5730;&#x5740;&#x3002;&#x4E00;&#x822C;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x5F53;&#x5BF9;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x5BF9;&#x8C61;&#x4E0D;&#x518D;&#x6709;&#x4EFB;&#x4F55;&#x5F3A;&#x5F15;&#x7528;&#x6307;&#x5411;&#x5B83;&#x65F6;&#xFF0C;&#x5783;&#x573E;&#x56DE;&#x6536;&#x673A;&#x5668;&#x5F00;&#x59CB;&#x8003;&#x8651;&#x53EF;&#x80FD;&#x8981;&#x5BF9;&#x6B64;&#x5185;&#x5B58;&#x8FDB;&#x884C;&#x7684;&#x5783;&#x573E;&#x56DE;&#x6536;&#x3002;&#x5982;&#x5F53;&#x8FDB;&#x884C;&#x7F16;&#x7801;&#xFF1A;a = null&#xFF0C;&#x6B64;&#x65F6;&#xFF0C;&#x521A;&#x521A;&#x5728;&#x5806;&#x4E2D;&#x5206;&#x914D;&#x5730;&#x5740;&#x5E76;&#x65B0;&#x5EFA;&#x7684;a&#x5BF9;&#x8C61;&#x6CA1;&#x6709;&#x5176;&#x4ED6;&#x7684;&#x4EFB;&#x4F55;&#x5F15;&#x7528;&#xFF0C;&#x5F53;&#x7CFB;&#x7EDF;&#x8FDB;&#x884C;&#x5783;&#x573E;&#x56DE;&#x6536;&#x65F6;&#xFF0C;&#x5806;&#x5185;&#x5B58;&#x5C06;&#x88AB;&#x5783;&#x573E;&#x56DE;&#x6536;&#x3002;</p>
+<ul>
+<li><ol>
+<li>&#x8F6F;&#x5F15;&#x7528;(Soft Reference)</li>
+</ol>
+</li>
+</ul>
+<p>&#x8F6F;&#x5F15;&#x7528;&#x7684;&#x4E00;&#x822C;&#x4F7F;&#x7528;&#x5F62;&#x5F0F;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code>A a = new A();
+SoftReference&lt;A&gt; srA = new SoftReference&lt;A&gt;(a);
+</code></pre><p>&#x8F6F;&#x5F15;&#x7528;&#x6240;&#x6307;&#x793A;&#x7684;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x5783;&#x573E;&#x56DE;&#x6536;&#x9700;&#x8981;&#x6EE1;&#x8DB3;&#x5982;&#x4E0B;&#x4E24;&#x4E2A;&#x6761;&#x4EF6;&#xFF1A;</p>
+<p>1.&#x5F53;&#x5176;&#x6307;&#x793A;&#x7684;&#x5BF9;&#x8C61;&#x6CA1;&#x6709;&#x4EFB;&#x4F55;&#x5F3A;&#x5F15;&#x7528;&#x5BF9;&#x8C61;&#x6307;&#x5411;&#x5B83;&#xFF1B;</p>
+<p>2.&#x5F53;&#x865A;&#x62DF;&#x673A;&#x5185;&#x5B58;&#x4E0D;&#x8DB3;&#x65F6;&#x3002;</p>
+<p>&#x56E0;&#x6B64;&#xFF0C;SoftReference&#x53D8;&#x76F8;&#x7684;&#x5EF6;&#x957F;&#x4E86;&#x5176;&#x6307;&#x793A;&#x5BF9;&#x8C61;&#x5360;&#x636E;&#x5806;&#x5185;&#x5B58;&#x7684;&#x65F6;&#x95F4;&#xFF0C;&#x76F4;&#x5230;&#x865A;&#x62DF;&#x673A;&#x5185;&#x5B58;&#x4E0D;&#x8DB3;&#x65F6;&#x5783;&#x573E;&#x56DE;&#x6536;&#x5668;&#x624D;&#x56DE;&#x6536;&#x6B64;&#x5806;&#x5185;&#x5B58;&#x7A7A;&#x95F4;&#x3002;</p>
+<ul>
+<li><ol>
+<li>&#x5F31;&#x5F15;&#x7528;(Weak Reference)</li>
+</ol>
+</li>
+</ul>
+<p>&#x540C;&#x6837;&#x7684;&#xFF0C;&#x8F6F;&#x5F15;&#x7528;&#x7684;&#x4E00;&#x822C;&#x4F7F;&#x7528;&#x5F62;&#x5F0F;&#x5982;&#x4E0B;&#xFF1A;</p>
+<pre><code>A a = new A();
+WeakReference&lt;A&gt; wrA = new WeakReference&lt;A&gt;(a);
+</code></pre><p>WeakReference&#x4E0D;&#x6539;&#x53D8;&#x539F;&#x6709;&#x5F3A;&#x5F15;&#x7528;&#x5BF9;&#x8C61;&#x7684;&#x5783;&#x573E;&#x56DE;&#x6536;&#x65F6;&#x673A;&#xFF0C;&#x4E00;&#x65E6;&#x5176;&#x6307;&#x793A;&#x5BF9;&#x8C61;&#x6CA1;&#x6709;&#x4EFB;&#x4F55;&#x5F3A;&#x5F15;&#x7528;&#x5BF9;&#x8C61;&#x65F6;&#xFF0C;&#x6B64;&#x5BF9;&#x8C61;&#x5373;&#x8FDB;&#x5165;&#x6B63;&#x5E38;&#x7684;&#x5783;&#x573E;&#x56DE;&#x6536;&#x6D41;&#x7A0B;&#x3002;</p>
+<ul>
+<li><ol>
+<li>&#x865A;&#x5F15;&#x7528;(Phantom Reference)</li>
+</ol>
+</li>
+</ul>
+<p>&#x4E0E;SoftReference&#x6216;WeakReference&#x76F8;&#x6BD4;&#xFF0C;PhantomReference&#x4E3B;&#x8981;&#x5DEE;&#x522B;&#x4F53;&#x73B0;&#x5728;&#x5982;&#x4E0B;&#x51E0;&#x70B9;&#xFF1A;</p>
+<p>1.PhantomReference&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x6784;&#x9020;&#x51FD;&#x6570;</p>
+<pre><code>PhantomReference(T referent, ReferenceQueue&lt;? super T&gt; q)
+</code></pre><p>2.&#x4E0D;&#x7BA1;&#x6709;&#x65E0;&#x5F3A;&#x5F15;&#x7528;&#x6307;&#x5411;PhantomReference&#x7684;&#x6307;&#x793A;&#x5BF9;&#x8C61;&#xFF0C;PhantomReference&#x7684;get()&#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;&#x90FD;&#x662F;null&#x3002;</p>
+<p>&#x56E0;&#x6B64;&#xFF0C;PhantomReference&#x4F7F;&#x7528;&#x5FC5;&#x987B;&#x7ED3;&#x5408;ReferenceQueue&#xFF1B;</p>
+<p>&#x4E0E;WeakReference&#x76F8;&#x540C;&#xFF0C;PhantomReference&#x5E76;&#x4E0D;&#x4F1A;&#x6539;&#x53D8;&#x5176;&#x6307;&#x793A;&#x5BF9;&#x8C61;&#x7684;&#x5783;&#x573E;&#x56DE;&#x6536;&#x65F6;&#x673A;&#x3002;</p>
+<h1 id="&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;"><a href="#&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;" class="headerlink" title="&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;"></a>&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x539F;&#x56E0;</h1><hr>
+<p>&#x5982;&#x679C;&#x6301;&#x6709;&#x5BF9;&#x8C61;&#x7684;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x5783;&#x573E;&#x56DE;&#x6536;&#x5668;&#x662F;&#x65E0;&#x6CD5;&#x5728;&#x5185;&#x5B58;&#x4E2D;&#x56DE;&#x6536;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x7684;&#x771F;&#x56E0;&#x662F;&#xFF1A;&#x6301;&#x6709;&#x5BF9;&#x8C61;&#x7684;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x4E14;&#x6CA1;&#x6709;&#x53CA;&#x65F6;&#x91CA;&#x653E;&#xFF0C;&#x8FDB;&#x800C;&#x9020;&#x6210;&#x5185;&#x5B58;&#x5355;&#x5143;&#x4E00;&#x76F4;&#x88AB;&#x5360;&#x7528;&#xFF0C;&#x6D6A;&#x8D39;&#x7A7A;&#x95F4;&#xFF0C;&#x751A;&#x81F3;&#x53EF;&#x80FD;&#x9020;&#x6210;&#x5185;&#x5B58;&#x6EA2;&#x51FA;&#xFF01;</p>
+<p>&#x5176;&#x5B9E;&#x5728;Android&#x4E2D;&#x4F1A;&#x9020;&#x6210;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x7684;&#x60C5;&#x666F;&#x65E0;&#x5916;&#x4E4E;&#x4E24;&#x79CD;&#xFF1A;</p>
+<p>&#x5168;&#x5C40;&#x8FDB;&#x7A0B;(process-global)&#x7684;static&#x53D8;&#x91CF;&#x3002;&#x8FD9;&#x4E2A;&#x65E0;&#x89C6;&#x5E94;&#x7528;&#x7684;&#x72B6;&#x6001;&#xFF0C;&#x6301;&#x6709;Activity&#x7684;&#x5F3A;&#x5F15;&#x7528;&#x7684;&#x602A;&#x7269;&#x3002;</p>
+<p>&#x6D3B;&#x5728;Activity&#x751F;&#x547D;&#x5468;&#x671F;&#x4E4B;&#x5916;&#x7684;&#x7EBF;&#x7A0B;&#x3002;&#x6CA1;&#x6709;&#x6E05;&#x7A7A;&#x5BF9;Activity&#x7684;&#x5F3A;&#x5F15;&#x7528;&#x3002;</p>
+<p>&#x68C0;&#x67E5;&#x4E00;&#x4E0B;&#x4F60;&#x7684;&#x9879;&#x76EE;&#x4E2D;&#x662F;&#x5426;&#x6709;&#x4EE5;&#x4E0B;&#x51E0;&#x79CD;&#x60C5;&#x51B5;&#xFF1A;</p>
+<ul>
+<li>Static Activities</li>
+<li>Static Views</li>
+<li>Inner Classes</li>
+<li>Anonymous Classes</li>
+<li>Handler</li>
+<li>Threads</li>
+<li>TimerTask</li>
+<li>Sensor Manager</li>
+</ul>
+<p>&#x6700;&#x540E;&#x63A8;&#x8350;&#x4E00;&#x4E2A;&#x53EF;&#x68C0;&#x6D4B;app&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x7684;&#x9879;&#x76EE;&#xFF1A;LeakCanary &#x201C;<a href="https://github.com/square/leakcanary" target="_blank" rel="external">https://github.com/square/leakcanary</a>&#x201C;<br>&#xFF08;&#x53EF;&#x4EE5;&#x68C0;&#x6D4B;app&#x7684;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#xFF09;</p>
+<h1 id="&#x603B;&#x7ED3;"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</h1><p>&#x867D;&#x7136;&#x73B0;&#x5728;&#x624B;&#x673A;&#x5185;&#x5B58;&#x5728;&#x4E0D;&#x505C;&#x7684;&#x63D0;&#x5347;&#xFF0C;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x5174;&#x8BB8;&#x4E0D;&#x4F1A;&#x50CF;dalvik&#x65F6;&#x4EE3;&#x7531;&#x4E8E;&#x865A;&#x62DF;&#x673A;&#x5185;&#x5B58;&#x8FC7;&#x5C0F;&#x9020;&#x6210;&#x5404;&#x79CD;&#x82B1;&#x6837;oom&#x3002;&#x4F46;&#x662F;&#x8FC7;&#x91CF;&#x7684;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x4F9D;&#x7136;&#x4F1A;&#x9020;&#x6210;&#x5185;&#x5B58;&#x6EA2;&#x51FA;&#xFF0C;&#x5F71;&#x54CD;&#x7528;&#x6237;&#x4F53;&#x9A8C;&#xFF0C;&#x5728;&#x5982;&#x4ECA;&#x5B9A;&#x5236;&#x7CFB;&#x7EDF;&#x5C42;&#x51FA;&#x4E0D;&#x7A77;&#x3001;&#x673A;&#x578B;&#x82B1;&#x6837;&#x8D8A;&#x6765;&#x8D8A;&#x591A;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x89E3;&#x51B3;&#x597D;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x7684;&#x95EE;&#x9898;&#x4F1A;&#x8BA9;&#x9002;&#x914D;&#x548C;&#x7A33;&#x5B9A;&#x6027;&#x8FDB;&#x4E00;&#x6B65;&#x63D0;&#x9AD8;&#xFF01;</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/27/解决Exception-raised-during-rendering-com-android-util-PropertiesMap-Details/" rel="next">解决Exception raised during rendering: com/android/util/PropertiesMap (Details)</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                             
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                $('#donate_guide').removeClass('hidden');
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <div class="bdsharebuttonbox">
+	<a href="#" class="bds_more" data-cmd="more"></a>
+	<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+	<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+	<a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Deng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Deng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+        </div>
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内存泄露"><span class="nav-number">1.</span> <span class="nav-text">内存泄露</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存"><span class="nav-number">2.</span> <span class="nav-text">内存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存泄露原因分析"><span class="nav-number">3.</span> <span class="nav-text">内存泄露原因分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾回收机制"><span class="nav-number">4.</span> <span class="nav-text">垃圾回收机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引用类型"><span class="nav-number">5.</span> <span class="nav-text">引用类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-Android引用类型及其使用分析"><span class="nav-number">5.1.</span> <span class="nav-text">Java/Android引用类型及其使用分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存泄露原因"><span class="nav-number">6.</span> <span class="nav-text">内存泄露原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Deng</span>
+
+  <div class="powered-by"></div>
+  <div class="powered-by">
+    Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  </div>
+
+  <div class="theme-info">
+    Theme by <a class="theme-link" href="http://blog.idhyt.com">idhyt</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+  </div>
+
+  <!-- busuanzi -->
+  
+
+</div>
+
+<!--
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mala
+  </a>
+</div>
+-->
+
+<!--
+<div class="powered-by"></div>
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+-->
+
+<!-- busuanzi -->
+<!--
+
+-->
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
