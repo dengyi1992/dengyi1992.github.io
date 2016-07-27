@@ -1,0 +1,1524 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。
+首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。
+具体来说：系统必须可用，非数学上不可译码。系统不一定要保密，可以轻易落入敌人手中。密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。系统可以用于电讯。系统可以转">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用加密技术与代码研究总结">
+<meta property="og:url" content="http://yoursite.com/2016/07/27/常用加密技术与代码研究总结/index.html">
+<meta property="og:site_name" content="似火的Blog">
+<meta property="og:description" content="总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。
+首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。
+具体来说：系统必须可用，非数学上不可译码。系统不一定要保密，可以轻易落入敌人手中。密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。系统可以用于电讯。系统可以转">
+<meta property="og:image" content="http://yoursite.com/常用加密技术与代码研究总结/20160715224112503.png">
+<meta property="og:updated_time" content="2016-07-27T14:46:41.373Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用加密技术与代码研究总结">
+<meta name="twitter:description" content="总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。
+首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。
+具体来说：系统必须可用，非数学上不可译码。系统不一定要保密，可以轻易落入敌人手中。密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。系统可以用于电讯。系统可以转">
+<meta name="twitter:image" content="http://yoursite.com/常用加密技术与代码研究总结/20160715224112503.png">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 常用加密技术与代码研究总结 | 似火的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title"></span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        $(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        $("#assist_btn").hide();
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              常用加密技术与代码研究总结
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-07-27T22:30:01+08:00" content="2016-07-27">
+            2016-07-27
+          </time>
+        </span>
+
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>总结类文章，把一些常用的Java加密技术和核心代码写在这边，供参考。</p>
+<p>首先大家要记住现代密码学最重要的原则柯克霍夫原则：数据的安全基于密钥而不是算法的保密。也就是说即使密码系统的任何细节已为人悉知，只要密匙未洩漏，它也应是安全的。</p>
+<p>具体来说：<br>系统必须可用，非数学上不可译码。<br>系统不一定要保密，可以轻易落入敌人手中。<br>密匙必须可以不经书写的资料交换和记忆，且双方可以改变密匙。<br>系统可以用于电讯。<br>系统可以转移位置，它的功能必须不用经过几个人之手才可达到。<br>系统容易使用，不要求使用者的脑力过份操劳或有很多的规则。</p>
+<hr>
+<h1 id="一、主要的加密方式代码提供方"><a href="#一、主要的加密方式代码提供方" class="headerlink" title="一、主要的加密方式代码提供方"></a>一、主要的加密方式代码提供方</h1><hr>
+<p>JDK：代码在java安装目录下的jre\lib\jce.jar包里;</p>
+<p>CC：Apache公司提供的org.apache.commons.codec</p>
+<p>主页： <a href="http://commons.apache.org/proper/commons-codec/" target="_blank" rel="external">http://commons.apache.org/proper/commons-codec/</a></p>
+<p>BC：org.bouncecastle</p>
+<p>主页： <a href="http://www.bouncycastle.org/java.html" target="_blank" rel="external">http://www.bouncycastle.org/java.html</a></p>
+<p>基本常用的使用JDK就够了。</p>
+<h1 id="二、Base64算法"><a href="#二、Base64算法" class="headerlink" title="二、Base64算法"></a>二、Base64算法</h1><hr>
+<p>1、从现在加密算法的复杂性来看Base64这种都不好意思说自己是加密，不过对于完全不懂计算机的人来说也够用了。采用Base64编码具有不可读性，即所编码的数据不会被人用肉眼所直接看到。<br>Base64编码一般用于url的处理，或者说任何你不想让普通人一眼就知道是啥的东西都可以用Base64编码处理后再发布在网络上。</p>
+<pre><code>import java.util.Base64;
+
+import com.amuro.strategy.IStrategy;
+
+/**
+ * Base64算法基于64个基本字符，加密后的string中只包含这64个字符
+ * @author Amuro
+ *
+ * /
+public class Base64Strategy implements IStrategy
+{
+    public String encode(String src)
+    {
+        byte[] encodeBytes = Base64.getEncoder().encode(src.getBytes());
+        return new String(encodeBytes);
+    }
+
+    public String decode(String src)
+    {
+        byte[] decodeBytes = Base64.getDecoder().decode(src.getBytes());
+        return new String(decodeBytes);
+    }
+}
+</code></pre><p>2、Base64编码对应关系表</p>
+<p><img src="/常用加密技术与代码研究总结/20160715224112503.png"></p>
+<h1 id="三、消息摘要算法（Message-Digest）"><a href="#三、消息摘要算法（Message-Digest）" class="headerlink" title="三、消息摘要算法（Message Digest）"></a>三、消息摘要算法（Message Digest）</h1><p>消息摘要（Message Digest）又称为数字摘要(Digital Digest)。它是一个唯一对应一个消息或文本的固定长度的值，它由一个单向Hash加密函数对消息进行作用而产生。HASH函数的抗冲突性使得如果一段明文稍有变化，哪怕只更改该段落的一个字母，通过哈希算法作用后都将产生不同的值。而HASH算法的单向性使得要找到哈希值相同的两个不同的输入消息，在计算上是不可能的。所以数据的哈希值，即消息摘要，可以检验数据的完整性。</p>
+<p>用大白话来说，任何一段数据应该都和人一样是唯一的，唯一的标识是什么，人类的话目前就是指纹，而数据的指纹是什么呢？没错，就是消息摘要算法产生的这一段String。比如我们在注册网站的时候，客户端向服务器传输的，应该是我们输入的密码进行消息摘要处理后的内容，这样就算服务器被攻破，Hack也无法知道用户真实的密码是什么。不过有说现在MD5和SHA已经被攻破了，具体大家可以谷歌。</p>
+<ul>
+<li><p>1、MD5</p>
+<pre><code>import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+/**
+ * 消息摘要算法
+ * @author Amuro
+ *
+ * /
+public class MD5Strategy implements IStrategy
+{
+
+    public String encode(String src)
+    {
+        try
+        {
+            MessageDigest md = MessageDigest.getInstance(&quot;MD5&quot;);
+            byte[] encodeBytes = md.digest(src.getBytes());
+
+            return Hex.encodeHexString(encodeBytes);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String decode(String src)
+    {
+        throw new RuntimeException(&quot;MD5 no decode&quot;);
+    }
+
+}
+</code></pre></li>
+<li><p>2、SHA</p>
+<pre><code>import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+/**
+* 安全散列算法
+* @author Amuro
+*
+* /
+public class SHAStrategy implements IStrategy
+{
+
+public String encode(String src)
+{
+  try
+  {
+      MessageDigest md = MessageDigest.getInstance(&quot;SHA&quot;);
+      md.update(src.getBytes());
+      return Hex.encodeHexString(md.digest());
+  }
+  catch (NoSuchAlgorithmException e)
+  {
+      e.printStackTrace();
+  }
+  return null;
+}
+
+public String decode(String src)
+{
+  throw new RuntimeException(&quot;SHA no decode&quot;);
+}
+
+}
+</code></pre></li>
+</ul>
+<h1 id="四、对称加密"><a href="#四、对称加密" class="headerlink" title="四、对称加密"></a>四、对称加密</h1><hr>
+<p>采用单钥密码系统的加密方法，同一个密钥可以同时用作信息的加密和解密，这种加密方法称为对称加密，也称为单密钥加密。而因为加密和解密都使用同一个密钥，如何把密钥安全地传递到解密者手上就成了必须要解决的问题。当然，安全性较低带来的优点就是优计算量小、加密速度快、加密效率高。</p>
+<p>然并卵，现代计算机对这种级别的计算量早就不care了，安全才是最重要的。</p>
+<ul>
+<li>1、DES</li>
+</ul>
+<p>DES，全称为“Data Encryption Standard”，中文名为“数据加密标准”，是一种使用密钥加密的块算法。DES 算法为密码体制中的对称密码体制，又被称为美国数据加密标准，是 1972 年美国 IBM 公司研制的对称密码体制加密算法。 明文按 64 位进行分组，密钥长 64 位，密钥事实上是 56 位参与 DES 运算（第8、16、24、32、40、48、56、64 位是校验位， 使得每个密钥都有奇数个 1）分组后的明文组和 56 位的密钥按位替代或交换的方法形成密文组的加密方法。</p>
+<pre><code>import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+/**
+ *
+ * @author Amuro
+ *
+ * /
+public class DESStrategy implements IStrategy
+{
+    private Cipher cipher;
+    private SecretKey generateKey;
+
+    public String encode(String src)
+    {
+        try
+        {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(&quot;DES&quot;);
+            keyGenerator.init(56);//size
+            SecretKey secretKey = keyGenerator.generateKey();
+            byte[] keyBytes = secretKey.getEncoded();
+
+            DESKeySpec desKeySpec = new DESKeySpec(keyBytes);
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(&quot;DES&quot;);
+            generateKey = secretKeyFactory.generateSecret(desKeySpec);
+
+            cipher = Cipher.getInstance(&quot;DES/ECB/PKCS5Padding&quot;);
+            cipher.init(Cipher.ENCRYPT_MODE, generateKey);
+            byte[] resultBytes = cipher.doFinal(src.getBytes());
+
+            return Hex.encodeHexString(resultBytes);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String decode(String src)
+    {
+        try
+        {
+            cipher.init(Cipher.DECRYPT_MODE, generateKey);
+            byte[] result = Hex.decodeHex(src.toCharArray());
+            return new String(cipher.doFinal(result));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+}
+</code></pre><ul>
+<li><p>2、3DES3DES，也就是“Triple DES”，中文名“三重数据加密算法”，它相当于是对每个数据块应用三次 DES 加密算法。由于计算机运算能力的增强，原版 DES 密码的密钥长度变得容易被暴力破解；3DES 即是设计用来提供一种相对简单的方法，即通过增加 DES 的密钥长度来避免类似的攻击，而不是设计一种全新的块密码算法。</p>
+<pre><code>import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESedeKeySpec;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+public class _ 3DESStrategy implements IStrategy
+{
+    private Cipher cipher;
+    private SecretKey generateKey;
+
+    public String encode(String src)
+    {
+        try
+        {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(&quot;DESede&quot;);
+            keyGenerator.init(168);//size
+            SecretKey secretKey = keyGenerator.generateKey();
+            byte[] keyBytes = secretKey.getEncoded();
+
+            DESedeKeySpec desKeySpec = new DESedeKeySpec(keyBytes);
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(&quot;DESede&quot;);
+            generateKey = secretKeyFactory.generateSecret(desKeySpec);
+
+            cipher = Cipher.getInstance(&quot;DESede/ECB/PKCS5Padding&quot;);
+            cipher.init(Cipher.ENCRYPT_MODE, generateKey);
+            byte[] resultBytes = cipher.doFinal(src.getBytes());
+
+            return Hex.encodeHexString(resultBytes);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String decode(String src)
+    {
+        try
+        {
+            cipher.init(Cipher.DECRYPT_MODE, generateKey);
+            byte[] result = Hex.decodeHex(src.toCharArray());
+            return new String(cipher.doFinal(result));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+}
+</code></pre></li>
+</ul>
+<ul>
+<li><p>3、AESAES，全称为“Advanced Encryption Standard”，中文名“高级加密标准”，在密码学中又称 Rijndael 加密法，是美国联邦政府采用的一种区块加密标准。AES 加密算法作为新一代的数据加密标准汇聚了强安全性、高性能、高效率、易用和灵活等优点。AES 设计有三个密钥长度：128，192，256 位。相对而言，AES 的 128 密钥比 DES 的 56 密钥强了 1021 倍。</p>
+<pre><code>import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+public class AESStrategy implements IStrategy
+{
+    private Cipher cipher;
+    private SecretKey generateKey;
+
+    public String encode(String src)
+    {
+        try
+        {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(&quot;AES&quot;);
+            keyGenerator.init(128);//size
+            SecretKey secretKey = keyGenerator.generateKey();
+            byte[] keyBytes = secretKey.getEncoded();
+
+            generateKey = new SecretKeySpec(keyBytes, &quot;AES&quot;);
+
+            cipher = Cipher.getInstance(&quot;AES/ECB/PKCS5Padding&quot;);
+            cipher.init(Cipher.ENCRYPT_MODE, generateKey);
+            byte[] resultBytes = cipher.doFinal(src.getBytes());
+
+            return Hex.encodeHexString(resultBytes);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String decode(String src)
+    {
+        try
+        {
+            cipher.init(Cipher.DECRYPT_MODE, generateKey);
+            byte[] result = Hex.decodeHex(src.toCharArray());
+            return new String(cipher.doFinal(result));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+}
+</code></pre></li>
+<li><p>4、PBE</p>
+</li>
+</ul>
+<p>PBE，全称为“Password Base Encryption”，中文名“基于口令加密”，是一种基于密码的加密算法，其特点是使用口令代替了密钥，而口令由用户自己掌管，采用随机数杂凑多重加密等方法保证数据的安全性。</p>
+<p>PBE算法没有密钥的概念，把口令当做密钥了。因为密钥长短影响算法安全性，还不方便记忆，这里我们直接换成我们自己常用的口令就大大不同了，便于我们的记忆。但是单纯的口令很容易被字典法给穷举出来，所以我们这里给口令加了点“盐”，这个盐和口令组合，想破解就难了。同时我们将盐和口令合并后用消息摘要算法进行迭代很多次来构建密钥初始化向量的基本材料，使破译更加难了。</p>
+<pre><code>import java.security.SecureRandom;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+/**
+ * 基于口令的加密（password），对称 + 消息摘要
+ * @author Amuro
+ *
+ * /
+public class PBEStrategy implements IStrategy
+{
+    private Cipher cipher;
+    private SecretKey generateKey;
+    private PBEParameterSpec pbeParameterSpec;
+
+    public String encode(String src)
+    {
+        try
+        {
+            SecureRandom secureRandom = new SecureRandom();
+            byte[] salt = secureRandom.generateSeed(8);
+
+            String password = &quot;amuro&quot;;
+            PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(&quot;PBEWITHMD5andDES&quot;);
+            generateKey = secretKeyFactory.generateSecret(pbeKeySpec);
+
+            pbeParameterSpec = new PBEParameterSpec(salt, 100);
+            cipher = Cipher.getInstance(&quot;PBEWITHMD5andDES&quot;);
+            cipher.init(Cipher.ENCRYPT_MODE, generateKey, pbeParameterSpec);
+            byte[] resultBytes = cipher.doFinal(src.getBytes());
+            return Hex.encodeHexString(resultBytes);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String decode(String src)
+    {
+        try
+        {
+            cipher.init(Cipher.DECRYPT_MODE, generateKey, pbeParameterSpec);
+            byte[] result = Hex.decodeHex(src.toCharArray());
+            return new String(cipher.doFinal(result));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+}
+</code></pre><h1 id="五、非对称加密"><a href="#五、非对称加密" class="headerlink" title="五、非对称加密"></a>五、非对称加密</h1><p>非对称加密算法需要两个密钥来进行加密和解密，分别是公钥和私钥。需要注意的一点，这个公钥和私钥必须是一对的，如果用公钥对数据进行加密，那么只有使用对应的私钥才能解密，反之亦然。由于加密和解密使用的是两个不同的密钥，因此，这种算法叫做非对称加密算法。</p>
+<ul>
+<li>1、RSA</li>
+</ul>
+<p>其实，在早在 1978 年的时候，RSA就已经出现了，它是第一个既能用于数据加密也能用于数字签名的算法。它易于理解和操作，也很流行。其原理就如上面的工作过程所述。RSA 算法基于一个十分简单的数论事实：将两个大素数相乘十分容易，但是想要对其乘积进行因式分解却极其困难，因此可以将乘积公开作为加密密钥。</p>
+<pre><code>import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+
+import javax.crypto.Cipher;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+public class RSAStrategy implements IStrategy
+{
+    private RSAPublicKey rsaPublicKey;
+    private RSAPrivateKey rsaPrivateKey;
+
+    public String encode(String src)
+    {
+        try
+        {
+            //初始化密钥
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(&quot;RSA&quot;);
+            keyPairGenerator.initialize(512);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            rsaPublicKey = (RSAPublicKey)keyPair.getPublic();
+            rsaPrivateKey = (RSAPrivateKey)keyPair.getPrivate();
+
+            //私钥加密 公钥解密
+            PKCS8EncodedKeySpec pkcs8EncodedKeySpec
+                = new PKCS8EncodedKeySpec(rsaPrivateKey.getEncoded());
+            KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
+            PrivateKey privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+            Cipher cipher = Cipher.getInstance(&quot;RSA&quot;);
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            byte[] resultBytes = cipher.doFinal(src.getBytes());
+
+            //私钥解密 公钥加密
+//          X509EncodedKeySpec x509EncodedKeySpec =
+//                  new X509EncodedKeySpec(rsaPublicKey.getEncoded());
+//          KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
+//          PublicKey publicKey = keyFactory.generatePublic(x509EncodedKeySpec);
+//          Cipher cipher = Cipher.getInstance(&quot;RSA&quot;);
+//          cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+//          byte[] resultBytes = cipher.doFinal(src.getBytes());
+
+            return Hex.encodeHexString(resultBytes);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String decode(String src)
+    {
+        try
+        {
+            //私钥加密 公钥解密
+            X509EncodedKeySpec x509EncodedKeySpec =
+                    new X509EncodedKeySpec(rsaPublicKey.getEncoded());
+            KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
+            PublicKey publicKey = keyFactory.generatePublic(x509EncodedKeySpec);
+            Cipher cipher = Cipher.getInstance(&quot;RSA&quot;);
+            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+            byte[] resultBytes = cipher.doFinal(Hex.decodeHex(src.toCharArray()));
+
+            //私钥解密 公钥加密
+//          PKCS8EncodedKeySpec pkcs8EncodedKeySpec
+//              = new PKCS8EncodedKeySpec(rsaPrivateKey.getEncoded());
+//          KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
+//          PrivateKey privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+//          Cipher cipher = Cipher.getInstance(&quot;RSA&quot;);
+//          cipher.init(Cipher.DECRYPT_MODE, privateKey);
+//          byte[] resultBytes = cipher.doFinal(Hex.decodeHex(src.toCharArray()));
+
+            return new String(resultBytes);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+}
+</code></pre><ul>
+<li>2、DH算法</li>
+</ul>
+<p>DH，全称为“Diffie-Hellman”，他是一种确保共享KEY安全穿越不安全网络的方法，也就是常说的密钥一致协议。由公开密钥密码体制的奠基人Diffie和Hellman所提出的一种思想。简单的说就是允许两名用户在公开媒体上交换信息以生成“一致”的、可以共享的密钥。也就是由甲方产出一对密钥（公钥、私钥），乙方依照甲方公钥产生乙方密钥对（公钥、私钥）。</p>
+<p>以此为基线，作为数据传输保密基础，同时双方使用同一种对称加密算法构建本地密钥（SecretKey）对数据加密。这样，在互通了本地密钥（SecretKey）算法后，甲乙双方公开自己的公钥，使用对方的公钥和刚才产生的私钥加密数据，同时可以使用对方的公钥和自己的私钥对数据解密。不单单是甲乙双方两方，可以扩展为多方共享数据通讯，这样就完成了网络交互数据的安全通讯！</p>
+<pre><code>import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Objects;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyAgreement;
+import javax.crypto.SecretKey;
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.DHParameterSpec;
+
+import org.apache.commons.codec.binary.Hex;
+
+import com.amuro.strategy.IStrategy;
+
+public class DHStrategy implements IStrategy
+{
+    private Cipher cipher;
+    private SecretKey receiverSecretKey;
+
+    public String encode(String src)
+    {
+        try
+        {
+            //初始化发送方密钥
+            KeyPairGenerator senderKeyPairGenerator = KeyPairGenerator.getInstance(&quot;DH&quot;);
+            senderKeyPairGenerator.initialize(512);
+            KeyPair senderkeyPair = senderKeyPairGenerator.generateKeyPair();
+            PrivateKey senderPrivateKey = senderkeyPair.getPrivate();
+            byte[] senderPublicKeyBytes = senderkeyPair.getPublic().getEncoded();//发送方的公钥
+
+            //初始化接收方密钥,用发送方的公钥
+            KeyFactory receiverKeyFactory = KeyFactory.getInstance(&quot;DH&quot;);
+            X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(senderPublicKeyBytes);
+            PublicKey receiverPublicKey = receiverKeyFactory.generatePublic(x509EncodedKeySpec);
+            DHParameterSpec dhParameterSpec =
+                    ((DHPublicKey)receiverPublicKey).getParams();
+            KeyPairGenerator receiverKeyPairGenerator = KeyPairGenerator.getInstance(&quot;DH&quot;);
+            receiverKeyPairGenerator.initialize(dhParameterSpec);
+            KeyPair receiverKeyPair = receiverKeyPairGenerator.generateKeyPair();
+            PrivateKey receiverPrivateKey = receiverKeyPair.getPrivate();
+            byte[] receiverPublicKeyBytes = receiverKeyPair.getPublic().getEncoded();
+
+            KeyAgreement receiverKeyAgreement = KeyAgreement.getInstance(&quot;DH&quot;);
+            receiverKeyAgreement.init(receiverPrivateKey);
+            receiverKeyAgreement.doPhase(receiverPublicKey, true);
+            receiverSecretKey = receiverKeyAgreement.generateSecret(&quot;DES&quot;);
+
+            //发送方拿到接收方的public key就可以做加密了
+            KeyFactory senderKeyFactory = KeyFactory.getInstance(&quot;DH&quot;);
+            x509EncodedKeySpec = new X509EncodedKeySpec(receiverPublicKeyBytes);
+            PublicKey senderPublicKey = senderKeyFactory.generatePublic(x509EncodedKeySpec);
+            KeyAgreement senderKeyAgreement = KeyAgreement.getInstance(&quot;DH&quot;);
+            senderKeyAgreement.init(senderPrivateKey);
+            senderKeyAgreement.doPhase(senderPublicKey, true);
+            SecretKey senderSecretKey = senderKeyAgreement.generateSecret(&quot;DES&quot;);
+
+            if(Objects.equals(receiverSecretKey, senderSecretKey))
+            {
+                cipher = Cipher.getInstance(&quot;DES&quot;);
+                cipher.init(Cipher.ENCRYPT_MODE, senderSecretKey);
+                byte[] result = cipher.doFinal(src.getBytes());
+                return Hex.encodeHexString(result);
+            }
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String decode(String src)
+    {
+        try
+        {
+            cipher.init(Cipher.DECRYPT_MODE, receiverSecretKey);
+            byte[] result = Hex.decodeHex(src.toCharArray());
+            return new String(cipher.doFinal(result));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+}
+</code></pre><h1 id="六、数字签名证书"><a href="#六、数字签名证书" class="headerlink" title="六、数字签名证书"></a>六、数字签名证书</h1><hr>
+<p>非对称加密已经灰常安全了，但是还有一个破绽：<br>服务器A公布了自己的公钥，我的电脑是用服务器A的公钥加密数据后再发给服务器A的；这时候服务器B侵入了我的电脑，把我用来加密的公钥换成了它的公钥，于是我发出去的数据就会被服务器B的私钥破解了。肿么防止公钥被篡改呢？</p>
+<p>对，我们想到了前面的消息摘要，服务器A把公钥丢给我的时候，同时去CA申请一份数字证书，其实主要就是公钥的消息摘要，有了这份证书，当我再用公钥加密的时候，我就可以先验证一下当前的公钥是否确定是服务器A发送给我的。</p>
+<p>这里就贴一种RSA的：</p>
+<pre><code>import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+
+public class RSASign
+{
+    public static boolean verifySign(String src)
+    {
+        try
+        {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(&quot;RSA&quot;);
+            keyPairGenerator.initialize(512);
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            PublicKey rsaPublicKey = (RSAPublicKey)keyPair.getPublic();
+            PrivateKey rsaPrivateKey = (RSAPrivateKey)keyPair.getPrivate();
+
+            PKCS8EncodedKeySpec pkcs8EncodedKeySpec
+                = new PKCS8EncodedKeySpec(rsaPrivateKey.getEncoded());
+            KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
+            PrivateKey privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+            Signature signature = Signature.getInstance(&quot;MD5withRSA&quot;);
+            signature.initSign(privateKey);
+            signature.update(src.getBytes());
+            //生成签名bytes
+            byte[] signBytes = signature.sign();
+
+            X509EncodedKeySpec x509EncodedKeySpec =
+                    new X509EncodedKeySpec(rsaPublicKey.getEncoded());
+            keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);
+            PublicKey publicKey = keyFactory.generatePublic(x509EncodedKeySpec);
+            signature = Signature.getInstance(&quot;MD5withRSA&quot;);
+            signature.initVerify(publicKey);
+            signature.update(src.getBytes());
+            boolean isVerified = signature.verify(signBytes);
+
+            return isVerified;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+}
+</code></pre><hr>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/06/android-防手抖/" rel="next">android 防手抖</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                             
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                $('#donate_guide').removeClass('hidden');
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <div class="bdsharebuttonbox">
+	<a href="#" class="bds_more" data-cmd="more"></a>
+	<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+	<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+	<a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Deng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Deng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+        </div>
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、主要的加密方式代码提供方"><span class="nav-number">1.</span> <span class="nav-text">一、主要的加密方式代码提供方</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Base64算法"><span class="nav-number">2.</span> <span class="nav-text">二、Base64算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、消息摘要算法（Message-Digest）"><span class="nav-number">3.</span> <span class="nav-text">三、消息摘要算法（Message Digest）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、对称加密"><span class="nav-number">4.</span> <span class="nav-text">四、对称加密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、非对称加密"><span class="nav-number">5.</span> <span class="nav-text">五、非对称加密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、数字签名证书"><span class="nav-number">6.</span> <span class="nav-text">六、数字签名证书</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Deng</span>
+
+  <div class="powered-by"></div>
+  <div class="powered-by">
+    Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  </div>
+
+  <div class="theme-info">
+    Theme by <a class="theme-link" href="http://blog.idhyt.com">idhyt</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+  </div>
+
+  <!-- busuanzi -->
+  
+
+</div>
+
+<!--
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mala
+  </a>
+</div>
+-->
+
+<!--
+<div class="powered-by"></div>
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+-->
+
+<!-- busuanzi -->
+<!--
+
+-->
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

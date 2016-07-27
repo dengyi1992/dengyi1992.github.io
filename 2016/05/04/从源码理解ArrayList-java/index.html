@@ -1,0 +1,2234 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="从源码理解ArrayList.javapackage java.util;
+
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
+/**
+* 可变数组实现了List接口，实现了所有列表操作，允许空值null。还提供了操作数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从源码理解ArrayList.java">
+<meta property="og:url" content="http://yoursite.com/2016/05/04/从源码理解ArrayList-java/index.html">
+<meta property="og:site_name" content="似火的Blog">
+<meta property="og:description" content="从源码理解ArrayList.javapackage java.util;
+
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
+/**
+* 可变数组实现了List接口，实现了所有列表操作，允许空值null。还提供了操作数">
+<meta property="og:updated_time" content="2016-06-25T15:25:56.311Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从源码理解ArrayList.java">
+<meta name="twitter:description" content="从源码理解ArrayList.javapackage java.util;
+
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
+/**
+* 可变数组实现了List接口，实现了所有列表操作，允许空值null。还提供了操作数">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 从源码理解ArrayList.java | 似火的Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title"></span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        $(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        $("#assist_btn").hide();
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              从源码理解ArrayList.java
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-05-04T17:34:52+08:00" content="2016-05-04">
+            2016-05-04
+          </time>
+        </span>
+
+        
+
+        
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h3 id="从源码理解ArrayList-java"><a href="#从源码理解ArrayList-java" class="headerlink" title="从源码理解ArrayList.java"></a>从源码理解ArrayList.java</h3><pre><code>package java.util;
+
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
+/**
+* 可变数组实现了List接口，实现了所有列表操作，允许空值null。还提供了操作数组大小的方法用以内部使用。
+* 除了不支持并发访问，这个类完全等同于Vector
+* 以下几个操作都是常数时间：size、isEmpty、get、set、iterator和listIterator
+* add操作均摊时间为常数时间
+* 其他操作是线性时间，常数因子比LinkedList实现小。
+* 每个ArrayList实例都有一个capacity。capacity是list中用于保存元素的数组大小。大于等于list的Size。
+* 添加元素后，capacity自增。
+*
+* 应用可以在添加大量元素之前，通过ensureCapacity操作提升容量，这样可以减少因为容量增长造成的内存重新分配。
+* 该实现不支持并发。多线程下需要外部同步：List list = Collections.synchronizedList(new ArrayList(...));
+*
+* 迭代器iterator和listIterator都是快速失败（fail-fast）的
+* 并发访问下行为未定。
+*/
+/**
+* 支持泛型，继承自AbstractList，实现了List、RandomAccess、Cloneable、java.io.Serializable接口
+* AbstractList提供了List接口的默认实现（个别方法为抽象方法）
+* List接口定义了列表必须实现的方法
+* RandomAccess是一个标记接口，接口内没有定义任何内容
+* 实现了Cloneable接口的类，可以调用Object.clone()方法返回该对象的浅拷贝
+* 通过实现java.io.Serializable接口以启用其序列化功能。未实现此接口的类将无法使其任何状态序列化或 反序列化。
+* 序列化接口没有方法或字段，仅用于标识可序列化的语义。
+*/
+public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt;
+implements List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable
+{
+private static final long serialVersionUID = 8683452581122892189L;
+
+/**
+* 默认初始容量.
+*/
+private static final int DEFAULT_CAPACITY = 10;
+
+/**
+* 所有空实例共享的空数组实例.
+*/
+private static final Object[] EMPTY_ELEMENTDATA = {};
+
+/**
+* 存储ArrayList元素的数组，为空时指向EMPTY_ELEMENTDATA
+*/
+transient Object[] elementData; // non-private to simplify nested class access
+
+/**
+* ArrayList的大小
+*/
+private int size;
+
+/**
+* 构造一个具有指定初始容量的空list
+* @param  initialCapacity  the initial capacity of the list
+* @throws IllegalArgumentException if the specified initial capacity
+*         is negative
+*/
+public ArrayList(int initialCapacity) {
+super();
+if (initialCapacity &lt; 0)
+    throw new IllegalArgumentException(&quot;Illegal Capacity: &quot;+
+                                       initialCapacity);
+this.elementData = new Object[initialCapacity];
+}
+
+/**
+* 构造一个具有初始容量10的空list
+*/
+public ArrayList() {
+super();
+this.elementData = EMPTY_ELEMENTDATA;
+}
+
+/**
+* 构造一个包含指定集合中元素的list，按照迭代器返回的顺序
+* @param c the collection whose elements are to be placed into this list
+* @throws NullPointerException if the specified collection is null
+*/
+public ArrayList(Collection&lt;? extends E&gt; c) {
+elementData = c.toArray();
+size = elementData.length;
+// c.toArray might (incorrectly) not return Object[] (see 6260652)
+//返回若不是Object[]将调用Arrays.copyOf方法将其转为Object[]
+if (elementData.getClass() != Object[].class)
+    elementData = Arrays.copyOf(elementData, size, Object[].class);
+}
+
+/**
+* 将ArrayList实例的容量裁剪到list当前大小Size。
+* 应用程序使用该操作降低ArrayList实例占用的存储
+* 因为清空等一些操作只改变参数而没有释放空间
+*/
+public void trimToSize() {
+modCount++;
+if (size &lt; elementData.length) {
+    elementData = Arrays.copyOf(elementData, size);
+}
+}
+
+/**
+* 提升ArrayList实例的容量，确保它可以保存至少minCapacity的元素
+* @param   minCapacity   the desired minimum capacity
+*/
+public void ensureCapacity(int minCapacity) {
+//如果数组当前为空，添加元素时最小增长容量为DEFAULT_CAPACITY
+//否则，增长容量大于0即可
+int minExpand = (elementData != EMPTY_ELEMENTDATA)
+    // any size if real element table
+    ? 0
+    // larger than default for empty table. It&apos;s already supposed to be
+    // at default size.
+    : DEFAULT_CAPACITY;
+
+if (minCapacity &gt; minExpand) {
+    ensureExplicitCapacity(minCapacity);
+}
+}
+
+private void ensureCapacityInternal(int minCapacity) {
+if (elementData == EMPTY_ELEMENTDATA) {
+    minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);
+}
+
+ensureExplicitCapacity(minCapacity);
+}
+
+private void ensureExplicitCapacity(int minCapacity) {
+modCount++;                //list结构被改变的次数
+
+// overflow-conscious code
+//目标容量大于当前容量才增长
+if (minCapacity - elementData.length &gt; 0)
+    grow(minCapacity);
+}
+
+/**
+* 数组可分配最大容量，有些虚拟机中会给数组保存头部，尝试分配更大的数组会导致内存溢出
+*/
+private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+
+/**
+* 提升容量，保证它可以存储指定参数个元素
+* @param minCapacity the desired minimum capacity
+*/
+private void grow(int minCapacity) {
+// overflow-conscious code
+int oldCapacity = elementData.length;
+int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);
+if (newCapacity - minCapacity &lt; 0)
+    newCapacity = minCapacity;
+if (newCapacity - MAX_ARRAY_SIZE &gt; 0)
+    newCapacity = hugeCapacity(minCapacity);
+// minCapacity is usually close to size, so this is a win:
+//返回一个内容为原数组元素，大小为新容量的数组赋给elementData
+elementData = Arrays.copyOf(elementData, newCapacity);
+}
+/**
+* 容量过大，栈溢出
+*/
+private static int hugeCapacity(int minCapacity) {
+if (minCapacity &lt; 0) // overflow
+    throw new OutOfMemoryError();
+return (minCapacity &gt; MAX_ARRAY_SIZE) ?
+    Integer.MAX_VALUE :
+    MAX_ARRAY_SIZE;
+}
+
+/**
+* Returns the number of elements in this list.
+*
+* @return the number of elements in this list
+*/
+public int size() {
+return size;
+}
+
+/**
+* Returns &lt;tt&gt;true&lt;/tt&gt; if this list contains no elements.
+*
+* @return &lt;tt&gt;true&lt;/tt&gt; if this list contains no elements
+*/
+public boolean isEmpty() {
+//直接返回size是否等于0
+return size == 0;
+}
+
+/**
+* 若列表中包含该元素就返回true，更严格的说，是当且仅当列表只含有一个当前元素时返回true
+* @param o element whose presence in this list is to be tested
+* @return &lt;tt&gt;true&lt;/tt&gt; if this list contains the specified element
+*/
+public boolean contains(Object o) {
+//indexOf方法返回值与0比较来判断对象是否在list中
+return indexOf(o) &gt;= 0;
+}
+
+/**
+* 通过遍历elementData数组来判断对象是否在list中，若存在，返回首次出现的index（【0，size-1】）
+* 若不存在，返回-1
+* 所以contains方法可以通过indexOf（Object）方法的返回值来判断对象是否被包含在list中
+*/
+public int indexOf(Object o) {
+if (o == null) {
+    for (int i = 0; i &lt; size; i++)
+        if (elementData[i]==null)
+            return i;
+} else {
+    for (int i = 0; i &lt; size; i++)
+        if (o.equals(elementData[i]))
+            return i;
+}
+return -1;
+}
+
+/**
+* 返回的是传入对象在elementData数组中最后出现的index值，没有则是-1
+*/
+public int lastIndexOf(Object o) {
+if (o == null) {
+    //从后向前遍历数组，若遇到object则返回index值，若没有遇到，返回-1
+    for (int i = size-1; i &gt;= 0; i--)
+        if (elementData[i]==null)
+            return i;
+} else {
+    for (int i = size-1; i &gt;= 0; i--)
+        if (o.equals(elementData[i]))
+            return i;
+}
+return -1;
+}
+
+/**
+* 返回ArrayList实例的浅表副本（不复制这些元素本身）
+* @return a clone of this &lt;tt&gt;ArrayList&lt;/tt&gt; instance
+*/
+public Object clone() {
+try {
+    //调用父类的clone方法返回一个对象的副本
+    ArrayList&lt;?&gt; v = (ArrayList&lt;?&gt;) super.clone();
+      //将返回对象的elementData数组的内容赋值为原对象elementData数组的内容
+    v.elementData = Arrays.copyOf(elementData, size);
+      //将副本的modCount设置为0
+    v.modCount = 0;
+    return v;
+} catch (CloneNotSupportedException e) {
+    // this shouldn&apos;t happen, since we are Cloneable
+    throw new InternalError(e);
+}
+}
+
+/**
+* 返回一个包含列表中所有元素的数组
+* 返回的数组是一个安全的数组，即没有列表中的引用，是一个全新申请的数组
+* @return an array containing all of the elements in this list in
+*         proper sequence
+*/
+public Object[] toArray() {
+//拷贝elementData从0到size-1位置的元素到新数组并返回
+return Arrays.copyOf(elementData, size);
+}
+
+/**
+* 返回一个包含列表所有元素的数组，若指定数组和列表大小合适，就在数组中返回元素，否则，重新申请数组空间
+* 若指定数组空间有多余，则把紧跟在元素后面的位置设为null
+* @param a the array into which the elements of the list are to
+*          be stored, if it is big enough; otherwise, a new array of the
+*          same runtime type is allocated for this purpose.
+* @return an array containing the elements of the list
+* @throws ArrayStoreException if the runtime type of the specified array
+*         is not a supertype of the runtime type of every element in
+*         this list
+* @throws NullPointerException if the specified array is null
+*/
+@SuppressWarnings(&quot;unchecked&quot;)
+public &lt;T&gt; T[] toArray(T[] a) {
+//如果传入数组的长度小于size，返回一个新的数组，大小为size，类型与传入数组相同
+if (a.length &lt; size)
+    // Make a new array of a&apos;s runtime type, but my contents:
+    return (T[]) Arrays.copyOf(elementData, size, a.getClass());
+  //否则，将elementData复制到传入数组并返回传入的数组
+System.arraycopy(elementData, 0, a, 0, size);
+  //若传入数组长度大于size，把返回数组的第size个元素置为空
+if (a.length &gt; size)
+    a[size] = null;
+return a;
+}
+
+// Positional Access Operations
+
+@SuppressWarnings(&quot;unchecked&quot;)
+E elementData(int index) {
+return (E) elementData[index];
+}
+
+/**
+* 返回指定位置的元素，即elementData[index]
+* @param  index index of the element to return
+* @return the element at the specified position in this list
+* @throws IndexOutOfBoundsException {@inheritDoc}
+*/
+public E get(int index) {
+//范围检查
+rangeCheck(index);
+return elementData(index);
+}
+
+/**
+* 将列表中指定位置的元素替换为指定元素
+* @param index index of the element to replace
+* @param element element to be stored at the specified position
+* @return the element previously at the specified position
+* @throws IndexOutOfBoundsException {@inheritDoc}
+*/
+public E set(int index, E element) {
+//范围检查
+rangeCheck(index);
+
+E oldValue = elementData(index);
+  //用新元素替换旧元素
+elementData[index] = element;
+  //返回旧元素
+return oldValue;
+}
+
+/**
+* 在列表尾部添加一个元素，容量的扩展将导致数组元素的复制，多次扩展将执行多次整个数组内容的复制。
+* 若能提前大致判断list的长度，调用ensureCapacity调整容量，将有效的提高运行速度
+*/
+public boolean add(E e) {
+//确保不会产生越界
+ensureCapacityInternal(size + 1);  // Increments modCount!!
+elementData[size++] = e;
+return true;
+}
+
+/**
+* 在指定位置插入元素，当前位置原元素及所有后继元素向右移动一个位置
+* @param index index at which the specified element is to be inserted
+* @param element element to be inserted
+* @throws IndexOutOfBoundsException {@inheritDoc}
+*/
+public void add(int index, E element) {
+//判断指定位置Index是否超出elementData的界限
+rangeCheckForAdd(index);
+  //调用ensureCapacityInternal调整容量（若容量足够则不会扩展）
+ensureCapacityInternal(size + 1);  // Increments modCount!!
+  //调用System.arrayCopy将elementData从Index开始的size-index个元素复制到index+1至size+1的位置
+  //即index开始的元素都向后移动一个位置，然后将Index位置的值指向element
+System.arraycopy(elementData, index, elementData, index + 1,
+                 size - index);
+elementData[index] = element;
+size++;
+}
+
+/**
+* 删除指定位置的元素，将后继元素向前移动一个位置
+* @param index the index of the element to be removed
+* @return the element that was removed from the list
+* @throws IndexOutOfBoundsException {@inheritDoc}
+*/
+public E remove(int index) {
+//检查范围
+rangeCheck(index);
+  //修改modCount
+modCount++;
+  //保留将要被移除的元素
+E oldValue = elementData(index);
+
+int numMoved = size - index - 1;
+if (numMoved &gt; 0)
+    //将移除位置之后的元素向前挪动一个位置
+    System.arraycopy(elementData, index+1, elementData, index,
+                     numMoved);
+  //将list末尾元素置空（null）
+elementData[--size] = null; // clear to let GC do its work
+  //返回被移除的元素
+return oldValue;
+}
+
+/**
+* 删除首次出现在列表中的元素，如果不包含该元素，不作变化
+* @param o element to be removed from this list, if present
+* @return &lt;tt&gt;true&lt;/tt&gt; if this list contained the specified element
+*/
+public boolean remove(Object o) {
+if (o == null) {
+    //从前向后遍历所有元素
+    for (int index = 0; index &lt; size; index++)
+        if (elementData[index] == null) {
+            //与remove(index)的不同之处在于跳过边界处理，也不返回被移除的元素
+            fastRemove(index);
+            return true;
+        }
+} else {
+    for (int index = 0; index &lt; size; index++)
+        if (o.equals(elementData[index])) {
+            fastRemove(index);
+            return true;
+        }
+}
+return false;
+}
+
+/*
+* 跳过边界检查也不返回删除值的删除函数
+*/
+private void fastRemove(int index) {
+modCount++;
+int numMoved = size - index - 1;
+if (numMoved &gt; 0)
+    System.arraycopy(elementData, index+1, elementData, index,
+                     numMoved);
+elementData[--size] = null; // clear to let GC do its work
+}
+
+/**
+* 清空列表中的所有元素，操作后列表为空
+* clear的时候并没有修改elementData的长度，这使得确定不再修改list内容之后最好调用trimToSize来释放掉一些空间
+*/
+public void clear() {
+modCount++;
+
+// clear to let GC do its work
+  //等待垃圾回收器回收
+for (int i = 0; i &lt; size; i++)
+    elementData[i] = null;
+
+size = 0;
+}
+
+/**
+* 将指定集合中的所有元素都添加到列表末尾，以其迭代器返回的顺序添加
+* 该操作在多线程情况下行为未定义，需要外部同步
+* @param c collection containing elements to be added to this list
+* @return &lt;tt&gt;true&lt;/tt&gt; if this list changed as a result of the call
+* @throws NullPointerException if the specified collection is null
+*/
+public boolean addAll(Collection&lt;? extends E&gt; c) {
+//先将集合c转换成数组，
+Object[] a = c.toArray();
+  //根据转换后数组的长度和ArrayList的size扩展容量
+int numNew = a.length;
+ensureCapacityInternal(size + numNew);  // Increments modCount
+  //调用System.arrayCopy方法复制元素到elementData的尾部
+System.arraycopy(a, 0, elementData, size, numNew);
+  //调整size
+size += numNew;
+  //只要集合c的大小不为空，即转换后的数组长度不为0则返回true
+return numNew != 0;
+}
+
+/**
+* 将指定集合c中所有元素添加到以index开头的位置中，将当前元素及所有后继元素向右移动，新元素的顺序以迭代器返回顺序
+* @param index index at which to insert the first element from the
+*              specified collection
+* @param c collection containing elements to be added to this list
+* @return &lt;tt&gt;true&lt;/tt&gt; if this list changed as a result of the call
+* @throws IndexOutOfBoundsException {@inheritDoc}
+* @throws NullPointerException if the specified collection is null
+*/
+public boolean addAll(int index, Collection&lt;? extends E&gt; c) {
+//先判断Index是否越界
+rangeCheckForAdd(index);
+  //与addAll(c)一致
+Object[] a = c.toArray();
+int numNew = a.length;
+ensureCapacityInternal(size + numNew);  // Increments modCount
+
+int numMoved = size - index;
+if (numMoved &gt; 0)
+      //先将index开始的元素向后移动numNew（c转换为数组后的长度）个位置（也是一个复制的过程）
+    System.arraycopy(elementData, index, elementData, index + numNew,
+                     numMoved);
+      //将数组内容复制到elementData的index位置到index+X
+System.arraycopy(a, 0, elementData, index, numNew);
+      //增加size
+size += numNew;
+      //集合大小不为空就返回true
+return numNew != 0;
+}
+
+/**
+* 删除列表中从fromIndex到toIndex的元素，包含fromIndex，不含toIndex，所有后继元素向前移动
+* 如果fromIndex=toIndex，没有修改
+* @throws IndexOutOfBoundsException if {@code fromIndex} or
+*         {@code toIndex} is out of range
+*         ({@code fromIndex &lt; 0 ||
+*          fromIndex &gt;= size() ||
+*          toIndex &gt; size() ||
+*          toIndex &lt; fromIndex})
+*/
+protected void removeRange(int fromIndex, int toIndex) {
+modCount++;
+int numMoved = size - toIndex;
+  //将elementData从toIndex位置开始的元素向前移动到fromIndex
+System.arraycopy(elementData, toIndex, elementData, fromIndex,
+                 numMoved);
+
+// clear to let GC do its work
+int newSize = size - (toIndex-fromIndex);
+  //将toIndex位置之后的元素全部置空顺便修改size
+for (int i = newSize; i &lt; size; i++) {
+    elementData[i] = null;
+}
+  //修改size
+size = newSize;
+}
+
+/**
+* 检查给定下标是否在范围内，该方法不检查下标为负数的情况
+*/
+private void rangeCheck(int index) {
+if (index &gt;= size)
+    throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+
+/**
+* A version of rangeCheck used by add and addAll.
+*/
+private void rangeCheckForAdd(int index) {
+if (index &gt; size || index &lt; 0)
+    throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+
+/**
+* Constructs an IndexOutOfBoundsException detail message.
+* Of the many possible refactorings of the error handling code,
+* this &quot;outlining&quot; performs best with both server and client VMs.
+*/
+private String outOfBoundsMsg(int index) {
+return &quot;Index: &quot;+index+&quot;, Size: &quot;+size;
+}
+
+/**
+* 删除列表中所有出现在集合c中的元素
+* @param c collection containing elements to be removed from this list
+* @return {@code true} if this list changed as a result of the call
+* @throws ClassCastException if the class of an element of this list
+*         is incompatible with the specified collection
+* (&lt;a href=&quot;Collection.html#optional-restrictions&quot;&gt;optional&lt;/a&gt;)
+* @throws NullPointerException if this list contains a null element and the
+*         specified collection does not permit null elements
+* (&lt;a href=&quot;Collection.html#optional-restrictions&quot;&gt;optional&lt;/a&gt;),
+*         or if the specified collection is null
+* @see Collection#contains(Object)
+*/
+public boolean removeAll(Collection&lt;?&gt; c) {
+Objects.requireNonNull(c);
+return batchRemove(c, false);
+}
+
+/**
+* 只保留列表中出现在集合c中的元素
+* @param c collection containing elements to be retained in this list
+* @return {@code true} if this list changed as a result of the call
+* @throws ClassCastException if the class of an element of this list
+*         is incompatible with the specified collection
+* (&lt;a href=&quot;Collection.html#optional-restrictions&quot;&gt;optional&lt;/a&gt;)
+* @throws NullPointerException if this list contains a null element and the
+*         specified collection does not permit null elements
+* (&lt;a href=&quot;Collection.html#optional-restrictions&quot;&gt;optional&lt;/a&gt;),
+*         or if the specified collection is null
+* @see Collection#contains(Object)
+*/
+public boolean retainAll(Collection&lt;?&gt; c) {
+Objects.requireNonNull(c);
+return batchRemove(c, true);
+}
+/**
+* 批量删除
+* complement为false，则为删除列表中出现在集合c中的元素
+* complement为true，则为删除列表中未出现在集合c中的元素
+*/
+private boolean batchRemove(Collection&lt;?&gt; c, boolean complement) {
+final Object[] elementData = this.elementData;
+int r = 0, w = 0;
+boolean modified = false;
+try {
+    for (; r &lt; size; r++)
+        if (c.contains(elementData[r]) == complement)
+            elementData[w++] = elementData[r];
+} finally {
+    // Preserve behavioral compatibility with AbstractCollection,
+    // even if c.contains() throws.
+  //循环被中断，将r之后的元素拷贝到w之后
+    if (r != size) {
+        System.arraycopy(elementData, r,
+                         elementData, w,
+                         size - r);
+          //修改新数组长度
+        w += size - r;
+    }
+      //有元素删除了
+    if (w != size) {
+        // clear to let GC do its work
+        //删除元素
+        for (int i = w; i &lt; size; i++)
+            elementData[i] = null;
+        modCount += size - w;
+        size = w;
+        modified = true;
+    }
+}
+return modified;
+}
+
+/**
+* Save the state of the &lt;tt&gt;ArrayList&lt;/tt&gt; instance to a stream (that
+* is, serialize it).
+*
+* @serialData The length of the array backing the &lt;tt&gt;ArrayList&lt;/tt&gt;
+*             instance is emitted (int), followed by all of its elements
+*             (each an &lt;tt&gt;Object&lt;/tt&gt;) in the proper order.
+*/
+private void writeObject(java.io.ObjectOutputStream s)
+throws java.io.IOException{
+// Write out element count, and any hidden stuff
+int expectedModCount = modCount;
+s.defaultWriteObject();
+
+// Write out size as capacity for behavioural compatibility with clone()
+s.writeInt(size);
+
+// Write out all elements in the proper order.
+for (int i=0; i&lt;size; i++) {
+    s.writeObject(elementData[i]);
+}
+
+if (modCount != expectedModCount) {
+    throw new ConcurrentModificationException();
+}
+}
+
+/**
+* Reconstitute the &lt;tt&gt;ArrayList&lt;/tt&gt; instance from a stream (that is,
+* deserialize it).
+*/
+private void readObject(java.io.ObjectInputStream s)
+throws java.io.IOException, ClassNotFoundException {
+elementData = EMPTY_ELEMENTDATA;
+
+// Read in size, and any hidden stuff
+s.defaultReadObject();
+
+// Read in capacity
+s.readInt(); // ignored
+
+if (size &gt; 0) {
+    // be like clone(), allocate array based upon size not capacity
+    ensureCapacityInternal(size);
+
+    Object[] a = elementData;
+    // Read in all elements in the proper order.
+    for (int i=0; i&lt;size; i++) {
+        a[i] = s.readObject();
+    }
+}
+}
+
+/**
+* Returns a list iterator over the elements in this list (in proper
+* sequence), starting at the specified position in the list.
+* The specified index indicates the first element that would be
+* returned by an initial call to {@link ListIterator#next next}.
+* An initial call to {@link ListIterator#previous previous} would
+* return the element with the specified index minus one.
+*
+* &lt;p&gt;The returned list iterator is &lt;a href=&quot;#fail-fast&quot;&gt;&lt;i&gt;fail-fast&lt;/i&gt;&lt;/a&gt;.
+*
+* @throws IndexOutOfBoundsException {@inheritDoc}
+*/
+public ListIterator&lt;E&gt; listIterator(int index) {
+if (index &lt; 0 || index &gt; size)
+    throw new IndexOutOfBoundsException(&quot;Index: &quot;+index);
+return new ListItr(index);
+}
+
+/**
+* Returns a list iterator over the elements in this list (in proper
+* sequence).
+*
+* &lt;p&gt;The returned list iterator is &lt;a href=&quot;#fail-fast&quot;&gt;&lt;i&gt;fail-fast&lt;/i&gt;&lt;/a&gt;.
+*
+* @see #listIterator(int)
+*/
+public ListIterator&lt;E&gt; listIterator() {
+return new ListItr(0);
+}
+
+/**
+* Returns an iterator over the elements in this list in proper sequence.
+*
+* &lt;p&gt;The returned iterator is &lt;a href=&quot;#fail-fast&quot;&gt;&lt;i&gt;fail-fast&lt;/i&gt;&lt;/a&gt;.
+*
+* @return an iterator over the elements in this list in proper sequence
+*/
+public Iterator&lt;E&gt; iterator() {
+return new Itr();
+}
+
+/**
+* An optimized version of AbstractList.Itr
+*/
+private class Itr implements Iterator&lt;E&gt; {
+int cursor;       // index of next element to return
+int lastRet = -1; // index of last element returned; -1 if no such
+int expectedModCount = modCount;
+
+public boolean hasNext() {
+    return cursor != size;
+}
+
+@SuppressWarnings(&quot;unchecked&quot;)
+public E next() {
+    checkForComodification();
+    int i = cursor;
+    if (i &gt;= size)
+        throw new NoSuchElementException();
+    Object[] elementData = ArrayList.this.elementData;
+    if (i &gt;= elementData.length)
+        throw new ConcurrentModificationException();
+    cursor = i + 1;
+    return (E) elementData[lastRet = i];
+}
+
+public void remove() {
+    if (lastRet &lt; 0)
+        throw new IllegalStateException();
+    checkForComodification();
+
+    try {
+        ArrayList.this.remove(lastRet);
+        cursor = lastRet;
+        lastRet = -1;
+        expectedModCount = modCount;
+    } catch (IndexOutOfBoundsException ex) {
+        throw new ConcurrentModificationException();
+    }
+}
+
+@Override
+@SuppressWarnings(&quot;unchecked&quot;)
+public void forEachRemaining(Consumer&lt;? super E&gt; consumer) {
+    Objects.requireNonNull(consumer);
+    final int size = ArrayList.this.size;
+    int i = cursor;
+    if (i &gt;= size) {
+        return;
+    }
+    final Object[] elementData = ArrayList.this.elementData;
+    if (i &gt;= elementData.length) {
+        throw new ConcurrentModificationException();
+    }
+    while (i != size &amp;&amp; modCount == expectedModCount) {
+        consumer.accept((E) elementData[i++]);
+    }
+    // update once at end of iteration to reduce heap write traffic
+    cursor = i;
+    lastRet = i - 1;
+    checkForComodification();
+}
+
+final void checkForComodification() {
+    if (modCount != expectedModCount)
+        throw new ConcurrentModificationException();
+}
+}
+
+/**
+* An optimized version of AbstractList.ListItr
+*/
+private class ListItr extends Itr implements ListIterator&lt;E&gt; {
+ListItr(int index) {
+    super();
+    cursor = index;
+}
+
+public boolean hasPrevious() {
+    return cursor != 0;
+}
+
+public int nextIndex() {
+    return cursor;
+}
+
+public int previousIndex() {
+    return cursor - 1;
+}
+
+@SuppressWarnings(&quot;unchecked&quot;)
+public E previous() {
+    checkForComodification();
+    int i = cursor - 1;
+    if (i &lt; 0)
+        throw new NoSuchElementException();
+    Object[] elementData = ArrayList.this.elementData;
+    if (i &gt;= elementData.length)
+        throw new ConcurrentModificationException();
+    cursor = i;
+    return (E) elementData[lastRet = i];
+}
+
+public void set(E e) {
+    if (lastRet &lt; 0)
+        throw new IllegalStateException();
+    checkForComodification();
+
+    try {
+        ArrayList.this.set(lastRet, e);
+    } catch (IndexOutOfBoundsException ex) {
+        throw new ConcurrentModificationException();
+    }
+}
+
+public void add(E e) {
+    checkForComodification();
+
+    try {
+        int i = cursor;
+        ArrayList.this.add(i, e);
+        cursor = i + 1;
+        lastRet = -1;
+        expectedModCount = modCount;
+    } catch (IndexOutOfBoundsException ex) {
+        throw new ConcurrentModificationException();
+    }
+}
+}
+
+/**
+* Returns a view of the portion of this list between the specified
+* {@code fromIndex}, inclusive, and {@code toIndex}, exclusive.  (If
+* {@code fromIndex} and {@code toIndex} are equal, the returned list is
+* empty.)  The returned list is backed by this list, so non-structural
+* changes in the returned list are reflected in this list, and vice-versa.
+* The returned list supports all of the optional list operations.
+*
+* &lt;p&gt;This method eliminates the need for explicit range operations (of
+* the sort that commonly exist for arrays).  Any operation that expects
+* a list can be used as a range operation by passing a subList view
+* instead of a whole list.  For example, the following idiom
+* removes a range of elements from a list:
+* &lt;pre&gt;
+*      list.subList(from, to).clear();
+* &lt;/pre&gt;
+* Similar idioms may be constructed for {@link #indexOf(Object)} and
+* {@link #lastIndexOf(Object)}, and all of the algorithms in the
+* {@link Collections} class can be applied to a subList.
+*
+* &lt;p&gt;The semantics of the list returned by this method become undefined if
+* the backing list (i.e., this list) is &lt;i&gt;structurally modified&lt;/i&gt; in
+* any way other than via the returned list.  (Structural modifications are
+* those that change the size of this list, or otherwise perturb it in such
+* a fashion that iterations in progress may yield incorrect results.)
+*
+* @throws IndexOutOfBoundsException {@inheritDoc}
+* @throws IllegalArgumentException {@inheritDoc}
+*/
+public List&lt;E&gt; subList(int fromIndex, int toIndex) {
+subListRangeCheck(fromIndex, toIndex, size);
+return new SubList(this, 0, fromIndex, toIndex);
+}
+
+static void subListRangeCheck(int fromIndex, int toIndex, int size) {
+if (fromIndex &lt; 0)
+    throw new IndexOutOfBoundsException(&quot;fromIndex = &quot; + fromIndex);
+if (toIndex &gt; size)
+    throw new IndexOutOfBoundsException(&quot;toIndex = &quot; + toIndex);
+if (fromIndex &gt; toIndex)
+    throw new IllegalArgumentException(&quot;fromIndex(&quot; + fromIndex +
+                                       &quot;) &gt; toIndex(&quot; + toIndex + &quot;)&quot;);
+}
+/**
+* 子列表类，维护的列表对象还是父类的列表对象，SubList只是维护一个下标区间
+*/
+private class SubList extends AbstractList&lt;E&gt; implements RandomAccess {
+private final AbstractList&lt;E&gt; parent;
+private final int parentOffset;
+private final int offset;
+int size;
+
+SubList(AbstractList&lt;E&gt; parent,
+        int offset, int fromIndex, int toIndex) {
+    this.parent = parent;
+    this.parentOffset = fromIndex;
+    this.offset = offset + fromIndex;
+    this.size = toIndex - fromIndex;
+    this.modCount = ArrayList.this.modCount;
+}
+
+public E set(int index, E e) {
+    rangeCheck(index);
+    checkForComodification();
+    E oldValue = ArrayList.this.elementData(offset + index);
+    ArrayList.this.elementData[offset + index] = e;
+    return oldValue;
+}
+
+public E get(int index) {
+    rangeCheck(index);
+    checkForComodification();
+    return ArrayList.this.elementData(offset + index);
+}
+
+public int size() {
+    checkForComodification();
+    return this.size;
+}
+
+public void add(int index, E e) {
+    rangeCheckForAdd(index);
+    checkForComodification();
+    parent.add(parentOffset + index, e);
+    this.modCount = parent.modCount;
+    this.size++;
+}
+
+public E remove(int index) {
+    rangeCheck(index);
+    checkForComodification();
+    E result = parent.remove(parentOffset + index);
+    this.modCount = parent.modCount;
+    this.size--;
+    return result;
+}
+
+protected void removeRange(int fromIndex, int toIndex) {
+    checkForComodification();
+    parent.removeRange(parentOffset + fromIndex,
+                       parentOffset + toIndex);
+    this.modCount = parent.modCount;
+    this.size -= toIndex - fromIndex;
+}
+
+public boolean addAll(Collection&lt;? extends E&gt; c) {
+    return addAll(this.size, c);
+}
+
+public boolean addAll(int index, Collection&lt;? extends E&gt; c) {
+    rangeCheckForAdd(index);
+    int cSize = c.size();
+    if (cSize==0)
+        return false;
+
+    checkForComodification();
+    parent.addAll(parentOffset + index, c);
+    this.modCount = parent.modCount;
+    this.size += cSize;
+    return true;
+}
+
+public Iterator&lt;E&gt; iterator() {
+    return listIterator();
+}
+
+public ListIterator&lt;E&gt; listIterator(final int index) {
+    checkForComodification();
+    rangeCheckForAdd(index);
+    final int offset = this.offset;
+
+    return new ListIterator&lt;E&gt;() {
+        int cursor = index;
+        int lastRet = -1;
+        int expectedModCount = ArrayList.this.modCount;
+
+        public boolean hasNext() {
+            return cursor != SubList.this.size;
+        }
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public E next() {
+            checkForComodification();
+            int i = cursor;
+            if (i &gt;= SubList.this.size)
+                throw new NoSuchElementException();
+            Object[] elementData = ArrayList.this.elementData;
+            if (offset + i &gt;= elementData.length)
+                throw new ConcurrentModificationException();
+            cursor = i + 1;
+            return (E) elementData[offset + (lastRet = i)];
+        }
+
+        public boolean hasPrevious() {
+            return cursor != 0;
+        }
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public E previous() {
+            checkForComodification();
+            int i = cursor - 1;
+            if (i &lt; 0)
+                throw new NoSuchElementException();
+            Object[] elementData = ArrayList.this.elementData;
+            if (offset + i &gt;= elementData.length)
+                throw new ConcurrentModificationException();
+            cursor = i;
+            return (E) elementData[offset + (lastRet = i)];
+        }
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public void forEachRemaining(Consumer&lt;? super E&gt; consumer) {
+            Objects.requireNonNull(consumer);
+            final int size = SubList.this.size;
+            int i = cursor;
+            if (i &gt;= size) {
+                return;
+            }
+            final Object[] elementData = ArrayList.this.elementData;
+            if (offset + i &gt;= elementData.length) {
+                throw new ConcurrentModificationException();
+            }
+            while (i != size &amp;&amp; modCount == expectedModCount) {
+                consumer.accept((E) elementData[offset + (i++)]);
+            }
+            // update once at end of iteration to reduce heap write traffic
+            lastRet = cursor = i;
+            checkForComodification();
+        }
+
+        public int nextIndex() {
+            return cursor;
+        }
+
+        public int previousIndex() {
+            return cursor - 1;
+        }
+
+        public void remove() {
+            if (lastRet &lt; 0)
+                throw new IllegalStateException();
+            checkForComodification();
+
+            try {
+                SubList.this.remove(lastRet);
+                cursor = lastRet;
+                lastRet = -1;
+                expectedModCount = ArrayList.this.modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        public void set(E e) {
+            if (lastRet &lt; 0)
+                throw new IllegalStateException();
+            checkForComodification();
+
+            try {
+                ArrayList.this.set(offset + lastRet, e);
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        public void add(E e) {
+            checkForComodification();
+
+            try {
+                int i = cursor;
+                SubList.this.add(i, e);
+                cursor = i + 1;
+                lastRet = -1;
+                expectedModCount = ArrayList.this.modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        final void checkForComodification() {
+            if (expectedModCount != ArrayList.this.modCount)
+                throw new ConcurrentModificationException();
+        }
+    };
+}
+
+public List&lt;E&gt; subList(int fromIndex, int toIndex) {
+    subListRangeCheck(fromIndex, toIndex, size);
+    return new SubList(this, offset, fromIndex, toIndex);
+}
+
+private void rangeCheck(int index) {
+    if (index &lt; 0 || index &gt;= this.size)
+        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+
+private void rangeCheckForAdd(int index) {
+    if (index &lt; 0 || index &gt; this.size)
+        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+
+private String outOfBoundsMsg(int index) {
+    return &quot;Index: &quot;+index+&quot;, Size: &quot;+this.size;
+}
+
+private void checkForComodification() {
+    if (ArrayList.this.modCount != this.modCount)
+        throw new ConcurrentModificationException();
+}
+
+public Spliterator&lt;E&gt; spliterator() {
+    checkForComodification();
+    return new ArrayListSpliterator&lt;E&gt;(ArrayList.this, offset,
+                                       offset + this.size, this.modCount);
+}
+}
+
+@Override
+public void forEach(Consumer&lt;? super E&gt; action) {
+Objects.requireNonNull(action);
+final int expectedModCount = modCount;
+@SuppressWarnings(&quot;unchecked&quot;)
+final E[] elementData = (E[]) this.elementData;
+final int size = this.size;
+for (int i=0; modCount == expectedModCount &amp;&amp; i &lt; size; i++) {
+    action.accept(elementData[i]);
+}
+if (modCount != expectedModCount) {
+    throw new ConcurrentModificationException();
+}
+}
+
+/**
+* Creates a &lt;em&gt;&lt;a href=&quot;Spliterator.html#binding&quot;&gt;late-binding&lt;/a&gt;&lt;/em&gt;
+* and &lt;em&gt;fail-fast&lt;/em&gt; {@link Spliterator} over the elements in this
+* list.
+*
+* &lt;p&gt;The {@code Spliterator} reports {@link Spliterator#SIZED},
+* {@link Spliterator#SUBSIZED}, and {@link Spliterator#ORDERED}.
+* Overriding implementations should document the reporting of additional
+* characteristic values.
+*
+* @return a {@code Spliterator} over the elements in this list
+* @since 1.8
+*/
+@Override
+public Spliterator&lt;E&gt; spliterator() {
+return new ArrayListSpliterator&lt;&gt;(this, 0, -1, 0);
+}
+
+/** Index-based split-by-two, lazily initialized Spliterator */
+static final class ArrayListSpliterator&lt;E&gt; implements Spliterator&lt;E&gt; {
+
+/*
+ * If ArrayLists were immutable, or structurally immutable (no
+ * adds, removes, etc), we could implement their spliterators
+ * with Arrays.spliterator. Instead we detect as much
+ * interference during traversal as practical without
+ * sacrificing much performance. We rely primarily on
+ * modCounts. These are not guaranteed to detect concurrency
+ * violations, and are sometimes overly conservative about
+ * within-thread interference, but detect enough problems to
+ * be worthwhile in practice. To carry this out, we (1) lazily
+ * initialize fence and expectedModCount until the latest
+ * point that we need to commit to the state we are checking
+ * against; thus improving precision.  (This doesn&apos;t apply to
+ * SubLists, that create spliterators with current non-lazy
+ * values).  (2) We perform only a single
+ * ConcurrentModificationException check at the end of forEach
+ * (the most performance-sensitive method). When using forEach
+ * (as opposed to iterators), we can normally only detect
+ * interference after actions, not before. Further
+ * CME-triggering checks apply to all other possible
+ * violations of assumptions for example null or too-small
+ * elementData array given its size(), that could only have
+ * occurred due to interference.  This allows the inner loop
+ * of forEach to run without any further checks, and
+ * simplifies lambda-resolution. While this does entail a
+ * number of checks, note that in the common case of
+ * list.stream().forEach(a), no checks or other computation
+ * occur anywhere other than inside forEach itself.  The other
+ * less-often-used methods cannot take advantage of most of
+ * these streamlinings.
+ */
+
+private final ArrayList&lt;E&gt; list;
+private int index; // current index, modified on advance/split
+private int fence; // -1 until used; then one past last index
+private int expectedModCount; // initialized when fence set
+
+/** Create new spliterator covering the given  range */
+ArrayListSpliterator(ArrayList&lt;E&gt; list, int origin, int fence,
+                     int expectedModCount) {
+    this.list = list; // OK if null unless traversed
+    this.index = origin;
+    this.fence = fence;
+    this.expectedModCount = expectedModCount;
+}
+
+private int getFence() { // initialize fence to size on first use
+    int hi; // (a specialized variant appears in method forEach)
+    ArrayList&lt;E&gt; lst;
+    if ((hi = fence) &lt; 0) {
+        if ((lst = list) == null)
+            hi = fence = 0;
+        else {
+            expectedModCount = lst.modCount;
+            hi = fence = lst.size;
+        }
+    }
+    return hi;
+}
+
+public ArrayListSpliterator&lt;E&gt; trySplit() {
+    int hi = getFence(), lo = index, mid = (lo + hi) &gt;&gt;&gt; 1;
+    return (lo &gt;= mid) ? null : // divide range in half unless too small
+        new ArrayListSpliterator&lt;E&gt;(list, lo, index = mid,
+                                    expectedModCount);
+}
+
+public boolean tryAdvance(Consumer&lt;? super E&gt; action) {
+    if (action == null)
+        throw new NullPointerException();
+    int hi = getFence(), i = index;
+    if (i &lt; hi) {
+        index = i + 1;
+        @SuppressWarnings(&quot;unchecked&quot;) E e = (E)list.elementData[i];
+        action.accept(e);
+        if (list.modCount != expectedModCount)
+            throw new ConcurrentModificationException();
+        return true;
+    }
+    return false;
+}
+
+public void forEachRemaining(Consumer&lt;? super E&gt; action) {
+    int i, hi, mc; // hoist accesses and checks from loop
+    ArrayList&lt;E&gt; lst; Object[] a;
+    if (action == null)
+        throw new NullPointerException();
+    if ((lst = list) != null &amp;&amp; (a = lst.elementData) != null) {
+        if ((hi = fence) &lt; 0) {
+            mc = lst.modCount;
+            hi = lst.size;
+        }
+        else
+            mc = expectedModCount;
+        if ((i = index) &gt;= 0 &amp;&amp; (index = hi) &lt;= a.length) {
+            for (; i &lt; hi; ++i) {
+                @SuppressWarnings(&quot;unchecked&quot;) E e = (E) a[i];
+                action.accept(e);
+            }
+            if (lst.modCount == mc)
+                return;
+        }
+    }
+    throw new ConcurrentModificationException();
+}
+
+public long estimateSize() {
+    return (long) (getFence() - index);
+}
+
+public int characteristics() {
+    return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
+}
+}
+
+@Override
+public boolean removeIf(Predicate&lt;? super E&gt; filter) {
+Objects.requireNonNull(filter);
+// figure out which elements are to be removed
+// any exception thrown from the filter predicate at this stage
+// will leave the collection unmodified
+int removeCount = 0;
+final BitSet removeSet = new BitSet(size);
+final int expectedModCount = modCount;
+final int size = this.size;
+for (int i=0; modCount == expectedModCount &amp;&amp; i &lt; size; i++) {
+    @SuppressWarnings(&quot;unchecked&quot;)
+    final E element = (E) elementData[i];
+    if (filter.test(element)) {
+        removeSet.set(i);
+        removeCount++;
+    }
+}
+if (modCount != expectedModCount) {
+    throw new ConcurrentModificationException();
+}
+
+// shift surviving elements left over the spaces left by removed elements
+final boolean anyToRemove = removeCount &gt; 0;
+if (anyToRemove) {
+    final int newSize = size - removeCount;
+    for (int i=0, j=0; (i &lt; size) &amp;&amp; (j &lt; newSize); i++, j++) {
+        i = removeSet.nextClearBit(i);
+        elementData[j] = elementData[i];
+    }
+    for (int k=newSize; k &lt; size; k++) {
+        elementData[k] = null;  // Let gc do its work
+    }
+    this.size = newSize;
+    if (modCount != expectedModCount) {
+        throw new ConcurrentModificationException();
+    }
+    modCount++;
+}
+
+return anyToRemove;
+}
+
+@Override
+@SuppressWarnings(&quot;unchecked&quot;)
+public void replaceAll(UnaryOperator&lt;E&gt; operator) {
+Objects.requireNonNull(operator);
+final int expectedModCount = modCount;
+final int size = this.size;
+for (int i=0; modCount == expectedModCount &amp;&amp; i &lt; size; i++) {
+    elementData[i] = operator.apply((E) elementData[i]);
+}
+if (modCount != expectedModCount) {
+    throw new ConcurrentModificationException();
+}
+modCount++;
+}
+
+@Override
+@SuppressWarnings(&quot;unchecked&quot;)
+public void sort(Comparator&lt;? super E&gt; c) {
+final int expectedModCount = modCount;
+Arrays.sort((E[]) elementData, 0, size, c);
+if (modCount != expectedModCount) {
+    throw new ConcurrentModificationException();
+}
+modCount++;
+}
+}
+</code></pre></span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/04/actvity重启/" rel="prev">actvity重启</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/26/android异步更新UI的几种方法/" rel="next">android异步更新UI的几种方法</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class ="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        仅仅是一个功能
+                             
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="支付宝打赏" class="fancybox" rel="article0" 
+                                style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/alipay.jpg" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="微信打赏" class="fancybox" rel="article0"
+                                style="margin-right:30%">
+                                <img src="http://o7keinrz4.bkt.clouddn.com/wechat.jpg" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                $('#donate_guide').removeClass('hidden');
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <div class="bdsharebuttonbox">
+	<a href="#" class="bds_more" data-cmd="more"></a>
+	<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+	<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+	<a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+
+        
+          <div class="comments" id="comments">
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Deng" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Deng</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description"></p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+        </div>
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#从源码理解ArrayList-java"><span class="nav-number">1.</span> <span class="nav-text">从源码理解ArrayList.java</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Deng</span>
+
+  <div class="powered-by"></div>
+  <div class="powered-by">
+    Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  </div>
+
+  <div class="theme-info">
+    Theme by <a class="theme-link" href="http://blog.idhyt.com">idhyt</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+  </div>
+
+  <!-- busuanzi -->
+  
+
+</div>
+
+<!--
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mala
+  </a>
+</div>
+-->
+
+<!--
+<div class="powered-by"></div>
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+-->
+
+<!-- busuanzi -->
+<!--
+
+-->
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+    
+
+  
+
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
